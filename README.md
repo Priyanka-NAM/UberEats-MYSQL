@@ -1,1 +1,2 @@
-# CMPE273-Lab1
+# UberEats
+  Prototype of UberEats application
