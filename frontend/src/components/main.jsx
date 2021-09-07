@@ -5,8 +5,8 @@ export default function Main() {
     <fragment>
       <main className='container'>
         <switch>
-          {/* <Route path='/signin' component={SignIn}></Route>
-        <Route path='/signup' component={SignUp}></Route>
+          {/* <Route path='/customersignin' component={customerSignIn}></Route>
+        <Route path='/customersignup' component={customerSignUp}></Route>
         <Route path='/' exact component={HomePage}></Route> */}
         </switch>
       </main>
