@@ -1,13 +1,15 @@
 import "./App.css";
 import React from "react";
-// import Main from "./components/main";
+import { Switch } from "react-router";
+import Main from "./components/main";
+
 function App() {
   return (
     <React.Fragment key='key'>
       <main className='container'>
-        {/* <Switch>
+        <Switch>
           <Main />
-        </Switch> */}
+        </Switch>
       </main>
     </React.Fragment>
   );

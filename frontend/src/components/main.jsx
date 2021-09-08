@@ -1,15 +1,21 @@
-import React from "react";
+import React, { Fragment } from "react";
+import { Route } from "react-router-dom";
 
-export default function Main() {
+import OwnerSignUp from "./SignUp/ownerSignUp";
+import CustomerSignUp from "./SignUp/customerSignUp";
+import HomePage from "./Home/home";
+import SignIn from "./SignIn/signIn";
+
+function Main() {
   return (
-    <fragment>
+    <Fragment key='key'>
       <main className='container'>
-        <switch>
-          {/* <Route path='/customersignin' component={customerSignIn}></Route>
-        <Route path='/customersignup' component={customerSignUp}></Route>
-        <Route path='/' exact component={HomePage}></Route> */}
-        </switch>
+        <Route path='/signin' component={SignIn} />
+        <Route path='/customersignup' component={CustomerSignUp} />
+        <Route path='/ownersignup' component={OwnerSignUp} />
+        <Route path='/' exact component={HomePage} />
       </main>
-    </fragment>
+    </Fragment>
   );
 }
+export default Main;
