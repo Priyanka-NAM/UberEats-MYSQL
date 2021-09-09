@@ -6,11 +6,11 @@ import Card from "./Card";
 
 const RestaurantCarousel = () => (
   <div className='select-restaur'>
-    <h2> National Brands</h2>
+    <h2>National Brands</h2>
     <div className='restaur-row'>
       <Card
         src='https://cn-geo1.uber.com/image-proc/resize/eats/format=webp/width=550/height=440/quality=70/srcb64=aHR0cHM6Ly9kMXJhbHNvZ25qbmczNy5jbG91ZGZyb250Lm5ldC8xNGQ2NTM4Yi00YjI2LTQxNzQtYTc1YS1hMDNjYzA2ZGUzMzUuanBlZw=='
-        title='Online Experiences'
+        title='Apna Bazar'
         address='246 Drivers dr'
         description='Unique ac, led by a world of hosts.'
       />
@@ -33,7 +33,7 @@ const RestaurantCarousel = () => (
         description='Unique activities w of hosts.'
       />
     </div>
-    <h2> Popular Near you</h2>
+    <h2>Popular Near you</h2>
     <div className='restaur-row'>
       <Card
         src='https://cn-geo1.uber.com/image-proc/resize/eats/format=webp/width=550/height=440/quality=70/srcb64=aHR0cHM6Ly9kMXJhbHNvZ25qbmczNy5jbG91ZGZyb250Lm5ldC9kZmNmNDY4Mi0xZDM0LTQ5MjUtOGNjYS00MmY0NDVlMTM3NjkuanBlZw=='

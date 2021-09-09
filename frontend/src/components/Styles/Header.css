@@ -34,7 +34,7 @@
 
 .button-box {
   display: flex;
-  width: 30%;
+  width: fit-content;
   background-color: #eeeeee;
   position: relative;
   border-radius: 30px;
