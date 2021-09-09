@@ -9,7 +9,7 @@ import SignIn from "./SignIn/signIn";
 function Main() {
   return (
     <Fragment key='key'>
-      <main className='container'>
+      <main>
         <Route path='/signin' component={SignIn} />
         <Route path='/customersignup' component={CustomerSignUp} />
         <Route path='/ownersignup' component={OwnerSignUp} />

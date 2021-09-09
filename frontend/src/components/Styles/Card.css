@@ -1,0 +1,22 @@
+.card {
+  margin: 10px;
+  width: 500px;
+  height: 220px;
+  padding: 0px;
+  overflow: hidden;
+  transition: transform 100ms ease-in;
+  cursor: pointer;
+}
+.card:hover {
+  transform: scale(1.07);
+}
+.card img {
+  height: 150px;
+  width: 100%;
+}
+.resta-info {
+  border-radius: 5px;
+  padding: 10px;
+
+  border: 1;
+}

@@ -1,0 +1,17 @@
+.side-bar {
+  margin-top: 50px;
+  position: sticky;
+  width: 20%;
+}
+.barcontents {
+  margin-top: 10px;
+  /* background-color: green; */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.allbuttons {
+  margin-top: 0px;
+  font-weight: bold;
+  display: flex;
+}
