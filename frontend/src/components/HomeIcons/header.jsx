@@ -7,6 +7,15 @@ import SearchIcon from "@material-ui/icons/Search";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import UberELogo from "./logo";
 
+const Cartbutton = {
+  backgroundColor: "black",
+  color: "white",
+  fontSize: "14px",
+  textTransform: "none",
+  borderRadius: "30px",
+  height: "40px",
+};
+
 const Header = () => (
   <div className='header'>
     <div className='header-lefttab'>
@@ -34,7 +43,10 @@ const Header = () => (
       <button type='button' className='toggle-btn cart-btn'>
         Cart
       </button>
-      {/* <Button startIcon={<ShoppingCartIcon />} className='toggle-btn cart-btn'>
+      {/* <Button
+        startIcon={<ShoppingCartIcon style={{ backgroundColor: "white" }} />}
+        className='toggle-btn cart-btn'
+        style={Cartbutton}>
         Cart
       </Button> */}
       <button type='button' className='toggle-btn signin-btn'>

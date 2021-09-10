@@ -16,7 +16,7 @@ const SidebarButton = {
 const SideBar = () => (
   <div className='side-bar'>
     <div className='barcontents'>
-      <h4>Dietery</h4>
+      <h4>Dietary</h4>
       <div className='allbuttons'>
         <Button style={SidebarButton}>Vegan</Button>
         <Button style={SidebarButton}>Vegetarian</Button>

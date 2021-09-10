@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import siginupmodule from "../Styles/signInUp.module.css";
 import { ubereatslogo } from "../../images/ubereatslogo.svg";
-import UberELogo from "../Icons/logo";
+import UberELogo from "../HomeIcons/logo";
 
 class SignIn extends Component {
   constructor(props) {

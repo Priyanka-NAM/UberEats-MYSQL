@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 
-import Header from "../Icons/header";
-import RestaurantCarousel from "../Icons/restaurarntcarousel";
-import SideBar from "../Icons/SideBar";
+import Header from "../HomeIcons/header";
+import RestaurantCarousel from "../HomeIcons/restaurarntcarousel";
+import SideBar from "../HomeIcons/SideBar";
 import "../Styles/Home.css";
 
 class HomePage extends Component {
