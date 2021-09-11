@@ -4,6 +4,7 @@
     "es2021": true
   },
   "extends": ["plugin:react/recommended", "airbnb", "prettier"],
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -15,6 +16,7 @@
   "rules": {
     "no-console": "off",
     "no-unused-vars": "warn",
+    // "react/destructuring-assignment": ["enabled", "never"],
     "jsx-a11y/label-has-for": [
       2,
       {

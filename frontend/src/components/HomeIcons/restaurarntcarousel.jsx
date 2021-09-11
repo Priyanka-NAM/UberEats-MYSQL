@@ -13,6 +13,7 @@ const RestaurantCarousel = () => (
         title='Apna Bazar'
         address='246 Drivers dr'
         description='Unique ac, led by a world of hosts.'
+        
       />
       <Card
         src='https://d1ralsognjng37.cloudfront.net/305df057-e65a-47e6-b62c-e5d024c918ca.jpeg 240w,https://d1ralsognjng37.cloudfront.net/467edb0b-cfe7-47dd-a9ac-ef851ffbbea8.jpeg 550w,https://d1ralsognjng37.cloudfront.net/0139e103-ee35-4d32-8b2f-e67cc34e1c15.jpeg 640w,https://d1ralsognjng37.cloudfront.net/247e7502-e549-4b08-b235-ce8b542e914d.jpeg 750w,https://d1ralsognjng37.cloudfront.net/5176bfe7-d608-4d6b-ad58-ba34d58bf573.jpeg 1080w,https://d1ralsognjng37.cloudfront.net/30c3d0ca-f45c-450c-9050-2fdbdaa38b49.jpeg 2880w'
