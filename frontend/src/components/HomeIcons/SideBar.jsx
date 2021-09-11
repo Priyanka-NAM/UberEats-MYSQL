@@ -1,29 +1,46 @@
 import React from "react";
-import { Button } from "@material-ui/core";
-
+import { Container, Button, Col, Row } from "react-bootstrap";
+import { RadioGroup, Radio } from "react-radio-group";
 import "../Styles/SideBar.css";
 
 const SidebarButton = {
   borderRadius: 20,
   backgroundColor: "#eeeeee",
   color: "black",
-  padding: "14px 18px",
   fontSize: "14px",
   textTransform: "none",
   height: "40px",
 };
 
 const SideBar = () => (
-  <div className='side-bar'>
-    <div className='barcontents'>
-      <h4>Dietary</h4>
+  <Container fluid>
+    <Col fluid>
+      <h4 className='sidebar-heading'>Sort</h4>
+      <Row align='left'>
+        <RadioGroup name='fruit'>
+          <Radio value='Picked for you' className='sidebarText' />
+          Picked for you
+        </RadioGroup>
+      </Row>
+    </Col>
+    <Col>
+      <h4 className='sidebar-heading'>Dietary</h4>
       <div className='allbuttons'>
-        <Button style={SidebarButton}>Vegan</Button>
-        <Button style={SidebarButton}>Vegetarian</Button>
-        <Button style={SidebarButton}>Non-Vegetarian</Button>
+        <Button variant='light' style={SidebarButton}>
+          Vegan
+        </Button>
+
+        <Button variant='light' style={SidebarButton}>
+          Vegetarian
+        </Button>
+
+        <Button variant='light' style={SidebarButton}>
+          Non-Vegetarian
+        </Button>
       </div>
-    </div>
-  </div>
+    </Col>
+    <br />
+  </Container>
 );
 
 export default SideBar;

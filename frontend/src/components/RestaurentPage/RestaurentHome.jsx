@@ -60,7 +60,7 @@ class RestaurentHome extends Component {
                 src='https://cn-geo1.uber.com/image-proc/resize/eats/format=webp/width=550/height=440/quality=70/srcb64=aHR0cHM6Ly9kMXJhbHNvZ25qbmczNy5jbG91ZGZyb250Lm5ldC8xNGQ2NTM4Yi00YjI2LTQxNzQtYTc1YS1hMDNjYzA2ZGUzMzUuanBlZw=='
                 title='Apna Bazar'
                 price='246 Drivers dr'
-                description='Unique ac, led by a world of hosts.'
+                description='Unique ac, led byvdfgvdbghjkbv uhsfjdhnjkvdhbxkhbgkjhbs n a world of hosts.'
                 quantity='2'
               />
               <MenuCard
@@ -84,6 +84,13 @@ class RestaurentHome extends Component {
                 description='Unique ac, led by a world of hosts.'
                 quantity='2'
               />
+              <MenuCard
+                src='https://cn-geo1.uber.com/image-proc/resize/eats/format=webp/width=550/height=440/quality=70/srcb64=aHR0cHM6Ly9kMXJhbHNvZ25qbmczNy5jbG91ZGZyb250Lm5ldC8xNGQ2NTM4Yi00YjI2LTQxNzQtYTc1YS1hMDNjYzA2ZGUzMzUuanBlZw=='
+                title='Apna Bazar'
+                price='246'
+                description='Unique ac, led by a world of hosts.'
+                quantity='2'
+              />{" "}
             </Row>
           </Container>
         </div>

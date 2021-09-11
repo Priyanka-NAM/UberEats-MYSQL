@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Container, Col } from "react-bootstrap";
 
 import Header from "../HomeIcons/header";
 import RestaurantCarousel from "../HomeIcons/restaurarntcarousel";
@@ -15,10 +16,12 @@ class HomePage extends Component {
     return (
       <div>
         <Header />
-        <div className='home-body'>
-          <SideBar />
+        <Container fluid className='home-container'>
+          <Col md='3'>
+            <SideBar />
+          </Col>
           <RestaurantCarousel />
-        </div>
+        </Container>
       </div>
     );
   }

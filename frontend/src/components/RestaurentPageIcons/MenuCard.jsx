@@ -10,6 +10,7 @@ class MenuCard extends Component {
     super(props);
     this.state = {
       showModal: false,
+      Orderquantity: 1,
     };
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -21,15 +22,29 @@ class MenuCard extends Component {
     });
   };
 
-  handleClose = (e) => {
+  handleClose = () => {
     this.setState({
       showModal: false,
     });
   };
 
+  handleIncrement = () => {
+    this.setState((prevState) => ({
+      Orderquantity: prevState.Orderquantity + 1,
+    }));
+  };
+
+  handleDecrement = () => {
+    this.setState((prevState) => ({
+      Orderquantity: prevState.Orderquantity - 1,
+    }));
+  };
+
+  handleAddToCart = () => {};
+
   render() {
-    const { showModal } = this.state;
-    const { title, description, price, src, quantity } = this.props;
+    const { showModal, Orderquantity } = this.state;
+    const { title, description, price, src } = this.props;
     return (
       <>
         <Card
@@ -37,8 +52,8 @@ class MenuCard extends Component {
           style={{ width: "35rem", margin: "1%" }}
           onClick={this.handleShow}>
           <Row>
-            <Col align='left' style={{ width: "15rem" }}>
-              <Card.Body>
+            <Col align='left'>
+              <Card.Body style={{ width: "auto" }}>
                 <Card.Title>{title}</Card.Title>
                 <Card.Text>
                   <p>{description}</p>
@@ -46,8 +61,11 @@ class MenuCard extends Component {
                 <Card.Text>${price}</Card.Text>
               </Card.Body>
             </Col>
-            <Col style={{ width: "12rem", height: "9rem" }}>
-              <Card.Img src={src} />
+            <Col style={{ width: "2%", objectFit: "contain" }}>
+              <Card.Img
+                style={{ width: "1%", objectFit: "contain" }}
+                src={src}
+              />
             </Col>
           </Row>
         </Card>
@@ -62,7 +80,7 @@ class MenuCard extends Component {
             {" "}
             <FaRegWindowClose
               size='30px'
-              style={{ color: "grey" }}
+              style={{ color: "black" }}
               onClick={this.handleClose}
             />
           </Modal.Header>
@@ -82,21 +100,22 @@ class MenuCard extends Component {
           </Modal.Body>
           <Modal.Footer>
             <FaMinusCircle
-              size='30px'
+              size='35px'
               style={{ color: "grey" }}
-              onClick={this.handleClose}
+              onClick={this.handleDecrement}
             />
-            <p>12</p>
+            <p>{Orderquantity}</p>
             <FaPlusCircle
-              size='30px'
+              size='35px'
               style={{ color: "grey" }}
-              onClick={this.handleClose}
+              onClick={this.handleIncrement}
             />
             <Button
-              variant='primary'
-              onClick={this.handleClose}
+              variant='dark'
+              onClick={this.handleAddToCart}
               style={{ width: "75%" }}>
-              Add {quantity} to order ${price}
+              Add {Orderquantity} to order{" "}
+              <span style={{ paddingLeft: "15px" }}>${price}</span>
             </Button>
           </Modal.Footer>
         </Modal>
@@ -109,7 +128,6 @@ MenuCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
-  quantity: PropTypes.string.isRequired,
 };
 
 export default MenuCard;
