@@ -3,20 +3,13 @@
   padding: 0;
   margin: 0;
 }
-.header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  top: 0;
-  background-color: white;
-  z-index: 100;
-  width: 100%;
-  margin: 30px;
-  margin-right: 40px;
+.header-row {
+  margin-top: "2rem";
+  margin-left: "2rem";
+  width: "100%";
 }
 
-.header-lefttab {
+/* .header-lefttab {
   display: flex;
 
   flex: 0.1 auto;
@@ -93,4 +86,4 @@
 }
 .header-icon {
   height: 50px;
-}
+} */

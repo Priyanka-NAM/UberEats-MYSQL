@@ -44,7 +44,7 @@ class RestoCard extends Component {
             className='fav-icon'
             size='22px'
             style={{ color: "white" }}
-            // onClick={this.handleClose}
+            //  onClick={this.handleClose}
           />
           <Card.Text className='resta-info'>
             <h2 className='restar-name'>
