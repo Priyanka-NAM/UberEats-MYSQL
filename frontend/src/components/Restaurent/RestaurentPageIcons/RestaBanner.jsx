@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import "font-awesome/css/font-awesome.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../Styles/SideBar.css";
+import "../../Styles/signInUp.module.css";
 
 function RestaBanner({
   src,
