@@ -13,10 +13,10 @@ class RestaurentCarousel extends React.Component {
 
   render() {
     return (
-      <Container fluid>
-        <Container fluid style={{ objectFit: "cover" }}>
+      <Container fluid='true'>
+        <Container fluid='true' style={{ objectFit: "cover" }}>
           <h2>Favourites</h2>
-          <Row xxs='auto' fluid>
+          <Row xxs='auto' fluid='true'>
             <RestoCard
               src='https://cn-geo1.uber.com/image-proc/resize/eats/format=webp/width=550/height=440/quality=70/srcb64=aHR0cHM6Ly9kMXJhbHNvZ25qbmczNy5jbG91ZGZyb250Lm5ldC8xNGQ2NTM4Yi00YjI2LTQxNzQtYTc1YS1hMDNjYzA2ZGUzMzUuanBlZw=='
               title='Apna Bazar'
@@ -31,9 +31,9 @@ class RestaurentCarousel extends React.Component {
             />
           </Row>
         </Container>
-        <Container fluid style={{ objectFit: "cover" }}>
+        <Container fluid='true' style={{ objectFit: "cover" }}>
           <h2>National Brands</h2>
-          <Row xxs='auto' fluid>
+          <Row xxs='auto' fluid='true'>
             <RestoCard
               src='https://cn-geo1.uber.com/image-proc/resize/eats/format=webp/width=550/height=440/quality=70/srcb64=aHR0cHM6Ly9kMXJhbHNvZ25qbmczNy5jbG91ZGZyb250Lm5ldC8xNGQ2NTM4Yi00YjI2LTQxNzQtYTc1YS1hMDNjYzA2ZGUzMzUuanBlZw=='
               title='Apna Bazar'
@@ -48,9 +48,9 @@ class RestaurentCarousel extends React.Component {
             />
           </Row>
         </Container>
-        <Container fluid style={{ objectFit: "cover" }}>
+        <Container fluid='true' style={{ objectFit: "cover" }}>
           <h2>Popular Near you</h2>
-          <Row xxs='auto' fluid>
+          <Row xxs='auto' fluid='true'>
             <RestoCard
               src='https://cn-geo1.uber.com/image-proc/resize/eats/format=webp/width=550/height=440/quality=70/srcb64=aHR0cHM6Ly9kMXJhbHNvZ25qbmczNy5jbG91ZGZyb250Lm5ldC9kZmNmNDY4Mi0xZDM0LTQ5MjUtOGNjYS00MmY0NDVlMTM3NjkuanBlZw=='
               title='Online Experiences'

@@ -13,8 +13,8 @@ const SidebarButton = {
 };
 
 const SideBar = () => (
-  <Container fluid>
-    <Col fluid>
+  <Container fluid='true'>
+    <Col fluid='true'>
       <h4 className='sidebar-heading'>Sort</h4>
       <Row align='left'>
         <RadioGroup name='fruit'>

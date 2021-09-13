@@ -46,13 +46,13 @@ class RestoCard extends Component {
             style={{ color: "white" }}
             //  onClick={this.handleClose}
           />
-          <Card.Text className='resta-info'>
+          <div className='resta-info'>
             <h2 className='restar-name'>
               {title}
               <span>({address})</span>
             </h2>
             <h4 className='resta-descr'>{description}</h4>
-          </Card.Text>
+          </div>
         </Card>
       </>
     );
