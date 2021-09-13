@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Button, Col, Row } from "react-bootstrap";
 import { RadioGroup, Radio } from "react-radio-group";
-import "../Styles/SideBar.css";
+import "../../Styles/SideBar.css";
 
 const SidebarButton = {
   borderRadius: 20,

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Nav, Container, Navbar, Form } from "react-bootstrap";
-import UberELogo from "../HomeIcons/logo";
+import UberELogo from "../Home/HomeIcons/logo";
 
 class CustomerSignUp extends React.Component {
   constructor(props) {

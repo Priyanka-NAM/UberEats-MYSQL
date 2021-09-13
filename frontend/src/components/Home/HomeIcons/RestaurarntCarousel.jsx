@@ -2,7 +2,7 @@
 import React from "react";
 import { Container, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../Styles/RestaCarousel.css";
+import "../../Styles/RestaCarousel.css";
 import RestoCard from "./RestoCard";
 
 class RestaurentCarousel extends React.Component {

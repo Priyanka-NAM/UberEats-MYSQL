@@ -1,13 +1,13 @@
 import React, { Fragment } from "react";
 import { Route } from "react-router-dom";
 
-import OwnerSignUp from "./SignUp/ownerSignUp";
-import CustomerSignUp from "./SignUp/customerSignUp";
+import OwnerSignUp from "./SignUp/OwnerSignUp";
+import CustomerSignUp from "./SignUp/CustomerSignUp";
 import HomePage from "./Home/home";
 import SignIn from "./SignIn/signIn";
-import RestaurentHome from "./RestaurentPage/RestaurentHome";
-import Rough from "./RestaurentPage/rough";
-import StartPage from "./StartPage/startpage";
+import RestaurentHome from "./Restaurent/RestaurentHome";
+import Rough from "./Restaurent/rough";
+import StartPage from "./StartPage/StartPage";
 
 function Main() {
   return (

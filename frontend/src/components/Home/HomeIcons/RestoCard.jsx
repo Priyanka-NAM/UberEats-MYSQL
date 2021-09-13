@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { FaRegHeart } from "react-icons/fa";
 import PropTypes from "prop-types";
-import "../Styles/SideBar.css";
-import "../Styles/Card.css";
+import "../../Styles/SideBar.css";
+import "../../Styles/Card.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
 

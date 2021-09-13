@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Container, Row } from "react-bootstrap";
 
-import Header from "../HomeIcons/header";
+import Header from "../Home/HomeIcons/Header";
 
-import RestaBanner from "../RestaurentPageIcons/RestaBanner";
+import RestaBanner from "./RestaurentPageIcons/RestaBanner";
 
 import "../Styles/Home.css";
-import MenuCard from "../RestaurentPageIcons/MenuCard";
+import MenuCard from "./RestaurentPageIcons/MenuCard";
 
 class RestaurentHome extends Component {
   constructor(props) {

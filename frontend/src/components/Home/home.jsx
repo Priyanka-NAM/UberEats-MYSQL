@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Container, Col } from "react-bootstrap";
 
-import Header from "../HomeIcons/header";
-import RestaurantCarousel from "../HomeIcons/restaurarntcarousel";
-import SideBar from "../HomeIcons/SideBar";
+import Header from "./HomeIcons/Header";
+import RestaurantCarousel from "./HomeIcons/RestaurarntCarousel";
+import SideBar from "./HomeIcons/SideBar";
 import "../Styles/Home.css";
 
 class HomePage extends Component {

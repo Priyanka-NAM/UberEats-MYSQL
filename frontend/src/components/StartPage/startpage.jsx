@@ -2,14 +2,17 @@
 import React, { Component } from "react";
 import { Nav, Button, Row } from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
-import UberELogo from "../HomeIcons/logo";
-import mainstyle from "../HomeIcons/HeaderStyle";
+import UberELogo from "../Home/HomeIcons/logo";
+import mainstyle from "../Home/HomeIcons/HeaderStyle";
+import StartPageCanvas from "./StartPageCanvas";
 import "../Styles/Header.css";
 
 class StartPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showModal: false,
+    };
   }
 
   componentDidMount() {
@@ -19,13 +22,32 @@ class StartPage extends Component {
     document.body.style.backgroundImage = `url("/images/Startpage_bg.PNG")`;
   }
 
+  handleShow = () => {
+    this.setState({
+      showModal: true,
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      showModal: false,
+    });
+  };
+
   render() {
+    const { showModal } = this.state;
+
     return (
       <div>
         <Row fluid='true'>
           <Nav style={mainstyle.headerRow}>
             <Nav.Item style={{ paddingLeft: "50px" }}>
-              <FaBars xs='6' size='22px' color='black' />
+              <FaBars
+                xs='6'
+                size='22px'
+                color='black'
+                onClick={this.handleShow}
+              />
             </Nav.Item>
             <Nav.Item style={{ paddingLeft: "20px" }}>
               <img
@@ -51,6 +73,7 @@ class StartPage extends Component {
             </Nav.Item>
           </Nav>
         </Row>
+        <StartPageCanvas handleClose={this.handleClose} showModal={showModal} />
       </div>
     );
   }

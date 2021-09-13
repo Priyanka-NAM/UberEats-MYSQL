@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import "font-awesome/css/font-awesome.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "../Styles/SideBar.css";
+import "../../Styles/SideBar.css";
 
 function RestaBanner({
   src,

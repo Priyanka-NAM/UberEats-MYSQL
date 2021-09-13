@@ -7,7 +7,7 @@ import { OffCanvas, OffCanvasMenu } from "react-offcanvas";
 import { FaUserCircle, FaHeart } from "react-icons/fa";
 import PropTypes from "prop-types";
 
-import "../Styles/Header.css";
+import "../../Styles/Header.css";
 
 class ProfileCanvas extends Component {
   constructor(props) {

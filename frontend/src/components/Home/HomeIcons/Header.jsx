@@ -14,7 +14,7 @@ import { FaBars, FaSearch, FaShoppingCart } from "react-icons/fa";
 import UberELogo from "./logo";
 import mainstyle from "./HeaderStyle";
 import ProfileCanvas from "./ProfileCanvas";
-import "../Styles/Header.css";
+import "../../Styles/Header.css";
 
 class Header extends React.Component {
   constructor(props) {

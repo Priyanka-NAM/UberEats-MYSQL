@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-// import signincss from "./Styles/signInUp.module.css";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import siginupmodule from "../Styles/signInUp.module.css";
 
-import UberELogo from "../HomeIcons/logo";
+import UberELogo from "../Home/HomeIcons/logo";
 
 class SignIn extends Component {
   constructor(props) {

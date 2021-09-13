@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 import { FaMinusCircle, FaPlusCircle, FaRegWindowClose } from "react-icons/fa";
 import PropTypes from "prop-types";
-import "../Styles/SideBar.css";
+import "../../Styles/SideBar.css";
 import { Card, Modal, Button, Col, Row } from "react-bootstrap";
 
 class MenuCard extends Component {

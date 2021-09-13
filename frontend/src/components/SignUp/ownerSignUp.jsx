@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button, Nav, Container, Navbar, Form } from "react-bootstrap";
-import UberELogo from "../HomeIcons/logo";
+import UberELogo from "../Home/HomeIcons/logo";
 
 class OwnerSignUp extends Component {
   constructor(props) {
