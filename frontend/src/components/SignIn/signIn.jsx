@@ -15,7 +15,11 @@ class SignIn extends Component {
     return (
       <Container>
         <Row align='center' style={{ marginTop: "100px" }}>
-          <UberELogo style={{ paddingLeft: "0" }} />
+          <img
+            style={{ paddingLeft: "0" }}
+            src={UberELogo.UberEBLogo.src}
+            alt={UberELogo.UberEBLogo.alt}
+          />
         </Row>
         <Row>
           <Form>
@@ -54,6 +58,14 @@ class SignIn extends Component {
                   size='lg'
                   type='email'
                   placeholder='Enter email'
+                />
+                <Form.Control
+                  style={{
+                    marginTop: "20px",
+                  }}
+                  size='lg'
+                  type='password'
+                  placeholder='Enter password'
                 />
                 <Button
                   size='lg'

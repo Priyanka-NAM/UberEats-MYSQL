@@ -25,7 +25,7 @@ class ProfileCanvas extends Component {
 
     return (
       <OffCanvas
-        style={{ backgroundColor: "black" }}
+        style={{}}
         transitionDuration={1000}
         effect='parallax'
         isMenuOpened={showModal}
@@ -33,6 +33,7 @@ class ProfileCanvas extends Component {
         <OffCanvasMenu
           style={{
             backgroundColor: "white",
+            width: "15.5%",
             height: "100%",
             zIndex: "1000",
           }}>
@@ -60,7 +61,7 @@ class ProfileCanvas extends Component {
                     color: "#05944F",
                     fontWeight: "500",
                     fontFamily: "UberMoveText, sans-serif",
-                    fontSize: "14px",
+                    fontSize: "18px",
                   }}
                   to='/'>
                   view account
@@ -85,6 +86,7 @@ class ProfileCanvas extends Component {
                   style={{
                     textDecoration: "none",
                     color: "black",
+                    fontSize: "18px",
                   }}
                   to='/'>
                   Orders
@@ -104,6 +106,7 @@ class ProfileCanvas extends Component {
                   style={{
                     textDecoration: "none",
                     color: "black",
+                    fontSize: "18px",
                   }}
                   to='/'>
                   Favorites

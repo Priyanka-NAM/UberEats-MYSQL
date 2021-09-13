@@ -115,7 +115,9 @@ class MenuCard extends Component {
               onClick={this.handleAddToCart}
               style={{ width: "75%" }}>
               Add {Orderquantity} to order{" "}
-              <span style={{ paddingLeft: "15px" }}>${price}</span>
+              <span style={{ paddingLeft: "15px" }}>
+                ${Orderquantity * price}
+              </span>
             </Button>
           </Modal.Footer>
         </Modal>

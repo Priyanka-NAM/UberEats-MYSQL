@@ -14,7 +14,7 @@ class HomePage extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ marginLeft: "1%" }}>
         <Header />
         <Container fluid className='home-container'>
           <Col md='3'>

@@ -29,7 +29,7 @@ class RestoCard extends Component {
         <Card
           style={{
             objectFit: "fit",
-            width: "20rem",
+            width: "22rem",
             height: "12.5rem",
             paddingLeft: "0px",
           }}>

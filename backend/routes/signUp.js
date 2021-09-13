@@ -1,9 +1,7 @@
 const express = require("express");
-const db = require("../dbPool");
+const db = require("../dbPoolConnection");
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-    
-});
+router.get("/", async (req, res) => {});
 module.exports = router;

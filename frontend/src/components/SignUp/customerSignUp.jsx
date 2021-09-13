@@ -83,19 +83,38 @@ class CustomerSignUp extends React.Component {
                 Sign Up to Order
               </h2>
               <Form.Group className='mb-3' controlId='formBasicEmail'>
-                <Form.Control type='name' placeholder='Name' />
+                <Form.Control
+                  style={{
+                    height: "50px",
+                  }}
+                  type='name'
+                  placeholder='Name'
+                />
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicEmail'>
-                <Form.Control type='email' placeholder='Enter email' />
+                <Form.Control
+                  style={{
+                    height: "50px",
+                  }}
+                  type='email'
+                  placeholder='Enter email'
+                />
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicPassword'>
-                <Form.Control type='password' placeholder='Password' />
+                <Form.Control
+                  style={{
+                    height: "50px",
+                  }}
+                  type='password'
+                  placeholder='Password'
+                />
               </Form.Group>
               <Button
                 style={{
                   width: "100%",
                   backgroundColor: "#43A422",
                   color: "white",
+                  height: "50px",
                 }}
                 variant='light'
                 type='submit'>

@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 
 import { FaBars, FaSearch, FaShoppingCart } from "react-icons/fa";
+import Cart from "./Cart";
 import UberELogo from "./logo";
 import mainstyle from "./HeaderStyle";
 import ProfileCanvas from "./ProfileCanvas";
@@ -48,8 +49,9 @@ class Header extends React.Component {
           <Nav style={mainstyle.headerRow}>
             <Nav.Item>
               <FaBars
+                style={{ height: "50px" }}
                 xs='6'
-                size='22px'
+                size='24px'
                 color='black'
                 onClick={this.handleShow}
               />
@@ -57,12 +59,12 @@ class Header extends React.Component {
 
             <Nav.Item style={mainstyle.paddingLeft}>
               <img
-                style={mainstyle.paddingLeft}
+                style={{ paddingLeft: "15px", height: "50px" }}
                 src={UberELogo.UberEBLogo.src}
                 alt={UberELogo.UberEBLogo.alt}
               />
             </Nav.Item>
-            <Nav.Item style={mainstyle.paddingLeft}>
+            <Nav.Item style={{ paddingLeft: "40px" }}>
               <ButtonGroup style={mainstyle.DeliveryPickupgroup}>
                 <Button style={mainstyle.DPButton} variant='light'>
                   Delivery
@@ -72,24 +74,29 @@ class Header extends React.Component {
                 </Button>
               </ButtonGroup>
             </Nav.Item>
-            <Nav.Item style={mainstyle.paddingLeft}>
+            <Nav.Item style={{ paddingLeft: "20px", paddingRight: "40px" }}>
               <Button style={mainstyle.location} variant='light'>
                 Location
               </Button>
             </Nav.Item>
             <Nav.Item style={mainstyle.paddingLeft}>
-              <InputGroup style={{ width: "70rem", height: "3rem" }}>
+              <InputGroup style={{ width: "70rem", height: "3.5rem" }}>
                 <Button variant='light'>
                   <FaSearch />
                 </Button>
-                <FormControl placeholder='What are you Craving for?' />
+                <FormControl placeholder='What are you craving?' />
               </InputGroup>
             </Nav.Item>
-            <Nav.Item style={mainstyle.paddingLeft}>
-              <Button style={mainstyle.cart} variant='light'>
+            <Nav.Item align='center' style={mainstyle.paddingLeft}>
+              {/* <Button style={mainstyle.cart} variant='light'>
                 <FaShoppingCart style={{ paddingRight: "3px" }} />
                 Cart .{0}
-              </Button>
+              </Button> */}
+              <Cart
+                title='Hello'
+                description='Nasheville startbird'
+                quantity='2'
+              />
             </Nav.Item>
           </Nav>
         </Row>

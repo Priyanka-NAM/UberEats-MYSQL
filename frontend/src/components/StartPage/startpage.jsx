@@ -34,6 +34,13 @@ class StartPage extends Component {
     });
   };
 
+  // componentDidUnMount(){
+  //   document.body.style.backgroundSize = "2200px 1200px";
+  //   document.body.style.backgroundRepeat = "no-repeat";
+  //   document.body.style.overflow = "hidden";
+  //   document.body.style.backgroundImage = `url("/images/Startpage_bg.PNG")`;
+  // }
+
   render() {
     const { showModal } = this.state;
 
