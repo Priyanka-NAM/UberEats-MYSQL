@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Row, Col, Button } from "react-bootstrap";
 import { FaShoppingCart, FaRegWindowClose } from "react-icons/fa";
+import { BiX } from "react-icons/bi";
 import PropTypes from "prop-types";
 import mainstyle from "./HeaderStyle";
 import "../../Styles/Header.css";
@@ -45,8 +46,8 @@ class Cart extends React.Component {
           keyboard={false}
           style={{ width: "100%", display: "flex", alignItems: "center" }}>
           <Modal.Header>
-            <FaRegWindowClose
-              size='30px'
+            <BiX
+              size='35px'
               style={{ color: "black" }}
               onClick={this.handleClose}
             />

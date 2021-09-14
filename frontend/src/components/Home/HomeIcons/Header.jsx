@@ -12,6 +12,7 @@ import {
 
 import { FaBars, FaSearch, FaShoppingCart } from "react-icons/fa";
 import Cart from "./Cart";
+import Location from "./Location";
 import UberELogo from "./logo";
 import mainstyle from "./HeaderStyle";
 import ProfileCanvas from "./ProfileCanvas";
@@ -75,9 +76,10 @@ class Header extends React.Component {
               </ButtonGroup>
             </Nav.Item>
             <Nav.Item style={{ paddingLeft: "20px", paddingRight: "40px" }}>
-              <Button style={mainstyle.location} variant='light'>
+              {/* <Button style={mainstyle.location} variant='light'>
                 Location
-              </Button>
+              </Button> */}
+              <Location />
             </Nav.Item>
             <Nav.Item style={mainstyle.paddingLeft}>
               <InputGroup style={{ width: "70rem", height: "3.5rem" }}>

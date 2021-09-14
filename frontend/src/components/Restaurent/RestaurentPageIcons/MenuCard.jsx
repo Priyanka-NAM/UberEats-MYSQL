@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
-import { FaMinusCircle, FaPlusCircle, FaRegWindowClose } from "react-icons/fa";
+import { BsFillPlusCircleFill, BsDashCircleFill } from "react-icons/bs";
+import { BiX } from "react-icons/bi";
 import PropTypes from "prop-types";
 import "../../Styles/SideBar.css";
 import { Card, Modal, Button, Col, Row } from "react-bootstrap";
@@ -78,8 +79,8 @@ class MenuCard extends Component {
           centered>
           <Modal.Header>
             {" "}
-            <FaRegWindowClose
-              size='30px'
+            <BiX
+              size='35px'
               style={{ color: "black" }}
               onClick={this.handleClose}
             />
@@ -99,15 +100,15 @@ class MenuCard extends Component {
             <p>{description}</p>
           </Modal.Body>
           <Modal.Footer>
-            <FaMinusCircle
+            <BsDashCircleFill
               size='35px'
-              style={{ color: "grey" }}
+              style={{ color: "lightgrey" }}
               onClick={this.handleDecrement}
             />
             <p>{Orderquantity}</p>
-            <FaPlusCircle
+            <BsFillPlusCircleFill
               size='35px'
-              style={{ color: "grey" }}
+              style={{ color: "lightgrey" }}
               onClick={this.handleIncrement}
             />
             <Button

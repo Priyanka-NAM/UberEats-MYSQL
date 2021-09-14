@@ -8,6 +8,8 @@ import SignIn from "./SignIn/signIn";
 import RestaurentHome from "./Restaurent/RestaurentHome";
 import Rough from "./Restaurent/rough";
 import StartPage from "./StartPage/StartPage";
+import FinalOrder from "./Orders/Customer/FinalOrder";
+import CustomerOrders from "./Orders/Customer/CustomerOrders";
 
 function Main() {
   return (
@@ -19,6 +21,9 @@ function Main() {
         <Route path='/restaurents' component={RestaurentHome} />
         <Route path='/rough' component={Rough} />
         <Route path='/home' component={HomePage} />
+        <Route path='/order' component={FinalOrder} />
+        <Route path='/customerorder' component={CustomerOrders} />
+
         <Route path='/' exact component={StartPage} />
       </main>
     </Fragment>
