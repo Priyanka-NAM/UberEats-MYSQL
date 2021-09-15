@@ -17,6 +17,7 @@
     "no-console": "off",
     "no-unused-vars": "warn",
     // "react/destructuring-assignment": ["enabled", "never"],
+    "object-shorthand": [2, "consistent-as-needed"],
     "jsx-a11y/label-has-for": [
       2,
       {

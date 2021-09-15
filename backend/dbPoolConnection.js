@@ -9,7 +9,7 @@ const dbPoolConnection = mysql.createPool({
   user: process.env.DB_USER,
   port: process.env.DB_PORT,
   password: process.env.DB_PASS,
-  database: "ubereats",
+  database: "uber_eats",
 });
 dbPoolConnection.getConnection((error) => {
   if (error) {

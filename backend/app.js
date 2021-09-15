@@ -28,5 +28,5 @@ app.use((res, req, next) => {
   res.header("Access-Control-Allow-Credentials", "true");
   next();
 });
-
+app.use(express.static("./public"));
 module.exports = app;

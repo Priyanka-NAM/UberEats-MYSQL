@@ -1,19 +1,69 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { Redirect } from "react-router";
+import PropTypes from "prop-types";
+import axios from "axios";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-
+// import SignInUp from "../Styles/SignInUp";
 import UberELogo from "../Home/HomeIcons/logo";
 
 class SignIn extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      signinStatus: "",
+    };
   }
 
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password } = this.state;
+    // const { userSignIn } = this.props;
+    const details = {
+      email,
+      password,
+    };
+    console.log(details);
+    axios.defaults.withCredentials = true;
+    axios
+      .post(`http://localhost:5000/ubereats/signin`, details)
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          signinStatus: response.data.status,
+        });
+      })
+      .catch(() => {
+        console.log("Axios Post Error");
+        this.setState({
+          signinStatus: "Server not reachable",
+        });
+      });
+  };
+
+  handleChange = (e) => {
+    console.log(this.state);
+
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
   render() {
+    const { signinStatus } = this.state;
+
+    // const { user, user_id } = this.props;
+    let redirectpage = null;
+    // let error = "";
+    if (signinStatus) {
+      redirectpage = <Redirect to='/home' />;
+    }
+
+
     return (
       <Container>
+        {redirectpage}
         <Row align='center' style={{ marginTop: "100px" }}>
           <img
             style={{ paddingLeft: "0" }}
@@ -22,7 +72,7 @@ class SignIn extends Component {
           />
         </Row>
         <Row>
-          <Form>
+          <Form onSubmit={this.handleSubmit}>
             <Row
               style={{
                 marginTop: "60px",
@@ -57,7 +107,9 @@ class SignIn extends Component {
                 <Form.Control
                   size='lg'
                   type='email'
+                  name='email'
                   placeholder='Enter email'
+                  onChange={this.handleChange}
                 />
                 <Form.Control
                   style={{
@@ -65,8 +117,22 @@ class SignIn extends Component {
                   }}
                   size='lg'
                   type='password'
+                  name='password'
                   placeholder='Enter password'
+                  onChange={this.handleChange}
                 />
+                {signinStatus && (
+                  <p
+                    style={{
+                      width: "100%",
+                      height: "40%",
+                      marginTop: "15px",
+                      fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+                    }}
+                    className='alert alert-danger'>
+                    {signinStatus}
+                  </p>
+                )}
                 <Button
                   size='lg'
                   style={{
@@ -75,7 +141,8 @@ class SignIn extends Component {
                     marginTop: "25px",
                     fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
                   }}
-                  variant='dark'>
+                  variant='dark'
+                  type='submit'>
                   Next
                 </Button>
               </div>
@@ -98,7 +165,7 @@ class SignIn extends Component {
                     style={{
                       color: "green",
                     }}
-                    to='/'>
+                    to='/signup'>
                     Create an account
                   </Link>
                 </Col>
@@ -110,5 +177,9 @@ class SignIn extends Component {
     );
   }
 }
+
+// SignIn.propTypes = {
+//   userSignIn: PropTypes.func.isRequired,
+// };
 
 export default SignIn;

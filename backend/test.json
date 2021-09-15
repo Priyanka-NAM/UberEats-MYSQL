@@ -5,7 +5,7 @@
     "user": "admin",
     "port": 3306,
     "password": "ubereats",
-    "database": "ubereats"
+    "database": "uber_eats"
   },
   "secret": "ubereats",
   "frontEnd": "http://localhost:3000"
