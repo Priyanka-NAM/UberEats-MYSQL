@@ -5,9 +5,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router";
 import { connect } from "react-redux";
-import { Button, Nav, Container, Navbar, Form } from "react-bootstrap";
-import UberELogo from "../Home/HomeIcons/logo";
+import { Button, Container, Form } from "react-bootstrap";
 import { addCustomer } from "../../Actions/CustomerActions";
+import SignInUpNAV from "./SignInUpNavBar";
 
 class CustomerSignUp extends React.Component {
   constructor(props) {
@@ -47,45 +47,7 @@ class CustomerSignUp extends React.Component {
     return (
       <>
         {redirectpage}
-        <Navbar bg='dark' variant='dark'>
-          <Container
-            align='right'
-            style={{
-              padding: "0px",
-              margin: "0px",
-            }}>
-            <Navbar.Brand href='#home'>
-              <Nav>
-                <Nav.Item
-                  style={{
-                    marginLeft: "50px",
-                    width: "100%",
-                  }}>
-                  <img
-                    style={{ height: "60px", marginRight: "100px" }}
-                    src={UberELogo.UberEWLogo.src}
-                    alt={UberELogo.UberEWLogo.alt}
-                  />
-                </Nav.Item>
-                <Nav.Item
-                  style={{
-                    marginLeft: "250%",
-                    marginRight: "0",
-                    paddingRight: "10px",
-                  }}>
-                  <Button variant='dark' type='submit'>
-                    Sign In
-                  </Button>
-                </Nav.Item>
-                <Nav.Item>
-                  <Button active='true' variant='dark' type='submit'>
-                    Sign Up
-                  </Button>
-                </Nav.Item>
-              </Nav>
-            </Navbar.Brand>
-          </Container>
-        </Navbar>
+        <SignInUpNAV />
         <Container
           align='right'
           style={{
