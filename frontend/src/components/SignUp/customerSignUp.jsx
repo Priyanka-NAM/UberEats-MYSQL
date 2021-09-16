@@ -1,6 +1,13 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/forbid-prop-types */
 import React from "react";
+import PropTypes from "prop-types";
+import { Redirect } from "react-router";
+import { connect } from "react-redux";
 import { Button, Nav, Container, Navbar, Form } from "react-bootstrap";
 import UberELogo from "../Home/HomeIcons/logo";
+import { addCustomer } from "../../Actions/CustomerActions";
 
 class CustomerSignUp extends React.Component {
   constructor(props) {
@@ -8,9 +15,38 @@ class CustomerSignUp extends React.Component {
     this.state = {};
   }
 
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password, name } = this.state;
+    const details = {
+      name,
+      email,
+      password,
+    };
+    this.props.addCustomer(details);
+  };
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.type]: e.target.value,
+    });
+  };
+
   render() {
+    const { custosignup } = this.props;
+    const { status, userid } = custosignup;
+    let redirectpage = null;
+    let errorMessage = "";
+    if (!custosignup && userid) {
+      localStorage.setItem("userid", userid);
+      redirectpage = <Redirect to='/home' />;
+    } else if (status === "Authentication Failed") {
+      errorMessage = "user already already exists";
+    }
+
     return (
       <>
+        {redirectpage}
         <Navbar bg='dark' variant='dark'>
           <Container
             align='right'
@@ -71,7 +107,8 @@ class CustomerSignUp extends React.Component {
                 height: "74vh",
                 width: "100%",
                 fontfamily: "UberMoveText",
-              }}>
+              }}
+              onSubmit={this.handleSubmit}>
               <h2
                 style={{
                   paddingTop: "50px",
@@ -88,7 +125,9 @@ class CustomerSignUp extends React.Component {
                     height: "50px",
                   }}
                   type='name'
+                  name='name'
                   placeholder='Name'
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicEmail'>
@@ -97,7 +136,9 @@ class CustomerSignUp extends React.Component {
                     height: "50px",
                   }}
                   type='email'
+                  name='email'
                   placeholder='Enter email'
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicPassword'>
@@ -106,7 +147,9 @@ class CustomerSignUp extends React.Component {
                     height: "50px",
                   }}
                   type='password'
+                  name='password'
                   placeholder='Password'
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Button
@@ -120,6 +163,17 @@ class CustomerSignUp extends React.Component {
                 type='submit'>
                 Next
               </Button>
+              {status && (
+                <p
+                  style={{
+                    width: "100%",
+                    marginTop: "15px",
+                    fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+                  }}
+                  className='alert alert-danger'>
+                  {errorMessage}
+                </p>
+              )}
             </Form>
           </Container>
         </Container>
@@ -128,4 +182,11 @@ class CustomerSignUp extends React.Component {
   }
 }
 
-export default CustomerSignUp;
+CustomerSignUp.propTypes = {
+  addCustomer: PropTypes.func.isRequired,
+  custosignup: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  custosignup: state.customersignup.user,
+});
+export default connect(mapStateToProps, { addCustomer })(CustomerSignUp);

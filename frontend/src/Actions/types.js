@@ -1,0 +1,6 @@
+export const USER_SIGNIN = "USER_SIGNIN";
+export const USER_SIGNOUT = "USER_SIGNOUT";
+export const OWNER_SIGNUP = "OWNER_SIGNUP";
+export const CUSTOMER_SIGNUP = "CUSTOMER_SIGNUP";
+export const UPDATE_OWNER = "UPDATE_OWNER";
+export const UPDATE_CUSTOMER = "CUSTOMER_SIGNUP";

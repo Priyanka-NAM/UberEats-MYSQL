@@ -16,8 +16,8 @@ function Main() {
     <Fragment key='key'>
       <main>
         <Route path='/signin' component={SignIn} />
-        <Route path='/customersignup' component={CustomerSignUp} />
-        <Route path='/ownersignup' component={OwnerSignUp} />
+        <Route path='/customer/signup' component={CustomerSignUp} />
+        <Route path='/owner/signup' component={OwnerSignUp} />
         <Route path='/restaurents' component={RestaurentHome} />
         <Route path='/rough' component={Rough} />
         <Route path='/home' component={HomePage} />

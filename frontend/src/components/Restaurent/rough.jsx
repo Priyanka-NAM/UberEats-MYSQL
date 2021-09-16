@@ -1,74 +1,204 @@
 // import React, { Component } from "react";
-// import { Container, Image, Figure, Button, Jumbotron } from "react-bootstrap";
-
+// import { connect } from "react-redux";
+// import { Link } from "react-router-dom";
+// import { Redirect } from "react-router";
 // import PropTypes from "prop-types";
+// import axios from "axios";
+// import { Container, Col, Row, Form, Button } from "react-bootstrap";
+// import { userSignin } from "../../Actions/signinAction";
+// import "bootstrap/dist/css/bootstrap.css";
+// // import SignInUp from "../Styles/SignInUp";
+// import UberELogo from "../Home/HomeIcons/logo";
 
-// import "font-awesome/css/font-awesome.min.css";
-// import "bootstrap/dist/css/bootstrap.min.css";
-
-// class Rough extends Component {
+// class SignIn extends Component {
 //   constructor(props) {
 //     super(props);
-//     this.state = {};
+//     this.state = {
+//       signinStatus: "",
+//     };
 //   }
 
-//   render() {
-//     return (
-//       <>
-//         {/* <Image
-//           src='https://d1ralsognjng37.cloudfront.net/2c9841a7-c2e5-4202-bcb4-dc7cff46c668.jpeg'
-//           fluid
-//         /> */}
-//         <Jumbotron>
-//           <h1 className='display-3'>Hello, world!</h1>
-//           <p className='lead'>
-//             This is a simple hero unit, a simple Jumbotron-style component for
-//             calling extra attention to featured content or information.
-//           </p>
-//           <hr className='my-2' />
-//           <p>
-//             It uses utility classes for typography and spacing to space content
-//             out within the larger container.
-//           </p>
-//           <p className='lead'>
-//             <Button color='primary'>Learn More</Button>
-//           </p>
-//           <Figure>
-//             <Figure.Image
-//               width={2200}
-//               height={1000}
-//               alt='171x180'
-//               src='https://d1ralsognjng37.cloudfront.net/2c9841a7-c2e5-4202-bcb4-dc7cff46c668.jpeg'
-//             />
-//             <Figure.Caption>
-//               Nulla vitae elit libero, a pharetra augue mollis interdum.
-//             </Figure.Caption>
-//           </Figure>
-//         </Jumbotron>
-//         <Figure>
-//           <Figure.Image
-//             width={2200}
-//             height={1000}
-//             alt='171x180'
-//             src='https://d1ralsognjng37.cloudfront.net/2c9841a7-c2e5-4202-bcb4-dc7cff46c668.jpeg'
-//           />
-//           <Figure.Caption>
-//             Nulla vitae elit libero, a pharetra augue mollis interdum.
-//           </Figure.Caption>
-//         </Figure>
+//   handleSubmit = (e) => {
+//     e.preventDefault();
+//     const { email, password } = this.state;
 
-//         <Jumbotron fluid>
-//           <Container fluid>
-//             <h1 className='display-3'>Fluid jumbotron</h1>
-//             <p className='lead'>
-//               This is a modified jumbotron that occupies the entire horizontal
-//               space of its parent.
-//             </p>
-//           </Container>
-//         </Jumbotron>
-//       </>
+//     // if (user && user_id) {
+//     //   localStorage.setItem("email_id", this.props.user.email_id);
+//     //   localStorage.setItem("is_owner", this.props.user.is_owner);
+//     //   localStorage.setItem("user_id", this.props.user.user_id);
+//     //   localStorage.setItem("name", this.props.user.name);
+
+//     // } else if (this.props.user === "NO_USER" && this.state.loginFlag) {
+//     //   message = "No user with this email id";
+//     // } else if (
+//     //   this.props.user === "INCORRECT_PASSWORD" &&
+//     //   this.state.loginFlag
+//     // ) {
+//     //   message = "Incorrect Password";
+//     // }
+
+//     const details = {
+//       email,
+//       password,
+//     };
+//     console.log(details);
+//     userSignin(details);
+//     // axios.defaults.withCredentials = true;
+//     // axios
+//     //   .post(`http://localhost:5000/ubereats/signin`, details)
+//     //   .then((response) => {
+//     //     console.log(response.data);
+//     //     this.setState({
+//     //       signinStatus: response.data.status,
+//     //     });
+//     //   })
+//     //   .catch(() => {
+//     //     console.log("Axios Post Error");
+//     //     this.setState({
+//     //       signinStatus: "Server not reachable",
+//     //     });
+//     //   });
+//   };
+
+//   handleChange = (e) => {
+//     console.log(this.state);
+
+//     this.setState({
+//       [e.target.name]: e.target.value,
+//     });
+//   };
+
+//   render() {
+//     const { signinStatus } = this.state;
+
+//     // const { user, user_id } = this.props;
+//     let redirectpage = null;
+//     // let error = "";
+//     if (signinStatus) {
+//       redirectpage = <Redirect to='/home' />;
+//     }
+
+//     return (
+//       <Container>
+//         {redirectpage}
+//         <Row align='center' style={{ marginTop: "100px" }}>
+//           <img
+//             style={{ paddingLeft: "0" }}
+//             src={UberELogo.UberEBLogo.src}
+//             alt={UberELogo.UberEBLogo.alt}
+//           />
+//         </Row>
+//         <Row>
+//           <Form onSubmit={this.handleSubmit}>
+//             <Row
+//               style={{
+//                 marginTop: "60px",
+//                 paddingLeft: "28%",
+//               }}>
+//               <h2
+//                 style={{
+//                   fontSize: "30px",
+//                   fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+//                   fontWeight: "400",
+//                 }}>
+//                 Welcome back
+//               </h2>
+//               <h6
+//                 style={{
+//                   marginTop: "30px",
+//                   marginBottom: "10px",
+//                   fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+//                   fontSize: "16px",
+//                   letterSpacing: ".02em",
+//                   fontWeight: "400",
+//                   color: "#262626",
+//                 }}>
+//                 Sign in with your email address or mobile number.
+//               </h6>
+//               <div
+//                 style={{
+//                   width: "60%",
+//                   height: "100%",
+//                   fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+//                 }}>
+//                 <Form.Control
+//                   size='lg'
+//                   type='email'
+//                   name='email'
+//                   placeholder='Enter email'
+//                   onChange={this.handleChange}
+//                 />
+//                 <Form.Control
+//                   style={{
+//                     marginTop: "20px",
+//                   }}
+//                   size='lg'
+//                   type='password'
+//                   name='password'
+//                   placeholder='Enter password'
+//                   onChange={this.handleChange}
+//                 />
+//                 {signinStatus && (
+//                   <p
+//                     style={{
+//                       width: "100%",
+//                       height: "40%",
+//                       marginTop: "15px",
+//                       fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+//                     }}
+//                     className='alert alert-danger'>
+//                     {signinStatus}
+//                   </p>
+//                 )}
+//                 <Button
+//                   size='lg'
+//                   style={{
+//                     width: "100%",
+//                     height: "60%",
+//                     marginTop: "25px",
+//                     fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+//                   }}
+//                   variant='dark'
+//                   type='submit'>
+//                   Next
+//                 </Button>
+//               </div>
+//               <Row
+//                 style={{
+//                   width: "60%",
+//                   marginTop: "20px",
+//                   fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+//                   fontSize: "16px",
+//                 }}>
+//                 <Col
+//                   align='right'
+//                   style={{
+//                     paddingRight: "0px",
+//                   }}>
+//                   <Form.Label>New to Uber?</Form.Label>
+//                 </Col>
+//                 <Col>
+//                   <Link
+//                     style={{
+//                       color: "green",
+//                     }}
+//                     to='/signup'>
+//                     Create an account
+//                   </Link>
+//                 </Col>
+//               </Row>
+//             </Row>
+//           </Form>
+//         </Row>
+//       </Container>
 //     );
 //   }
 // }
 
-// export default Rough;
+// SignIn.propTypes = {
+//   userSignin: PropTypes.func.isRequired,
+// };
+// const mapStateToProps = (state) => ({
+//   signinuser: state.signin.user,
+// });
+// export default connect(mapStateToProps, { userSignin })(SignIn);

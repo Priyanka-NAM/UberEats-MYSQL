@@ -1,9 +1,12 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Redirect } from "react-router";
 import PropTypes from "prop-types";
-import axios from "axios";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
+import { userSignin } from "../../Actions/signinAction";
 import "bootstrap/dist/css/bootstrap.css";
 // import SignInUp from "../Styles/SignInUp";
 import UberELogo from "../Home/HomeIcons/logo";
@@ -11,55 +14,36 @@ import UberELogo from "../Home/HomeIcons/logo";
 class SignIn extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      signinStatus: "",
-    };
+    this.state = {};
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = this.state;
-    // const { userSignIn } = this.props;
     const details = {
       email,
       password,
     };
-    console.log(details);
-    axios.defaults.withCredentials = true;
-    axios
-      .post(`http://localhost:5000/ubereats/signin`, details)
-      .then((response) => {
-        console.log(response.data);
-        this.setState({
-          signinStatus: response.data.status,
-        });
-      })
-      .catch(() => {
-        console.log("Axios Post Error");
-        this.setState({
-          signinStatus: "Server not reachable",
-        });
-      });
+    this.props.userSignin(details);
   };
 
   handleChange = (e) => {
-    console.log(this.state);
-
     this.setState({
       [e.target.name]: e.target.value,
     });
   };
 
   render() {
-    const { signinStatus } = this.state;
-
-    // const { user, user_id } = this.props;
+    const { signinuser } = this.props;
+    const { status, userid } = signinuser;
     let redirectpage = null;
-    // let error = "";
-    if (signinStatus) {
+    let errorMessage = "";
+    if (signinuser && userid) {
+      localStorage.setItem("userid", userid);
       redirectpage = <Redirect to='/home' />;
+    } else if (status === "Authentication Failed") {
+      errorMessage = "user does not exist";
     }
-
 
     return (
       <Container>
@@ -121,7 +105,7 @@ class SignIn extends Component {
                   placeholder='Enter password'
                   onChange={this.handleChange}
                 />
-                {signinStatus && (
+                {status && (
                   <p
                     style={{
                       width: "100%",
@@ -130,7 +114,7 @@ class SignIn extends Component {
                       fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
                     }}
                     className='alert alert-danger'>
-                    {signinStatus}
+                    {errorMessage}
                   </p>
                 )}
                 <Button
@@ -178,8 +162,11 @@ class SignIn extends Component {
   }
 }
 
-// SignIn.propTypes = {
-//   userSignIn: PropTypes.func.isRequired,
-// };
-
-export default SignIn;
+SignIn.propTypes = {
+  userSignin: PropTypes.func.isRequired,
+  signinuser: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  signinuser: state.signin.user,
+});
+export default connect(mapStateToProps, { userSignin })(SignIn);

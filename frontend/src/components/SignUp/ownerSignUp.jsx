@@ -1,6 +1,12 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
+import { Redirect } from "react-router";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Button, Nav, Container, Navbar, Form } from "react-bootstrap";
 import UberELogo from "../Home/HomeIcons/logo";
+import { addOwner } from "../../Actions/OwnerActions";
 
 class OwnerSignUp extends Component {
   constructor(props) {
@@ -8,9 +14,39 @@ class OwnerSignUp extends Component {
     this.state = {};
   }
 
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { email, password, name, location } = this.state;
+    const details = {
+      name,
+      email,
+      password,
+      location,
+    };
+    this.props.addOwner(details);
+  };
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
   render() {
+    const { ownersignup } = this.props;
+    const { status, userid } = ownersignup;
+    let redirectpage = null;
+    let errorMessage = "";
+    if (!ownersignup && userid) {
+      localStorage.setItem("userid", userid);
+      redirectpage = <Redirect to='/home' />;
+    } else if (status === "Authentication Failed") {
+      errorMessage = "user already already exists";
+    }
+
     return (
       <>
+        {redirectpage}
         <Navbar bg='dark' variant='dark'>
           <Container
             align='right'
@@ -70,7 +106,8 @@ class OwnerSignUp extends Component {
                 height: "80vh",
                 width: "100%",
                 fontfamily: "UberMoveText",
-              }}>
+              }}
+              onSubmit={this.handleSubmit}>
               <h2
                 style={{
                   paddingTop: "50px",
@@ -87,6 +124,8 @@ class OwnerSignUp extends Component {
                   }}
                   type='name'
                   placeholder='Restaurant Name'
+                  name='name'
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicEmail'>
@@ -95,7 +134,9 @@ class OwnerSignUp extends Component {
                     height: "50px",
                   }}
                   type='Location'
+                  name='location'
                   placeholder='Restaurant Location'
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicEmail'>
@@ -104,7 +145,9 @@ class OwnerSignUp extends Component {
                     height: "50px",
                   }}
                   type='email'
+                  name='email'
                   placeholder='Enter email'
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicPassword'>
@@ -113,7 +156,9 @@ class OwnerSignUp extends Component {
                     height: "50px",
                   }}
                   type='password'
+                  name='password'
                   placeholder='Password'
+                  onChange={this.handleChange}
                 />
               </Form.Group>
               <Button
@@ -127,6 +172,17 @@ class OwnerSignUp extends Component {
                 type='submit'>
                 Submit
               </Button>
+              {status && (
+                <p
+                  style={{
+                    width: "100%",
+                    marginTop: "15px",
+                    fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+                  }}
+                  className='alert alert-danger'>
+                  {errorMessage}
+                </p>
+              )}
             </Form>
           </Container>
         </Container>
@@ -135,4 +191,12 @@ class OwnerSignUp extends Component {
   }
 }
 
-export default OwnerSignUp;
+OwnerSignUp.propTypes = {
+  addOwner: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  ownersignup: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  ownersignup: state.ownersignup.user,
+});
+export default connect(mapStateToProps, { addOwner })(OwnerSignUp);
