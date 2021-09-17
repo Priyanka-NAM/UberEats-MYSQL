@@ -88,7 +88,7 @@ class ProfileCanvas extends Component {
                     color: "black",
                     fontSize: "18px",
                   }}
-                  to='/'>
+                  to='/customerOrder'>
                   Orders
                 </Link>
               </Col>

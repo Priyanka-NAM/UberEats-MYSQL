@@ -2,6 +2,9 @@
 import React, { Component } from "react";
 import { Nav, Button, Row } from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
+import { Redirect } from "react-router";
+import { useHistory } from "react-router-dom";
+
 import UberELogo from "../Home/HomeIcons/logo";
 import mainstyle from "../Home/HomeIcons/HeaderStyle";
 import StartPageCanvas from "./StartPageCanvas";
@@ -13,6 +16,7 @@ class StartPage extends Component {
     this.state = {
       showModal: false,
     };
+    this.handleSignInClick = this.handleSignInClick.bind(this);
   }
 
   componentDidMount() {
@@ -20,6 +24,10 @@ class StartPage extends Component {
     document.body.style.backgroundRepeat = "no-repeat";
     document.body.style.overflow = "hidden";
     document.body.style.backgroundImage = `url("/images/Startpage_bg.PNG")`;
+  }
+
+  componentWillUnmount() {
+    document.body.style.backgroundImage = ``;
   }
 
   handleShow = () => {
@@ -34,18 +42,16 @@ class StartPage extends Component {
     });
   };
 
-  // componentDidUnMount(){
-  //   document.body.style.backgroundSize = "2200px 1200px";
-  //   document.body.style.backgroundRepeat = "no-repeat";
-  //   document.body.style.overflow = "hidden";
-  //   document.body.style.backgroundImage = `url("/images/Startpage_bg.PNG")`;
-  // }
+  handleSignInClick = () => {
+    const history = useHistory();
+    // eslint-disable-next-line react/destructuring-assignment
+    history.push("/home");
+  };
 
   render() {
     const { showModal } = this.state;
-
     return (
-      <div>
+      <div className='imgStyle'>
         <Row fluid='true'>
           <Nav style={mainstyle.headerRow}>
             <Nav.Item style={{ paddingLeft: "50px" }}>
@@ -74,7 +80,8 @@ class StartPage extends Component {
                   borderRadius: "40px",
                   fontFamily: "UberMoveText, sans-serif",
                 }}
-                variant='light'>
+                variant='light'
+                onClick={this.handleSignInClick}>
                 Sign in
               </Button>
             </Nav.Item>

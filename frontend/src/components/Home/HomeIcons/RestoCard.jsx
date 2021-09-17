@@ -23,7 +23,8 @@ class RestoCard extends Component {
   handleAddToCart = () => {};
 
   render() {
-    const { title, description, address, src } = this.props;
+    const { restaurant } = this.props;
+
     return (
       <>
         <Card
@@ -38,7 +39,7 @@ class RestoCard extends Component {
               objectFit: "cover",
               width: "auto",
             }}
-            src={src}
+            src={restaurant.imageurl}
           />
           <FaRegHeart
             className='fav-icon'
@@ -48,10 +49,10 @@ class RestoCard extends Component {
           />
           <div className='resta-info'>
             <h2 className='restar-name'>
-              {title}
-              <span>({address})</span>
+              {restaurant.title}
+              <span>({restaurant.address})</span>
             </h2>
-            <h4 className='resta-descr'>{description}</h4>
+            <h4 className='resta-descr'>{restaurant.description}</h4>
           </div>
         </Card>
       </>
@@ -59,10 +60,8 @@ class RestoCard extends Component {
   }
 }
 RestoCard.propTypes = {
-  src: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  restaurant: PropTypes.object.isRequired,
 };
 
 export default RestoCard;
