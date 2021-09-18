@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, Row, Col, Button } from "react-bootstrap";
-import { FaShoppingCart, FaRegWindowClose } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 import { BiX } from "react-icons/bi";
 import PropTypes from "prop-types";
 import mainstyle from "./HeaderStyle";
@@ -33,11 +33,12 @@ class Cart extends React.Component {
     return (
       <>
         <Button
+          size='lg'
           style={mainstyle.cart}
           variant='light'
           onClick={this.handleShow}>
           <FaShoppingCart style={{ paddingRight: "3px" }} />
-          Cart .{0}
+          Cart.{0}
         </Button>
         <Modal
           show={showModal}

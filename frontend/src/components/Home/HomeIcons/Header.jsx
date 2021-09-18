@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 import {
   Nav,
   ButtonGroup,
@@ -9,8 +9,7 @@ import {
   Row,
   Container,
 } from "react-bootstrap";
-
-import { FaBars, FaSearch, FaShoppingCart } from "react-icons/fa";
+import { FaBars, FaSearch } from "react-icons/fa";
 import Cart from "./Cart";
 import Location from "./Location";
 import UberELogo from "./logo";
@@ -23,6 +22,9 @@ class Header extends React.Component {
     super(props);
     this.state = {
       showModal: false,
+      deliverystyle: mainstyle.DpActiveButton,
+      pickupstyle: mainstyle.DPButton,
+      searchInput: "",
     };
   }
 
@@ -38,13 +40,51 @@ class Header extends React.Component {
     });
   };
 
+  handleDeliveryPickup = (e) => {
+    e.preventDefault();
+    const { restoSearch } = this.props;
+    if (e.target.name === "delivery") {
+      this.setState({
+        deliverystyle: mainstyle.DpActiveButton,
+        pickupstyle: mainstyle.DPButton,
+      });
+      return restoSearch(e.target.name);
+    }
+
+    this.setState({
+      deliverystyle: mainstyle.DPButton,
+      pickupstyle: mainstyle.DpActiveButton,
+    });
+    return restoSearch(e.target.name);
+  };
+
+  handleSearchBarKeyPress = (target) => {
+    if (target.charCode === 13) {
+      const { searchBarCallback } = this.props;
+      const { searchInput } = this.state;
+      console.log("On Search Bar Enter Key Press: ", searchInput);
+      searchBarCallback(searchInput);
+    }
+  };
+
+  handleSearchBarChange = (e) => {
+    console.log("On Search Bar change: ", e.target.value);
+    this.setState({
+      searchInput: e.target.value,
+    });
+  };
+
+  handleSearchBar = (e) => {
+    const { searchBarCallback } = this.props;
+    const { searchInput } = this.state;
+    console.log("On Search Bar Click : ", searchInput);
+    searchBarCallback(searchInput);
+  };
+
   render() {
-    const { showModal } = this.state;
+    const { showModal, deliverystyle, pickupstyle } = this.state;
 
     return (
-      // let className='DPButton';
-      // if(this.props.isActive)
-      //   className
       <Container fluid='true' style={{ marginBottom: "2%" }}>
         <Row fluid='true'>
           <Nav style={mainstyle.headerRow}>
@@ -67,37 +107,46 @@ class Header extends React.Component {
             </Nav.Item>
             <Nav.Item style={{ paddingLeft: "40px" }}>
               <ButtonGroup style={mainstyle.DeliveryPickupgroup}>
-                <Button style={mainstyle.DPButton} variant='light'>
+                <Button
+                  style={deliverystyle}
+                  variant='light'
+                  name='delivery'
+                  onClick={this.handleDeliveryPickup}>
                   Delivery
                 </Button>
-                <Button style={mainstyle.DPButton} variant='light'>
+                <Button
+                  style={pickupstyle}
+                  variant='light'
+                  name='pickup'
+                  onClick={this.handleDeliveryPickup}>
                   Pickup
                 </Button>
               </ButtonGroup>
             </Nav.Item>
             <Nav.Item style={{ paddingLeft: "20px", paddingRight: "40px" }}>
-              {/* <Button style={mainstyle.location} variant='light'>
-                Location
-              </Button> */}
-              <Location />
+              <Location description='123 San Fernando St, San Jose' />
             </Nav.Item>
             <Nav.Item style={mainstyle.paddingLeft}>
-              <InputGroup style={{ width: "70rem", height: "3.5rem" }}>
-                <Button variant='light'>
+              <InputGroup
+                size='lg'
+                style={{ width: "70rem", height: "54.4px" }}>
+                {/* style={{ width: "70rem", height: "3.5rem" }}> */}
+                <Button variant='light' onClick={this.handleSearchBar}>
                   <FaSearch />
                 </Button>
-                <FormControl placeholder='What are you craving?' />
+                <FormControl
+                  placeholder='What are you craving?'
+                  onKeyPress={this.handleSearchBarKeyPress}
+                  onChange={this.handleSearchBarChange}
+                />
               </InputGroup>
             </Nav.Item>
             <Nav.Item align='center' style={mainstyle.paddingLeft}>
-              {/* <Button style={mainstyle.cart} variant='light'>
-                <FaShoppingCart style={{ paddingRight: "3px" }} />
-                Cart .{0}
-              </Button> */}
               <Cart
                 title='Hello'
                 description='Nasheville startbird'
                 quantity='2'
+                price='10.00'
               />
             </Nav.Item>
           </Nav>
@@ -107,5 +156,9 @@ class Header extends React.Component {
     );
   }
 }
+Header.propTypes = {
+  restoSearch: PropTypes.func.isRequired,
+  searchBarCallback: PropTypes.func.isRequired,
+};
 
 export default Header;

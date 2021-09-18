@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import PropTypes, { resetWarningCache } from "prop-types";
+import PropTypes from "prop-types";
 import {
   Container,
   Button,
@@ -16,7 +16,9 @@ const SidebarButton = {
   borderRadius: 20,
   backgroundColor: "#eeeeee",
   color: "black",
-  fontSize: "14px",
+  fontSize: "16px",
+  fontFamily: "UberMoveText, sans-serif",
+  fontWeight: "550",
   textTransform: "none",
   height: "40px",
 };
@@ -25,7 +27,9 @@ const SidebarActiveButton = {
   borderRadius: 20,
   backgroundColor: "black",
   color: "white",
-  fontSize: "14px",
+  fontFamily: "UberMoveText, sans-serif",
+  fontWeight: "550",
+  fontSize: "16px",
   textTransform: "none",
   height: "40px",
 };
@@ -103,8 +107,6 @@ class SideBar extends Component {
     return FoodTypeSelection(e.target.name);
   };
 
-  handleSort = (e) => {};
-
   render() {
     return (
       <Container fluid='true'>
@@ -113,7 +115,7 @@ class SideBar extends Component {
             <h4 className='sidebar-heading'>Sort</h4>
           </Row>
 
-          <Row style={{ maxWidth: "30%" }}>
+          <Row style={{ maxWidth: "20%" }}>
             <Button
               variant='light'
               style={veganStyle}
@@ -122,7 +124,7 @@ class SideBar extends Component {
               Vegan
             </Button>
           </Row>
-          <Row style={{ maxWidth: "30%" }}>
+          <Row style={{ maxWidth: "32%" }}>
             <Button
               variant='light'
               style={vegStyle}
@@ -131,7 +133,7 @@ class SideBar extends Component {
               Vegetarian
             </Button>
           </Row>
-          <Row style={{ maxWidth: "30%" }}>
+          <Row style={{ maxWidth: "32%" }}>
             <Button
               variant='light'
               style={nonVegStyle}

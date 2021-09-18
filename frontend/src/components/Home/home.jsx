@@ -8,14 +8,18 @@ import RestoCard from "./HomeIcons/RestoCard";
 import SideBar from "./HomeIcons/SideBar";
 import "../Styles/Home.css";
 
+let favoriteRestos = [];
+let nationalRestos = [];
+let nearToYouRestos = [];
 class HomePage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchInput: "",
-      noRecord: false,
-      displayRestaurants: [],
       allRestaurents: [],
+
+      deliveryType: "delivery",
+      foodSelectionType: "allresto",
+      userLocation: "",
     };
   }
 
@@ -35,9 +39,6 @@ class HomePage extends Component {
               response.data.restaurentsinfo.restaurants
             );
             this.setState({
-              noRecord: true,
-              searchInput: "",
-              displayRestaurants: [],
               allRestaurents: [],
             });
           } else {
@@ -46,9 +47,6 @@ class HomePage extends Component {
               response.data.restaurentsinfo.restaurants
             );
             this.setState({
-              noRecord: false,
-              searchInput: "",
-              displayRestaurants: response.data.restaurentsinfo.restaurants,
               allRestaurents: response.data.restaurentsinfo.restaurants,
             });
           }
@@ -61,51 +59,146 @@ class HomePage extends Component {
       });
   }
 
-  handleFoodSelect = (e) => {
-    console.log(e);
+  handleRestaurantFiltering = (foodSelection, deliveryType, location = "") => {
     const { allRestaurents } = this.state;
-
-    if (e === "allresto") {
-      this.setState({
-        displayRestaurants: allRestaurents,
-      });
+    let foodBasedFilteredSet = null;
+    let deliveryBasedFilteredSet = null;
+    console.log("All Restaurants Length: ", allRestaurents.length);
+    console.log("All Restaurants: ", allRestaurents);
+    // Food Type Filtering
+    if (foodSelection === "allresto") {
+      foodBasedFilteredSet = allRestaurents;
     } else {
-      const filteredList = allRestaurents.filter(
-        (restaurant) => restaurant.foodtype === e
+      foodBasedFilteredSet = allRestaurents.filter(
+        (restaurant) => restaurant.foodtype === foodSelection
       );
-      console.log(`The list is here :${allRestaurents}`);
-      this.setState({
-        displayRestaurants: filteredList,
-      });
     }
+    console.log(
+      "Food Based Filtering Restaurants Length: ",
+      foodBasedFilteredSet.length
+    );
+
+    console.log("Food Based Filetered Set: ", foodBasedFilteredSet);
+    // Delivery Based filtering
+    deliveryBasedFilteredSet = foodBasedFilteredSet.filter(
+      (restaurant) =>
+        restaurant.deliveryType === deliveryType ||
+        restaurant.deliveryType === "both"
+    );
+
+    // Location Based Filtering
+    // console.log("Filtering Location: ", location);
+    console.log(
+      "Delivery Based Filtering Restaurants Length: ",
+      deliveryBasedFilteredSet.length
+    );
+
+    console.log("Delivery Based Filetered Set: ", deliveryBasedFilteredSet);
+
+    // Favorites
+    favoriteRestos = deliveryBasedFilteredSet.filter(
+      (restaurant) => restaurant.isFavorite
+    );
+
+    // National Brands
+    nationalRestos = deliveryBasedFilteredSet.filter(
+      (restaurant) => restaurant.isNationalBrand
+    );
+
+    // Restaurants Near me
+    nearToYouRestos = deliveryBasedFilteredSet.filter(
+      (restaurant) => restaurant.isNationalBrand
+    );
+  };
+
+  handleFoodSelect = (e) => {
+    console.log("Food Selection Type: ", e);
+    const { deliveryType, userLocation } = this.state;
+    this.setState({
+      foodSelectionType: e,
+    });
+    this.handleRestaurantFiltering(e, deliveryType, userLocation);
+  };
+
+  handleRestoSearch = (e) => {
+    console.log("Delivery Type : ", e);
+    const { foodSelectionType, userLocation } = this.state;
+    this.setState({
+      deliveryType: e,
+    });
+    this.handleRestaurantFiltering(foodSelectionType, e, userLocation);
+  };
+
+  handleSearchBarInput = (e) => {
+    console.log("Search Input from Header: ", e);
+  };
+
+  handleRestaPageRedirect = (restaurant) => {
+    console.log("handleRestaPageRedirect: ", restaurant);
   };
 
   render() {
-    const { displayRestaurants, allRestaurents, searchInput, noRecord } =
+    const { allRestaurents, foodSelectionType, deliveryType, userLocation } =
       this.state;
     let nationalbrands = null;
-    let foodselection = null;
-    console.log("Inside Render");
-    if (foodselection) {
-      foodselection = allRestaurents.map((restaurant) => {
-        console.log("!!");
-        return <RestoCard restaurant={restaurant} />;
+    let favorites = null;
+    let popularnear = null;
+
+    if (allRestaurents) {
+      this.handleRestaurantFiltering(
+        foodSelectionType,
+        deliveryType,
+        userLocation
+      );
+      nationalbrands = nationalRestos.map((restaurant) => {
+        console.log("Inside National Brands, ", nationalRestos.length);
+        return (
+          <RestoCard
+            key={restaurant.restaurant_id}
+            RestaRedirect={this.handleRestaPageRedirect}
+            restaurant={restaurant}
+            isLiked={false}
+          />
+        );
       });
-    }
-    if (displayRestaurants) {
-      nationalbrands = displayRestaurants.map((restaurant) => {
-        console.log("!!");
-        return <RestoCard restaurant={restaurant} />;
+      favorites = favoriteRestos.map((restaurant) => {
+        console.log("Inside Favorite Brands, ", favoriteRestos.length);
+        return (
+          <RestoCard
+            key={restaurant.restaurant_id}
+            RestaRedirect={this.handleRestaPageRedirect}
+            restaurant={restaurant}
+            isLiked
+          />
+        );
+      });
+      popularnear = nearToYouRestos.map((restaurant) => {
+        console.log("Inside Popular Near me, ", nationalRestos.length);
+        return (
+          <RestoCard
+            key={restaurant.restaurant_id}
+            RestaRedirect={this.handleRestaPageRedirect}
+            restaurant={restaurant}
+            isLiked={false}
+          />
+        );
       });
     }
     return (
       <div style={{ marginLeft: "1%" }}>
-        <Header />
+        <Header
+          restoSearch={this.handleRestoSearch}
+          searchBarCallback={this.handleSearchBarInput}
+        />
         <Container fluid className='home-container'>
           <Col md='3'>
             <SideBar FoodTypeSelection={this.handleFoodSelect} />
           </Col>
-          <RestaurantCarousel nationalbrands={nationalbrands} />
+          <RestaurantCarousel
+            nationalbrands={nationalbrands}
+            favorites={favorites}
+            popularnear={popularnear}
+          />
         </Container>
       </div>
     );

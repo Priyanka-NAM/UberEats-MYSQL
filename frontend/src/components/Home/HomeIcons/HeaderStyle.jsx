@@ -9,6 +9,8 @@ const mainstyle = {
     margin: "none",
     padding: "none",
     width: "11rem",
+    fontFamily: "UberMoveText, sans-serif",
+
     backgroundColor: "#EEEEEE",
     borderRadius: "25px",
     height: "3.4rem",
@@ -17,6 +19,15 @@ const mainstyle = {
     justifyContent: "center",
   },
   DPButton: {
+    borderRadius: "30px",
+    backgroundColor: "#EEEEEE",
+    boder: "none",
+    color: "black",
+    height: "2.5rem",
+    width: "20px",
+    padding: "0",
+  },
+  DpActiveButton: {
     borderRadius: "30px",
     backgroundColor: "white",
     color: "black",
@@ -28,9 +39,10 @@ const mainstyle = {
     borderRadius: "30px",
     backgroundColor: "black",
     color: "white",
-    height: "2.5rem",
+    // height: "2.5rem",
+    height: "54.4 px",
     width: "7rem",
-    paddingLeft: "1px",
+    paddingLeft: "10px",
   },
   location: {
     borderRadius: "30px",

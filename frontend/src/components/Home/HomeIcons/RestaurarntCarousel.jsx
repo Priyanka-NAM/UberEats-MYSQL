@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from "react";
 import { Container, Row, Carousel } from "react-bootstrap";
@@ -12,7 +13,7 @@ class RestaurentCarousel extends React.Component {
   }
 
   render() {
-    const { nationalbrands } = this.props;
+    const { nationalbrands, favorites, popularnear } = this.props;
     console.log(nationalbrands);
     return (
       <Container fluid='true'>
@@ -21,7 +22,7 @@ class RestaurentCarousel extends React.Component {
           <Carousel data-interval='false'>
             <Carousel.Item>
               <Row xxs='auto' fluid='true'>
-                {nationalbrands}
+                {favorites}
               </Row>
             </Carousel.Item>
           </Carousel>
@@ -35,7 +36,7 @@ class RestaurentCarousel extends React.Component {
         <Container fluid='true' style={{ objectFit: "cover" }}>
           <h2>Popular Near you</h2>
           <Row xxs='auto' fluid='true'>
-            {nationalbrands}
+            {popularnear}
           </Row>
         </Container>
       </Container>
@@ -43,7 +44,8 @@ class RestaurentCarousel extends React.Component {
   }
 }
 RestaurentCarousel.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  nationalbrands: PropTypes.object.isRequired,
+  nationalbrands: PropTypes.array.isRequired,
+  favorites: PropTypes.array.isRequired,
+  popularnear: PropTypes.array.isRequired,
 };
 export default RestaurentCarousel;

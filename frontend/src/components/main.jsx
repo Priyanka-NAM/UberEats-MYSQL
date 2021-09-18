@@ -19,7 +19,7 @@ function Main() {
         <Route path='/customer/signup' component={CustomerSignUp} />
         <Route path='/owner/signup' component={OwnerSignUp} />
         <Route path='/restaurents' component={RestaurentHome} />
-        <Route path='/rough' component={Rough} />
+        {/* <Route path='/rough' component={Rough} /> */}
         <Route path='/home' component={HomePage} />
         <Route path='/order' component={FinalOrder} />
         <Route path='/customerorder' component={CustomerOrders} />

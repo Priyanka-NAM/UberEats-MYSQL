@@ -1,16 +1,20 @@
+/* eslint-disable no-shadow */
 import React, { Component } from "react";
 
 import { BsFillPlusCircleFill, BsDashCircleFill } from "react-icons/bs";
 import { BiX } from "react-icons/bi";
 import PropTypes from "prop-types";
 import "../../Styles/SideBar.css";
-import { Card, Modal, Button, Col, Row } from "react-bootstrap";
+import { Card, Alert, Modal, Button, Col, Row } from "react-bootstrap";
+import { connect } from "react-redux";
+import { addToCart } from "../../../Actions/CartActions";
 
 class MenuCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showModal: false,
+      showAlert: false,
       Orderquantity: 1,
     };
     this.handleShow = this.handleShow.bind(this);
@@ -41,11 +45,56 @@ class MenuCard extends Component {
     }));
   };
 
-  handleAddToCart = () => {};
+  handleAlert = () => {
+    const { Orderquantity } = this.state;
+    const { title, price, addToCart, currentRestaurantName } = this.props;
+    const cartDetails = {
+      restaurantName: currentRestaurantName,
+      itemDetails: {
+        title: title,
+        price: price,
+        quantity: Orderquantity,
+      },
+    };
+    addToCart(cartDetails);
+    this.setState({
+      showAlert: false,
+    });
+    this.handleClose();
+  };
+
+  handleAddToCart = () => {
+    const { Orderquantity } = this.state;
+    const { title, price, addToCart, currentRestaurantName, restaurantName } =
+      this.props;
+    if (currentRestaurantName !== restaurantName && restaurantName !== "") {
+      this.setState({
+        showAlert: true,
+      });
+      return;
+    }
+    const cartDetails = {
+      restaurantName: "",
+      itemDetails: {
+        title: title,
+        price: price,
+        quantity: Orderquantity,
+      },
+    };
+    addToCart(cartDetails);
+    this.handleClose();
+  };
 
   render() {
-    const { showModal, Orderquantity } = this.state;
-    const { title, description, price, src } = this.props;
+    const { showAlert, showModal, Orderquantity } = this.state;
+    const {
+      title,
+      description,
+      price,
+      src,
+      restaurantName,
+      currentRestaurantName,
+    } = this.props;
     return (
       <>
         <Card
@@ -115,13 +164,26 @@ class MenuCard extends Component {
               variant='dark'
               onClick={this.handleAddToCart}
               style={{ width: "75%" }}>
-              Add {Orderquantity} to order{" "}
+              Add {Orderquantity} to order
               <span style={{ paddingLeft: "15px" }}>
                 ${Orderquantity * price}
               </span>
             </Button>
           </Modal.Footer>
         </Modal>
+        <Alert show={showAlert} variant='light'>
+          <Alert.Heading>Create new order?</Alert.Heading>
+          <p>
+            Your order contains items from {restaurantName}.Create a new order
+            to add items from {currentRestaurantName}.
+          </p>
+          <hr />
+          <div>
+            <Button onClick={this.handleAlert} variant='dark'>
+              New Order
+            </Button>
+          </div>
+        </Alert>
       </>
     );
   }
@@ -131,6 +193,12 @@ MenuCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
+  currentRestaurantName: PropTypes.string.isRequired,
+  addToCart: PropTypes.func.isRequired,
+  restaurantName: PropTypes.string.isRequired,
 };
 
-export default MenuCard;
+const mapStateToProps = (state) => ({
+  restaurantName: state.cartDetails.restaurantName,
+});
+export default connect(mapStateToProps, { addToCart })(MenuCard);
