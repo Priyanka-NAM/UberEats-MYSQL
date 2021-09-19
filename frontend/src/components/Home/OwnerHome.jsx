@@ -1,35 +1,35 @@
 import React, { Component } from "react";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import TimePicker from "react-times";
+
+import "react-times/css/classic/default.css";
 import Slider, { Range } from "rc-slider";
-import { MdHome, MdBorderColor, MdRestaurant } from "react-icons/md";
+import {
+  MdHome,
+  MdBorderColor,
+  MdContactPhone,
+  MdRestaurant,
+} from "react-icons/md";
 import {
   Button,
   Form,
   Nav,
   Container,
   Col,
+  Card,
   Row,
   Navbar,
 } from "react-bootstrap";
 import UberELogo from "./HomeIcons/logo";
+import OwnerProfile from "../Profile/OwnerProfile";
 
 class OwnerHome extends Component {
   constructor(props) {
     super(props);
-    this.state = { country: "", region: "" };
-  }
-
-  selectCountry(val) {
-    this.setState({ country: val });
-  }
-
-  selectRegion(val) {
-    this.setState({ region: val });
+    this.state = {};
   }
 
   render() {
-    const { country, region } = this.state;
     return (
       <>
         <Navbar bg='dark' variant='dark'>
@@ -102,7 +102,7 @@ class OwnerHome extends Component {
                     paddingBottom: "20px",
                   }}>
                   <Nav.Link eventKey='link-1' style={{ color: "black" }}>
-                    <MdRestaurant style={{ marginRight: "18px" }} />
+                    <MdContactPhone style={{ marginRight: "18px" }} />
                     Profile
                   </Nav.Link>
                 </Nav.Item>
@@ -130,171 +130,18 @@ class OwnerHome extends Component {
                 </Nav.Item>
               </Nav>
             </Col>
-
-            {/* Right panel of profile */}
-
-            <Col align='left'>
-              <Row style={{ padding: "0px" }}>
-                <Col style={{ marginLeft: "30px" }}>
-                  <h4>Profile Picture</h4>
-
-                  <h4>Basic Info</h4>
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>Restaurant Name</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <Form.Control placeholder='' />
-                      </Col>
-                    </Row>
-                  </Form>
-                  <br />
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>Description</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <Form.Control as='textarea' rows={3} />
-                      </Col>
-                    </Row>
-                  </Form>
-
-                  <h4>Contact Info</h4>
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>Email</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <Form.Control placeholder='' />
-                      </Col>
-                    </Row>
-                  </Form>
-                  <br />
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>Phone Number</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <Form.Control placeholder='' />
-                      </Col>
-                    </Row>
-                  </Form>
-                </Col>
-                <Col>
-                  <h4>Address Info</h4>
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>Addres Line1</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <Form.Control placeholder='' />
-                      </Col>
-                    </Row>
-                  </Form>
-                  <br />
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>City</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <Form.Control placeholder='' />
-                      </Col>
-                    </Row>
-                  </Form>
-                  <br />
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>State</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <RegionDropdown
-                          style={{
-                            width: "100%",
-                            height: "2.6rem",
-                            borderColor: "#eeeee",
-                          }}
-                          disableWhenEmpty
-                          country={country}
-                          value={region}
-                          onChange={(val) => this.selectRegion(val)}
-                        />
-                      </Col>
-                    </Row>
-                  </Form>
-                  <br />
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>Country</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <CountryDropdown
-                          style={{
-                            width: "100%",
-                            height: "2.6rem",
-                            borderColor: "#eeeee",
-                          }}
-                          whitelist={["CA", "US"]}
-                          value={country}
-                          onChange={(val) => this.selectCountry(val)}
-                        />
-                      </Col>
-                    </Row>
-                  </Form>
-                  <br />
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>Zip Code</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <Form.Control placeholder='' />
-                      </Col>
-                    </Row>
-                  </Form>
-                  <h4>Restaurant Timings</h4>
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>Start Time</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <TimePicker disableClock theme='classic' />
-                      </Col>
-                    </Row>
-                  </Form>
-                  <br />
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>End Time</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <Form.Control placeholder='' />
-                      </Col>
-                    </Row>
-                  </Form>
-                  <br />
-                  <h4>Working Days</h4>
-                  <Form>
-                    <Row>
-                      <Col xs={2}>
-                        <Form.Label>Working Days</Form.Label>
-                      </Col>
-                      <Col xs={6}>
-                        <Form.Control placeholder='' />
-                      </Col>
-                    </Row>
-                  </Form>
-                </Col>
-              </Row>
+            {/* <OwnerProfile /> */}
+            <Col>
+              <Navbar variant='light'>
+                <Container>
+                  <Navbar.Brand href='#home'>Navbar</Navbar.Brand>
+                  <Nav className='me-auto'>
+                    <Nav.Link href='#home'>Home</Nav.Link>
+                    <Nav.Link href='#features'>Features</Nav.Link>
+                    <Nav.Link href='#pricing'>Pricing</Nav.Link>
+                  </Nav>
+                </Container>
+              </Navbar>
             </Col>
           </Row>
         </Container>
