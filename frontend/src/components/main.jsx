@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
 import { Route } from "react-router-dom";
-
+import OwnerHome from "./Home/OwnerHome";
 import OwnerSignUp from "./SignUp/OwnerSignUp";
 import CustomerSignUp from "./SignUp/CustomerSignUp";
 import HomePage from "./Home/home";
 import SignIn from "./SignIn/signIn";
-import RestaurentHome from "./Restaurent/RestaurentHome";
+import RestaurentHome from "./Restaurent/CustomerRestaurentHome";
 import Rough from "./Restaurent/rough";
 import StartPage from "./StartPage/StartPage";
 import FinalOrder from "./Orders/Customer/FinalOrder";
@@ -23,7 +23,7 @@ function Main() {
         <Route path='/home' component={HomePage} />
         <Route path='/order' component={FinalOrder} />
         <Route path='/customerorder' component={CustomerOrders} />
-
+        <Route path='/owner/restarant' component={OwnerHome} />
         <Route path='/' exact component={StartPage} />
       </main>
     </Fragment>

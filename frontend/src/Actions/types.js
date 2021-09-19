@@ -5,3 +5,4 @@ export const CUSTOMER_SIGNUP = "CUSTOMER_SIGNUP";
 export const UPDATE_OWNER = "UPDATE_OWNER";
 export const UPDATE_CUSTOMER = "CUSTOMER_SIGNUP";
 export const CART_ADD = "CART_ADD";
+export const LOCATION_UPDATE = "LOCATION_UPDATE";

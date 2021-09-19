@@ -5,7 +5,7 @@ import { BsFillPlusCircleFill, BsDashCircleFill } from "react-icons/bs";
 import { BiX } from "react-icons/bi";
 import PropTypes from "prop-types";
 import "../../Styles/SideBar.css";
-import { Card, Alert, Modal, Button, Col, Row } from "react-bootstrap";
+import { Card, Modal, Button, Col, Row } from "react-bootstrap";
 import { connect } from "react-redux";
 import { addToCart } from "../../../Actions/CartActions";
 
@@ -30,6 +30,7 @@ class MenuCard extends Component {
   handleClose = () => {
     this.setState({
       showModal: false,
+      showAlert: false,
     });
   };
 
@@ -70,14 +71,15 @@ class MenuCard extends Component {
     if (currentRestaurantName !== restaurantName && restaurantName !== "") {
       this.setState({
         showAlert: true,
+        showModal: false,
       });
       return;
     }
     const cartDetails = {
-      restaurantName: "",
+      restaurantName: currentRestaurantName,
       itemDetails: {
         title: title,
-        price: price,
+        price: price * Orderquantity,
         quantity: Orderquantity,
       },
     };
@@ -124,7 +126,12 @@ class MenuCard extends Component {
           onHide={this.handleClose}
           backdrop='static'
           keyboard={false}
-          style={{ width: "100%", display: "flex", alignItems: "center" }}
+          style={{
+            width: "100%",
+            display: "flex",
+            height: "80rem",
+            alignItems: "center",
+          }}
           centered>
           <Modal.Header>
             {" "}
@@ -145,7 +152,14 @@ class MenuCard extends Component {
                 height: "19rem",
               }}
             />
-            <Modal.Title>{title}</Modal.Title>
+            <Modal.Title
+              style={{
+                color: "black",
+                fontSize: "35px",
+                fontFamily: "UberMove sans-serif",
+              }}>
+              {title}
+            </Modal.Title>
             <p>{description}</p>
           </Modal.Body>
           <Modal.Footer>
@@ -163,7 +177,12 @@ class MenuCard extends Component {
             <Button
               variant='dark'
               onClick={this.handleAddToCart}
-              style={{ width: "75%" }}>
+              style={{
+                width: "75%",
+                height: "3.5rem",
+                fontSize: "18px",
+                fontFamily: "UberMove sans-serif",
+              }}>
               Add {Orderquantity} to order
               <span style={{ paddingLeft: "15px" }}>
                 ${Orderquantity * price}
@@ -171,19 +190,46 @@ class MenuCard extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Alert show={showAlert} variant='light'>
-          <Alert.Heading>Create new order?</Alert.Heading>
-          <p>
-            Your order contains items from {restaurantName}.Create a new order
-            to add items from {currentRestaurantName}.
-          </p>
-          <hr />
-          <div>
-            <Button onClick={this.handleAlert} variant='dark'>
-              New Order
-            </Button>
-          </div>
-        </Alert>
+        <Modal show={showAlert} variant='light'>
+          <BiX
+            size='35px'
+            style={{ color: "black", marginLeft: "20px", marginTop: "20px" }}
+            onClick={this.handleClose}
+          />
+          <Modal.Body style={{ margin: "2%", marginBottom: "0%" }}>
+            <h1
+              style={{
+                fontFamily: "UberMove sans-serif",
+                fontWeight: "500",
+              }}>
+              Create new order?
+            </h1>
+            <p
+              style={{
+                paddingTop: "14px",
+                paddingBottom: "16px",
+                fontSize: "20px",
+                fontFamily: "UberMove sans-serif",
+              }}>
+              Your order contains items from {restaurantName}.Create a new order
+              to add items from {currentRestaurantName}.
+            </p>
+            <div>
+              <Button
+                onClick={this.handleAlert}
+                style={{
+                  fontSize: "22px",
+                  width: "100%",
+                  height: "3.5rem",
+                  fontFamily: "UberMove sans-serif",
+                  fontWeight: "500",
+                }}
+                variant='dark'>
+                New Order
+              </Button>
+            </div>
+          </Modal.Body>
+        </Modal>
       </>
     );
   }
@@ -192,7 +238,7 @@ MenuCard.propTypes = {
   src: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  price: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
   currentRestaurantName: PropTypes.string.isRequired,
   addToCart: PropTypes.func.isRequired,
   restaurantName: PropTypes.string.isRequired,

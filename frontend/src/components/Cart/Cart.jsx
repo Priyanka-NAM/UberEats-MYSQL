@@ -1,10 +1,14 @@
+/* eslint-disable react/forbid-prop-types */
 import React from "react";
+import { connect } from "react-redux";
+
 import { Modal, Row, Col, Button } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { BiX } from "react-icons/bi";
 import PropTypes from "prop-types";
-import mainstyle from "./HeaderStyle";
-import "../../Styles/Header.css";
+import CartItemRow from "./CartItemRow";
+import mainstyle from "../Home/HomeIcons/HeaderStyle";
+import "../Styles/Header.css";
 
 class Cart extends React.Component {
   constructor(props) {
@@ -28,7 +32,23 @@ class Cart extends React.Component {
 
   render() {
     const { showModal } = this.state;
-    const { title, description, price, quantity } = this.props;
+    const { restaurantName, cartItems } = this.props;
+    let cartRows = null;
+    let totalCartValue = 0;
+    let totalItems = 0;
+    if (cartItems) {
+      totalItems = cartItems.length;
+      cartRows = cartItems.map((cartitem) => {
+        totalCartValue += cartitem.price;
+        return (
+          <CartItemRow
+            quantity={cartitem.quantity}
+            dishtitle={cartitem.title}
+            totaldishprice={cartitem.price}
+          />
+        );
+      });
+    }
 
     return (
       <>
@@ -38,7 +58,7 @@ class Cart extends React.Component {
           variant='light'
           onClick={this.handleShow}>
           <FaShoppingCart style={{ paddingRight: "3px" }} />
-          Cart.{0}
+          Cart.{totalItems}
         </Button>
         <Modal
           show={showModal}
@@ -60,9 +80,11 @@ class Cart extends React.Component {
                 fontFamily: "UberMove, sans-serif",
                 marginBottom: "20px",
               }}>
-              {title}
+              {restaurantName}
             </Modal.Title>
-            <Row style={{ display: "flex" }}>
+            {cartRows}
+
+            {/* <Row style={{ display: "flex" }}>
               <Row style={{ display: "flex", paddingBottom: "0px" }}>
                 <Col>
                   <Button
@@ -97,7 +119,7 @@ class Cart extends React.Component {
                   </p>
                 </Col>
               </Row>
-            </Row>
+            </Row> */}
           </Modal.Body>
           <Modal.Footer>
             <Button
@@ -110,7 +132,7 @@ class Cart extends React.Component {
                 fontFamily: "UberMove, sans-serif",
               }}>
               Go to Checkout .
-              <span style={{ paddingLeft: "15px" }}>${price}</span>
+              <span style={{ paddingLeft: "15px" }}>${totalCartValue}</span>
             </Button>
           </Modal.Footer>
         </Modal>
@@ -120,9 +142,13 @@ class Cart extends React.Component {
 }
 
 Cart.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  price: PropTypes.string.isRequired,
-  quantity: PropTypes.string.isRequired,
+  restaurantName: PropTypes.string.isRequired,
+  cartItems: PropTypes.array.isRequired,
 };
-export default Cart;
+
+const mapStateToProps = (state) => ({
+  restaurantName: state.cartDetails.restaurantName,
+  cartItems: state.cartDetails.items,
+});
+
+export default connect(mapStateToProps, null)(Cart);

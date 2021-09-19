@@ -10,6 +10,15 @@
   margin-left: "2rem";
   width: "100%";
 }
+.shortlocation {
+  padding-left: "20px";
+  padding-right: "40px";
+}
+.longlocation {
+  padding-left: "20px";
+  padding-right: "40px";
+  width: "150px";
+}
 
 /* .header-lefttab {
   display: flex;

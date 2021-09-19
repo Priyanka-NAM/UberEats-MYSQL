@@ -14,26 +14,6 @@ function RestaBanner({
   restauDescri,
 }) {
   return (
-    // <div className='resta-baneer'>
-    //   <div className='image-banner'>
-    //     <img src={src} alt='' />
-    //   </div>
-    //   <div className='text-wrapper'>
-    //     <div className='like-icon'>
-    //       <i className='fa fa-heart-o fa-lg' aria-hidden='true' />
-    //     </div>
-    //     <h1>
-    //       {restaTitle} {restaAddress}
-    //     </h1>
-    //     <div className='details'>
-    //       <h6>{otherDetails}</h6>
-    //     </div>
-    //   </div>
-    //   <div className='resta-details'>
-    //     <h6>{restauDescri}</h6>
-    //   </div>
-    // </div>
-
     <Container fluid='true'>
       <img
         style={{
@@ -41,12 +21,10 @@ function RestaBanner({
           minHeight: "24vh",
           minWidth: "100%",
           overflow: "hidden",
-          // filter: "blur(1px)",
         }}
         src={src}
         alt=''
       />
-      {/* <div className='text-wrapper'> */}
       <div
         style={{
           width: "100%",

@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import {
   Nav,
@@ -10,7 +11,7 @@ import {
   Container,
 } from "react-bootstrap";
 import { FaBars, FaSearch } from "react-icons/fa";
-import Cart from "./Cart";
+import Cart from "../../Cart/Cart";
 import Location from "./Location";
 import UberELogo from "./logo";
 import mainstyle from "./HeaderStyle";
@@ -83,6 +84,9 @@ class Header extends React.Component {
 
   render() {
     const { showModal, deliverystyle, pickupstyle } = this.state;
+    const { location, defaultUserLocationDescription } = this.props;
+    const isCurrentURL = (url) =>
+      location.pathname.toLowerCase() === url.toLowerCase();
 
     return (
       <Container fluid='true' style={{ marginBottom: "2%" }}>
@@ -105,26 +109,39 @@ class Header extends React.Component {
                 alt={UberELogo.UberEBLogo.alt}
               />
             </Nav.Item>
-            <Nav.Item style={{ paddingLeft: "40px" }}>
-              <ButtonGroup style={mainstyle.DeliveryPickupgroup}>
-                <Button
-                  style={deliverystyle}
-                  variant='light'
-                  name='delivery'
-                  onClick={this.handleDeliveryPickup}>
-                  Delivery
-                </Button>
-                <Button
-                  style={pickupstyle}
-                  variant='light'
-                  name='pickup'
-                  onClick={this.handleDeliveryPickup}>
-                  Pickup
-                </Button>
-              </ButtonGroup>
-            </Nav.Item>
-            <Nav.Item style={{ paddingLeft: "20px", paddingRight: "40px" }}>
-              <Location description='123 San Fernando St, San Jose' />
+
+            {isCurrentURL("/home") ? (
+              <Nav.Item style={{ paddingLeft: "40px" }}>
+                <ButtonGroup style={mainstyle.DeliveryPickupgroup}>
+                  <Button
+                    style={deliverystyle}
+                    variant='light'
+                    name='delivery'
+                    onClick={this.handleDeliveryPickup}>
+                    Delivery
+                  </Button>
+                  <Button
+                    style={pickupstyle}
+                    variant='light'
+                    name='pickup'
+                    onClick={this.handleDeliveryPickup}>
+                    Pickup
+                  </Button>
+                </ButtonGroup>
+              </Nav.Item>
+            ) : null}
+
+            <Nav.Item
+              style={{
+                paddingLeft: "20px",
+                paddingRight: "40px",
+              }}>
+              <Location
+                isLong={!isCurrentURL("/home")}
+                description={defaultUserLocationDescription}
+                changedLocationDescription=''
+                changeLocation={() => {}}
+              />
             </Nav.Item>
             <Nav.Item style={mainstyle.paddingLeft}>
               <InputGroup
@@ -159,6 +176,10 @@ class Header extends React.Component {
 Header.propTypes = {
   restoSearch: PropTypes.func.isRequired,
   searchBarCallback: PropTypes.func.isRequired,
+  // hideDeliveryPickup: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  location: PropTypes.object.isRequired,
+  defaultUserLocationDescription: PropTypes.string.isRequired,
 };
 
-export default Header;
+export default withRouter(Header);

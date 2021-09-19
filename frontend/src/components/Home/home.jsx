@@ -1,5 +1,8 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import { Container, Col } from "react-bootstrap";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import axios from "axios";
 import Header from "./HomeIcons/Header";
 import RestaurantCarousel from "./HomeIcons/RestaurarntCarousel";
@@ -19,7 +22,6 @@ class HomePage extends Component {
 
       deliveryType: "delivery",
       foodSelectionType: "allresto",
-      userLocation: "",
     };
   }
 
@@ -61,6 +63,7 @@ class HomePage extends Component {
 
   handleRestaurantFiltering = (foodSelection, deliveryType, location = "") => {
     const { allRestaurents } = this.state;
+    const { changedUserLocation } = this.props;
     let foodBasedFilteredSet = null;
     let deliveryBasedFilteredSet = null;
     console.log("All Restaurants Length: ", allRestaurents.length);
@@ -93,6 +96,8 @@ class HomePage extends Component {
       deliveryBasedFilteredSet.length
     );
 
+    console.log("Changed User Address Location: ", changedUserLocation);
+
     console.log("Delivery Based Filetered Set: ", deliveryBasedFilteredSet);
 
     // Favorites
@@ -113,7 +118,8 @@ class HomePage extends Component {
 
   handleFoodSelect = (e) => {
     console.log("Food Selection Type: ", e);
-    const { deliveryType, userLocation } = this.state;
+    const { deliveryType } = this.state;
+    const { userLocation } = this.props;
     this.setState({
       foodSelectionType: e,
     });
@@ -122,7 +128,8 @@ class HomePage extends Component {
 
   handleRestoSearch = (e) => {
     console.log("Delivery Type : ", e);
-    const { foodSelectionType, userLocation } = this.state;
+    const { foodSelectionType } = this.state;
+    const { userLocation } = this.props;
     this.setState({
       deliveryType: e,
     });
@@ -138,8 +145,8 @@ class HomePage extends Component {
   };
 
   render() {
-    const { allRestaurents, foodSelectionType, deliveryType, userLocation } =
-      this.state;
+    const { allRestaurents, foodSelectionType, deliveryType } = this.state;
+    const { userLocation, userAddressDescription } = this.props;
     let nationalbrands = null;
     let favorites = null;
     let popularnear = null;
@@ -189,6 +196,11 @@ class HomePage extends Component {
         <Header
           restoSearch={this.handleRestoSearch}
           searchBarCallback={this.handleSearchBarInput}
+          defaultUserLocationDescription={
+            // eslint-disable-next-line no-unneeded-ternary
+            userAddressDescription ? userAddressDescription : "Default Location"
+          }
+          hideDeliveryPickup
         />
         <Container fluid className='home-container'>
           <Col md='3'>
@@ -205,4 +217,16 @@ class HomePage extends Component {
   }
 }
 
-export default HomePage;
+HomePage.propTypes = {
+  userAddressDescription: PropTypes.string.isRequired,
+  userLocation: PropTypes.object.isRequired,
+  changedUserLocation: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  userAddressDescription: state.signin.address.addressDescription,
+  userLocation: state.signin.address,
+  changedUserLocation: state.currentLocation,
+});
+
+export default connect(mapStateToProps, null)(HomePage);

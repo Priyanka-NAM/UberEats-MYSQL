@@ -82,7 +82,7 @@ class RestaurentHome extends Component {
           src={dish.imageurl}
           title={dish.name}
           price={dish.price}
-          currentRestaurantName={restaurentDetails.title}
+          currentRestaurantName={restaurentDetails[0].title}
           description={dish.description}
           quantity='2'
         />
@@ -102,18 +102,20 @@ class RestaurentHome extends Component {
       ));
     }
     return (
-      <div>
+      <>
         <Header
           restoSearch={null}
-          searchBarCallback={this.handleSearchBarInput}
+          searchBarCallback={null}
+          hideDeliveryPickup={false}
+          defaultUserLocationDescription=''
         />
-        <div>
+        <>
           {restaurentBanner}
           <Container fluid>
             <Row xxs='auto'>{restaurentMenu}</Row>
           </Container>
-        </div>
-      </div>
+        </>
+      </>
     );
   }
 }

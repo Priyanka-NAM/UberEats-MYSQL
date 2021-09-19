@@ -51,6 +51,13 @@ const mainstyle = {
     height: "3.4rem",
     width: "13rem",
   },
+  longlocation: {
+    borderRadius: "30px",
+    backgroundColor: "#EEEEEE",
+    color: "black",
+    height: "3.4rem",
+    width: "20rem",
+  },
   paddingLeft: {
     paddingLeft: "1rem",
   },

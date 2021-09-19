@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React from "react";
 import {
   Modal,
@@ -7,20 +8,22 @@ import {
   FormControl,
   InputGroup,
 } from "react-bootstrap";
+import { connect } from "react-redux";
 import { BiX } from "react-icons/bi";
 import { MdLocationOn } from "react-icons/md";
 
 import PropTypes from "prop-types";
 import mainstyle from "./HeaderStyle";
+import { changeLocation } from "../../../Actions/LocationAction";
 import "../../Styles/Header.css";
 
 class Location extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { showModal: false, showChange: false };
-    this.handleShow = this.handleShow.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleOpen = this.handleOpen.bind(this);
+    this.state = { showModal: false, showChange: false, locationInput: "" };
+    // this.handleShow = this.handleShow.bind(this);
+    // this.handleClose = this.handleClose.bind(this);
+    // this.handleOpen = this.handleOpen.bind(this);
   }
 
   handleShow = () => {
@@ -41,7 +44,70 @@ class Location extends React.Component {
     });
   };
 
+  handleDone = () => {
+    this.setState({
+      showModal: false,
+    });
+  };
+
   handleSecClose = () => {
+    this.setState({
+      showChange: false,
+    });
+  };
+
+  parseAddress = (address) => {
+    // eslint-disable-next-line prefer-const
+    let parsedAddress = {
+      addressDescription: "",
+      addressLine1: "",
+      city: "",
+      state: "",
+      country: "",
+      zipcode: "",
+    };
+    parsedAddress.addressDescription = address;
+    const splitAddr = address.split(",");
+    [
+      parsedAddress.addressLine1,
+      parsedAddress.city,
+      parsedAddress.state,
+      parsedAddress.zipcode,
+    ] = splitAddr;
+    parsedAddress.country = "US";
+    return parsedAddress;
+  };
+
+  handleKeyPress = (target) => {
+    if (target.charCode === 13) {
+      const { locationInput } = this.state;
+      console.log("On Location Enter Key Press: ", locationInput);
+      console.log(
+        "On Location Enter Key Press Parsed Address: ",
+        this.parseAddress(locationInput)
+      );
+      this.props.changeLocation(this.parseAddress(locationInput));
+      this.setState({
+        showChange: false,
+      });
+    }
+  };
+
+  handleChange = (e) => {
+    console.log("On Location change: ", e.target.value);
+    this.setState({
+      locationInput: e.target.value,
+    });
+  };
+
+  handleLocationUpdate = (e) => {
+    const { locationInput } = this.state;
+    console.log("On Location Update Click : ", locationInput);
+    console.log(
+      "On Location update click Parsed Address: ",
+      this.parseAddress(locationInput)
+    );
+    this.props.changeLocation(this.parseAddress(locationInput));
     this.setState({
       showChange: false,
     });
@@ -49,15 +115,18 @@ class Location extends React.Component {
 
   render() {
     const { showModal, showChange } = this.state;
-    const { description } = this.props;
-
+    const { description, isLong, changedLocationDescription } = this.props;
+    let AddressDescription = description;
+    if (changedLocationDescription !== "") {
+      AddressDescription = changedLocationDescription;
+    }
     return (
       <>
         <Button
-          style={mainstyle.location}
+          style={isLong ? mainstyle.longlocation : mainstyle.location}
           variant='light'
           onClick={this.handleShow}>
-          Location
+          {AddressDescription}
         </Button>
         <Modal
           show={showModal}
@@ -86,7 +155,7 @@ class Location extends React.Component {
                 <Col style={{ flex: "6" }}>
                   <MdLocationOn size='35px' />
                 </Col>
-                {description}
+                {AddressDescription}
                 <Col>
                   <Button
                     variant='secondary'
@@ -106,7 +175,7 @@ class Location extends React.Component {
           <Modal.Footer>
             <Button
               variant='dark'
-              onClick={this.handleAddToCart}
+              onClick={this.handleDone}
               style={{
                 width: "100%",
                 height: "60px",
@@ -149,8 +218,10 @@ class Location extends React.Component {
                 </InputGroup.Text>
                 <FormControl
                   placeholder='Enter delivery address'
-                  aria-label='Username'
+                  aria-label='Enter delivery address'
                   aria-describedby='basic-addon1'
+                  onKeyPress={this.handleKeyPress}
+                  onChange={this.handleChange}
                 />
               </InputGroup>
             </Row>
@@ -158,7 +229,7 @@ class Location extends React.Component {
           <Modal.Footer>
             <Button
               variant='dark'
-              onClick={this.handleAddToCart}
+              onClick={this.handleLocationUpdate}
               style={{
                 width: "100%",
                 height: "60px",
@@ -176,5 +247,13 @@ class Location extends React.Component {
 
 Location.propTypes = {
   description: PropTypes.string.isRequired,
+  isLong: PropTypes.bool.isRequired,
+  changeLocation: PropTypes.func.isRequired,
+  changedLocationDescription: PropTypes.string.isRequired,
 };
-export default Location;
+
+const mapStateToProps = (state) => ({
+  changedLocationDescription: state.currentLocation.addressDescription,
+});
+
+export default connect(mapStateToProps, { changeLocation })(Location);
