@@ -12,28 +12,9 @@ function RestaBanner({
   restaAddress,
   otherDetails,
   restauDescri,
+  isOwnerHome,
 }) {
   return (
-    // <div className='resta-baneer'>
-    //   <div className='image-banner'>
-    //     <img src={src} alt='' />
-    //   </div>
-    //   <div className='text-wrapper'>
-    //     <div className='like-icon'>
-    //       <i className='fa fa-heart-o fa-lg' aria-hidden='true' />
-    //     </div>
-    //     <h1>
-    //       {restaTitle} {restaAddress}
-    //     </h1>
-    //     <div className='details'>
-    //       <h6>{otherDetails}</h6>
-    //     </div>
-    //   </div>
-    //   <div className='resta-details'>
-    //     <h6>{restauDescri}</h6>
-    //   </div>
-    // </div>
-
     <Container fluid='true'>
       <img
         style={{
@@ -41,15 +22,13 @@ function RestaBanner({
           minHeight: "24vh",
           minWidth: "100%",
           overflow: "hidden",
-          // filter: "blur(1px)",
         }}
         src={src}
         alt=''
       />
-      {/* <div className='text-wrapper'> */}
       <div
         style={{
-          width: "100%",
+          width: isOwnerHome ? "80%" : "100%",
           color: "white",
           position: "absolute",
           marginTop: "-4%",
@@ -76,5 +55,6 @@ RestaBanner.propTypes = {
   restaAddress: PropTypes.string.isRequired,
   otherDetails: PropTypes.string.isRequired,
   restauDescri: PropTypes.string.isRequired,
+  isOwnerHome: PropTypes.bool.isRequired,
 };
 export default RestaBanner;

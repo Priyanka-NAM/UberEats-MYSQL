@@ -8,8 +8,15 @@ import SignIn from "./SignIn/signIn";
 import RestaurentHome from "./Restaurent/CustomerRestaurentHome";
 import Rough from "./Restaurent/rough";
 import StartPage from "./StartPage/StartPage";
-import FinalOrder from "./Orders/Customer/FinalOrder";
-import CustomerOrders from "./Orders/Customer/CustomerOrders";
+import FinalOrder from "./Customer/Orders/FinalOrder";
+import CustomerOrders from "./Customer/Orders/CustomerOrders";
+import MenuUpdate from "./Owner/Menu/MenuUpdate";
+import OwnerProfile from "./Owner/Profile/OwnerProfile";
+import MenuUpdateCategories from "./Owner/Menu/MenuUpdateCategories";
+import OwnerOrders from "./Owner/Orders/OwnerOrders";
+import DeliveredOrders from "./Owner/Orders/DeliveredOrders";
+import CancelledOrders from "./Owner/Orders/CancelledOrders";
+import OwnerHomePage from "./Owner/OwnersHome/OwnerHomePage";
 
 function Main() {
   return (
@@ -23,7 +30,16 @@ function Main() {
         <Route path='/home' component={HomePage} />
         <Route path='/order' component={FinalOrder} />
         <Route path='/customerorder' component={CustomerOrders} />
-        <Route path='/owner/restarant' component={OwnerHome} />
+        <Route path='/owner/menuupdate' component={MenuUpdate} />
+        <Route
+          path='/owner/updatecategories'
+          component={MenuUpdateCategories}
+        />
+        <Route path='/owner/orders' component={OwnerOrders} />
+        <Route path='/owner/deliveredorders' component={DeliveredOrders} />
+        <Route path='/owner/cancelledorders' component={CancelledOrders} />
+        <Route path='/owner/profile' component={OwnerProfile} />
+        <Route path='/owner/home' component={OwnerHomePage} />
         <Route path='/' exact component={StartPage} />
       </main>
     </Fragment>

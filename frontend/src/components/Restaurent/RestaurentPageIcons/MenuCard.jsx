@@ -5,7 +5,7 @@ import { BsFillPlusCircleFill, BsDashCircleFill } from "react-icons/bs";
 import { BiX } from "react-icons/bi";
 import PropTypes from "prop-types";
 import "../../Styles/SideBar.css";
-import { Card, Modal, Button, Col, Row } from "react-bootstrap";
+import { Modal, Image, Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import { addToCart } from "../../../Actions/CartActions";
 
@@ -99,28 +99,27 @@ class MenuCard extends Component {
     } = this.props;
     return (
       <>
-        <Card
-          bg='white'
-          style={{ width: "35rem", margin: "1%" }}
-          onClick={this.handleShow}>
-          <Row>
-            <Col align='left'>
-              <Card.Body style={{ width: "auto" }}>
-                <Card.Title>{title}</Card.Title>
-                <Card.Text>
-                  <p>{description}</p>
-                </Card.Text>
-                <Card.Text>${price}</Card.Text>
-              </Card.Body>
-            </Col>
-            <Col style={{ width: "2%", objectFit: "contain" }}>
-              <Card.Img
-                style={{ width: "1%", objectFit: "contain" }}
-                src={src}
-              />
-            </Col>
-          </Row>
-        </Card>
+        <div
+          className='card mb-3'
+          style={{ width: "33rem", margin: "1%" }}
+          onKeyPress={() => {}}
+          onClick={this.handleShow}
+          role='presentation'>
+          <div className='row no-gutters'>
+            <div className='col-md-8'>
+              <div className='card-body'>
+                <h5 className='card-title' style={{ fontSize: "22px" }}>
+                  {title}
+                </h5>
+                <p className='card-text'>{description}</p>
+                <p className='card-text'>${price}</p>
+              </div>
+            </div>
+            <div className='col-md-4'>
+              <Image src={src} />
+            </div>
+          </div>
+        </div>
         <Modal
           show={showModal}
           onHide={this.handleClose}

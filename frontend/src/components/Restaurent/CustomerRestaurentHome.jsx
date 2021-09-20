@@ -96,6 +96,7 @@ class RestaurentHome extends Component {
           src={eachrestaDetails.imageurl}
           restaTitle={eachrestaDetails.title}
           restaAddress={eachrestaDetails.address}
+          isOwnerHome={false}
           otherDetails='fsdfnbsjfkdgnjkf'
           restauDescri='One of the most popular items on the menu among Uber Eats users is the Chicken Wings and the Quarter Pound Big Bite and the Steak & Cheese Taquito are two of the items most commonly ordered together at this late night go-to. • $ • Convenience • Everyday Essentials • Grocery • Snacks • Home & Personal Care'
         />

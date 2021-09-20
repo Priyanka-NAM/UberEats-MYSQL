@@ -18,7 +18,7 @@ class FormTextBox extends Component {
             <Form.Label>{FieldName}</Form.Label>
           </Col>
           <Col xs={6}>
-            <Form.Control placeholder='' />
+            <Form.Control placeholder='' required />
           </Col>
         </Row>
       </Form>
