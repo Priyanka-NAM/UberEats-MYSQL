@@ -28,7 +28,7 @@ function Main() {
         <Route path='/restaurents' component={RestaurentHome} />
         {/* <Route path='/rough' component={Rough} /> */}
         <Route path='/home' component={HomePage} />
-        <Route path='/order' component={FinalOrder} />
+        <Route path='/order/checkout' component={FinalOrder} />
         <Route path='/customerorder' component={CustomerOrders} />
         <Route path='/owner/menuupdate' component={MenuUpdate} />
         <Route

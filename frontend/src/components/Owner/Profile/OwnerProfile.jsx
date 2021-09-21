@@ -70,7 +70,7 @@ class OwnerProfile extends Component {
               </Card.Footer>
             </Card>
             <br />
-            <h4>Basic Info</h4>
+            <h5>Basic Info</h5>
             <FormTextBox FieldName='Restaurant Name' />
             <br />
             <Form>
@@ -88,9 +88,11 @@ class OwnerProfile extends Component {
             <FormTextBox FieldName='Email' />
             <br />
             <FormTextBox FieldName='Phone Number' />
+            <br />
+            <FormTextBox FieldName='Password' />
           </Col>
           <Col>
-            <h4>Address Info</h4>
+            <h5>Address Info</h5>
             <FormTextBox FieldName='Addres Line1' />
             <br />
             <FormTextBox FieldName='City' />

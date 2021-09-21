@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { Modal, Row, Col, Button } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { BiX } from "react-icons/bi";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import CartItemRow from "./CartItemRow";
 import mainstyle from "../Home/HomeIcons/HeaderStyle";
@@ -28,6 +29,10 @@ class Cart extends React.Component {
     this.setState({
       showModal: false,
     });
+  };
+
+  handleGoCheckout = () => {
+    // <Route path='/insert/your/path/here' component={YourComponent} />;
   };
 
   render() {
@@ -83,57 +88,21 @@ class Cart extends React.Component {
               {restaurantName}
             </Modal.Title>
             {cartRows}
-
-            {/* <Row style={{ display: "flex" }}>
-              <Row style={{ display: "flex", paddingBottom: "0px" }}>
-                <Col>
-                  <Button
-                    variant='secondary'
-                    style={{
-                      fontSize: "18px",
-                      fontFamily: "UberMove, sans-serif",
-                      borderRadius: "30px",
-                      width: "60px",
-
-                      height: "35px",
-                    }}>
-                    {quantity}
-                  </Button>
-                </Col>
-                <Col style={{ flex: "6" }}>
-                  <p
-                    style={{
-                      fontSize: "20px",
-                      fontFamily: "UberMove, sans-serif",
-                    }}>
-                    {description}
-                  </p>
-                </Col>
-                <Col align='right' style={{ flex: "1" }}>
-                  <p
-                    style={{
-                      fontSize: "18px",
-                      fontFamily: "UberMove, sans-serif",
-                    }}>
-                    $20
-                  </p>
-                </Col>
-              </Row>
-            </Row> */}
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              variant='dark'
-              onClick={this.handleAddToCart}
-              style={{
-                width: "100%",
-                height: "60px",
-                fontSize: "18px",
-                fontFamily: "UberMove, sans-serif",
-              }}>
-              Go to Checkout .
-              <span style={{ paddingLeft: "15px" }}>${totalCartValue}</span>
-            </Button>
+            <Link to={{ pathname: "/order/checkout", state: "" }}>
+              <Button
+                variant='dark'
+                style={{
+                  width: "100%",
+                  height: "60px",
+                  fontSize: "18px",
+                  fontFamily: "UberMove, sans-serif",
+                }}>
+                Go to Checkout .
+                <span style={{ paddingLeft: "15px" }}>${totalCartValue}</span>
+              </Button>
+            </Link>
           </Modal.Footer>
         </Modal>
       </>
