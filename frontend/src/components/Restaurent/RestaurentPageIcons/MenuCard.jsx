@@ -96,19 +96,24 @@ class MenuCard extends Component {
       src,
       restaurantName,
       currentRestaurantName,
+      isOwnerHome,
     } = this.props;
     return (
       <>
         <div
           className='card mb-3'
-          style={{ width: "33rem", margin: "1%" }}
+          style={{
+            width: isOwnerHome ? "33rem" : "40rem",
+            margin: "1%",
+            height: "10rem",
+          }}
           onKeyPress={() => {}}
           onClick={this.handleShow}
           role='presentation'>
           <div className='row no-gutters'>
             <div className='col-md-8'>
               <div className='card-body'>
-                <h5 className='card-title' style={{ fontSize: "22px" }}>
+                <h5 className='card-title' style={{ fontSize: "20px" }}>
                   {title}
                 </h5>
                 <p className='card-text'>{description}</p>
@@ -116,7 +121,7 @@ class MenuCard extends Component {
               </div>
             </div>
             <div className='col-md-4'>
-              <Image src={src} />
+              <Image style={{ height: "10rem" }} src={src} />
             </div>
           </div>
         </div>
@@ -241,6 +246,7 @@ MenuCard.propTypes = {
   currentRestaurantName: PropTypes.string.isRequired,
   addToCart: PropTypes.func.isRequired,
   restaurantName: PropTypes.string.isRequired,
+  isOwnerHome: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state) => ({

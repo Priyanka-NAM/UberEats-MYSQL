@@ -1,5 +1,5 @@
 import axios from "axios";
-import { USER_SIGNIN, USER_SIGNOUT } from "./types";
+import { USER_SIGNIN, USER_SIGNIN_ERROR, USER_SIGNOUT } from "./types";
 import backendServer from "../backEndConfig";
 
 export const userSignin = (signindata) => async (dispatch) => {
@@ -10,14 +10,18 @@ export const userSignin = (signindata) => async (dispatch) => {
       signindata
     );
     const userSigninData = await res;
+    const { data } = userSigninData;
+    // if (data.status === "Authentication Successful") {
     dispatch({
       type: USER_SIGNIN,
-      payload: userSigninData.data,
+      payload: data,
     });
+    // }
   } catch (err) {
+    console.log("Error recieved: ", err.response);
     dispatch({
-      type: USER_SIGNIN,
-      payload: err.response.userSigninData.data,
+      type: USER_SIGNIN_ERROR,
+      payload: err.response.data,
     });
   }
 };

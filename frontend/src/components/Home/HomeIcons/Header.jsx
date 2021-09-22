@@ -10,6 +10,7 @@ import {
   Row,
   Container,
 } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { FaBars, FaSearch } from "react-icons/fa";
 import Cart from "../../Cart/Cart";
 import Location from "./Location";
@@ -103,11 +104,13 @@ class Header extends React.Component {
             </Nav.Item>
 
             <Nav.Item style={mainstyle.paddingLeft}>
-              <img
-                style={{ paddingLeft: "15px", height: "50px" }}
-                src={UberELogo.UberEBLogo.src}
-                alt={UberELogo.UberEBLogo.alt}
-              />
+              <Link to={{ pathname: "/home", state: "" }}>
+                <img
+                  style={{ paddingLeft: "15px", height: "50px" }}
+                  src={UberELogo.UberEBLogo.src}
+                  alt={UberELogo.UberEBLogo.alt}
+                />
+              </Link>
             </Nav.Item>
 
             {isCurrentURL("/home") ? (

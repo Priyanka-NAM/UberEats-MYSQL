@@ -1,4 +1,4 @@
-import { USER_SIGNIN, USER_SIGNOUT } from "../Actions/types";
+import { USER_SIGNIN, USER_SIGNIN_ERROR, USER_SIGNOUT } from "../Actions/types";
 
 const intitalState = {
   user: {},
@@ -11,6 +11,11 @@ export default (state = intitalState, action) => {
         ...state,
         user: action.payload,
         address: action.payload.address,
+      };
+    case USER_SIGNIN_ERROR:
+      return {
+        ...state,
+        user: action.payload,
       };
     case USER_SIGNOUT:
       return {};

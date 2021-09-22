@@ -31,10 +31,6 @@ class Cart extends React.Component {
     });
   };
 
-  handleGoCheckout = () => {
-    // <Route path='/insert/your/path/here' component={YourComponent} />;
-  };
-
   render() {
     const { showModal } = this.state;
     const { restaurantName, cartItems } = this.props;

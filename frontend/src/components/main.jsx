@@ -17,6 +17,7 @@ import OwnerOrders from "./Owner/Orders/OwnerOrders";
 import DeliveredOrders from "./Owner/Orders/DeliveredOrders";
 import CancelledOrders from "./Owner/Orders/CancelledOrders";
 import OwnerHomePage from "./Owner/OwnersHome/OwnerHomePage";
+import CustomerProfile from "./Customer/Profile/CustomerProfile";
 
 function Main() {
   return (
@@ -39,6 +40,7 @@ function Main() {
         <Route path='/owner/deliveredorders' component={DeliveredOrders} />
         <Route path='/owner/cancelledorders' component={CancelledOrders} />
         <Route path='/owner/profile' component={OwnerProfile} />
+        <Route path='/customer/profile' component={CustomerProfile} />
         <Route path='/owner/home' component={OwnerHomePage} />
         <Route path='/' exact component={StartPage} />
       </main>

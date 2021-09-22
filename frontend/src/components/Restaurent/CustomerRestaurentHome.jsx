@@ -83,6 +83,7 @@ class RestaurentHome extends Component {
           title={dish.name}
           price={dish.price}
           currentRestaurantName={restaurentDetails[0].title}
+          isOwnerHome={false}
           description={dish.description}
           quantity='2'
         />
@@ -113,7 +114,45 @@ class RestaurentHome extends Component {
         <>
           {restaurentBanner}
           <Container fluid>
-            <Row xxs='auto'>{restaurentMenu}</Row>
+            {" "}
+            <Row
+              style={{
+                paddingLeft: "15px",
+                paddingTop: "40px",
+                fontSize: "19px",
+                fontWeight: "500",
+                color: "black",
+                fontFamily: "UberMoveText, sans-serif",
+              }}>
+              <nav
+                className='nav'
+                style={{
+                  paddingRight: "30px",
+                }}>
+                <a
+                  className='nav-link active'
+                  href='/'
+                  style={{ color: "black", paddingRight: "30px" }}>
+                  Desserts
+                </a>
+                <a
+                  className='nav-link'
+                  href='/'
+                  style={{ color: "black", paddingRight: "30px" }}>
+                  Picked for you
+                </a>
+                <a
+                  className='nav-link'
+                  href='/'
+                  style={{ color: "black", paddingRight: "25px" }}>
+                  mains
+                </a>
+              </nav>
+            </Row>
+          </Container>
+          <hr style={{ border: "soild 1px" }} />
+          <Container fluid>
+            <Row style={{ padding: "0%", margin: "0%" }}>{restaurentMenu}</Row>
           </Container>
         </>
       </>

@@ -126,6 +126,7 @@ class Location extends React.Component {
           style={isLong ? mainstyle.longlocation : mainstyle.location}
           variant='light'
           onClick={this.handleShow}>
+          <MdLocationOn size='25px' />
           {AddressDescription}
         </Button>
         <Modal

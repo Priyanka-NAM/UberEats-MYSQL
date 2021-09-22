@@ -1,4 +1,5 @@
 export const USER_SIGNIN = "USER_SIGNIN";
+export const USER_SIGNIN_ERROR = "USER_SIGNIN_ERROR";
 export const USER_SIGNOUT = "USER_SIGNOUT";
 export const OWNER_SIGNUP = "OWNER_SIGNUP";
 export const CUSTOMER_SIGNUP = "CUSTOMER_SIGNUP";

@@ -35,15 +35,29 @@ class SignIn extends Component {
 
   render() {
     const { signinuser } = this.props;
-    const { status, userid } = signinuser;
     let redirectpage = null;
-    let errorMessage = "";
-    if (signinuser && userid) {
-      localStorage.setItem("userid", userid);
-      redirectpage = <Redirect to='/home' />;
-    } else if (status === "Authentication Failed") {
-      errorMessage = "user does not exist";
+    let errorMessage = null;
+    if (signinuser) {
+      const { status } = signinuser;
+      if (status === "Authentication Failed") {
+        errorMessage = "user does not exist";
+      } else {
+        const { userid } = signinuser;
+        if (userid) {
+          localStorage.setItem("userid", userid);
+          redirectpage = <Redirect to='/home' />;
+        }
+      }
     }
+
+    // let redirectpage = null;
+    // let errorMessage = "";
+    // if (signinuser && userid) {
+    //   localStorage.setItem("userid", userid);
+    //   redirectpage = <Redirect to='/home' />;
+    // } else if (status === "Authentication Failed") {
+    //   errorMessage = "user does not exist";
+    // }
 
     return (
       <Container>
@@ -105,7 +119,7 @@ class SignIn extends Component {
                   placeholder='Enter password'
                   onChange={this.handleChange}
                 />
-                {status && (
+                {errorMessage && (
                   <p
                     style={{
                       width: "100%",

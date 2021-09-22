@@ -69,18 +69,19 @@ class RestoCard extends Component {
         <Card
           style={{
             objectFit: "fit",
-            width: "22rem",
+            width: "23rem",
             height: "12.5rem",
             paddingLeft: "0px",
           }}
           onClick={this.handleRestaPage}>
           <Link to={{ pathname: "/restaurents", state: { restaurant } }}>
-            <Card.Img
+            <img
               style={{
                 objectFit: "cover",
-                width: "auto",
+                width: "23rem",
               }}
               src={restaurant.imageurl}
+              alt=''
             />
           </Link>
           <i
@@ -89,12 +90,38 @@ class RestoCard extends Component {
             aria-hidden='true'
             onClick={this.handleFavorite}
           />
-          <div className='resta-info'>
-            <h2 className='restar-name'>
-              {restaurant.title}
-              <span>({restaurant.address})</span>
-            </h2>
-            <h4 className='resta-descr'>{restaurant.description}</h4>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}>
+            <div className='resta-info'>
+              <h2 className='restar-name'>
+                {restaurant.title}
+                <span>({restaurant.address})</span>
+              </h2>
+              <h4 className='resta-descr'>
+                <span style={{ color: "black" }}>$0.49 Delivery Fee • </span>35
+                - 45 • min
+              </h4>
+            </div>
+            <div
+              style={{
+                backgroundColor: "#eeee",
+                width: 30,
+                height: 30,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 15,
+                fontFamily: "sans-serif",
+                fontSize: "15px",
+                marginRight: "12px",
+                marginTop: "10px",
+              }}>
+              <text>4.5</text>
+            </div>
           </div>
         </Card>
       </>
