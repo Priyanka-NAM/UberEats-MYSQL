@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import {
@@ -134,44 +134,52 @@ class Header extends React.Component {
               </Nav.Item>
             ) : null}
 
-            <Nav.Item
-              style={{
-                paddingLeft: "20px",
-                paddingRight: "40px",
-              }}>
-              <Location
-                isLong={!isCurrentURL("/home")}
-                description={defaultUserLocationDescription}
-                changedLocationDescription=''
-                changeLocation={() => {}}
-              />
-            </Nav.Item>
-            <Nav.Item style={mainstyle.paddingLeft}>
-              <InputGroup
-                size='lg'
-                style={{ width: "70rem", height: "54.4px" }}>
-                {/* style={{ width: "70rem", height: "3.5rem" }}> */}
-                <Button variant='light' onClick={this.handleSearchBar}>
-                  <FaSearch />
-                </Button>
-                <FormControl
-                  placeholder='What are you craving?'
-                  onKeyPress={this.handleSearchBarKeyPress}
-                  onChange={this.handleSearchBarChange}
-                />
-              </InputGroup>
-            </Nav.Item>
-            <Nav.Item align='center' style={mainstyle.paddingLeft}>
-              <Cart
-                title='Hello'
-                description='Nasheville startbird'
-                quantity='2'
-                price='10.00'
-              />
-            </Nav.Item>
+            {!isCurrentURL("/customer/profile") ? (
+              <>
+                <Nav.Item
+                  style={{
+                    paddingLeft: "20px",
+                    paddingRight: "40px",
+                  }}>
+                  <Location
+                    isLong={!isCurrentURL("/home")}
+                    description={defaultUserLocationDescription}
+                    changedLocationDescription=''
+                    changeLocation={() => {}}
+                  />
+                </Nav.Item>
+                <Nav.Item style={mainstyle.paddingLeft}>
+                  <InputGroup
+                    size='lg'
+                    style={{ width: "70rem", height: "54.4px" }}>
+                    {/* style={{ width: "70rem", height: "3.5rem" }}> */}
+                    <Button variant='light' onClick={this.handleSearchBar}>
+                      <FaSearch />
+                    </Button>
+                    <FormControl
+                      placeholder='What are you craving?'
+                      onKeyPress={this.handleSearchBarKeyPress}
+                      onChange={this.handleSearchBarChange}
+                    />
+                  </InputGroup>
+                </Nav.Item>
+                <Nav.Item align='center' style={mainstyle.paddingLeft}>
+                  <Cart
+                    title='Hello'
+                    description='Nasheville startbird'
+                    quantity='2'
+                    price='10.00'
+                  />
+                </Nav.Item>
+              </>
+            ) : null}
           </Nav>
         </Row>
-        <ProfileCanvas handleClose={this.handleClose} showModal={showModal} />
+        <ProfileCanvas
+          showModal={showModal}
+          handleSignOut={null}
+          handleClose={this.handleClose}
+        />
       </Container>
     );
   }
@@ -179,7 +187,6 @@ class Header extends React.Component {
 Header.propTypes = {
   restoSearch: PropTypes.func.isRequired,
   searchBarCallback: PropTypes.func.isRequired,
-  // hideDeliveryPickup: PropTypes.bool.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   location: PropTypes.object.isRequired,
   defaultUserLocationDescription: PropTypes.string.isRequired,

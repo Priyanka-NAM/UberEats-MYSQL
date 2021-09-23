@@ -14,7 +14,10 @@ import "../Styles/Home.css";
 let favoriteRestos = [];
 let nationalRestos = [];
 let nearToYouRestos = [];
+
 class HomePage extends Component {
+  hasMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -26,6 +29,7 @@ class HomePage extends Component {
   }
 
   componentDidMount() {
+    this.hasMounted = true;
     axios
       .get(
         "http://localhost:5000/ubereats/customerrestaurant/restaurantsearch/_"
@@ -40,17 +44,21 @@ class HomePage extends Component {
               "Status Filtered Restaurants and setting no state: ",
               response.data.restaurentsinfo.restaurants
             );
-            this.setState({
-              allRestaurents: [],
-            });
+            if (this.hasMounted) {
+              this.setState({
+                allRestaurents: [],
+              });
+            }
           } else {
             console.log(
               "Status All Restaurants and Setting State: ",
               response.data.restaurentsinfo.restaurants
             );
-            this.setState({
-              allRestaurents: response.data.restaurentsinfo.restaurants,
-            });
+            if (this.hasMounted) {
+              this.setState({
+                allRestaurents: response.data.restaurentsinfo.restaurants,
+              });
+            }
           }
         }
       })
@@ -59,6 +67,10 @@ class HomePage extends Component {
           console.log("Restaurant Get Error", error.response.data);
         }
       });
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false;
   }
 
   handleRestaurantFiltering = (foodSelection, deliveryType, location = "") => {

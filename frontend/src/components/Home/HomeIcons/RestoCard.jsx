@@ -120,7 +120,7 @@ class RestoCard extends Component {
                 marginRight: "12px",
                 marginTop: "10px",
               }}>
-              <text>4.5</text>
+              <span>4.5</span>
             </div>
           </div>
         </Card>

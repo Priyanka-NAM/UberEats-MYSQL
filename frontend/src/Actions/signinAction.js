@@ -1,5 +1,9 @@
 import axios from "axios";
-import { USER_SIGNIN, USER_SIGNIN_ERROR, USER_SIGNOUT } from "./types";
+import {
+  USER_SIGNIN_SUCCESS,
+  USER_SIGNIN_FAILURE,
+  USER_SIGNOUT,
+} from "./types";
 import backendServer from "../backEndConfig";
 
 export const userSignin = (signindata) => async (dispatch) => {
@@ -9,21 +13,22 @@ export const userSignin = (signindata) => async (dispatch) => {
       `${backendServer}/ubereats/signin`,
       signindata
     );
-    const userSigninData = await res;
-    const { data } = userSigninData;
-    // if (data.status === "Authentication Successful") {
+    const response = await res;
+    localStorage.setItem("jwtToken", response.data.token);
+    localStorage.setItem("user_id", response.data.userid);
     dispatch({
-      type: USER_SIGNIN,
-      payload: data,
+      type: USER_SIGNIN_SUCCESS,
+      payload: response.data,
     });
-    // }
   } catch (err) {
-    console.log("Error recieved: ", err.response);
     dispatch({
-      type: USER_SIGNIN_ERROR,
+      type: USER_SIGNIN_FAILURE,
       payload: err.response.data,
     });
   }
 };
 
-export const userSignOut = () => (dispatch) => dispatch({ type: USER_SIGNOUT });
+export const userSignOut = () => (dispatch) => {
+  localStorage.clear();
+  dispatch({ type: USER_SIGNOUT });
+};

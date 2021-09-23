@@ -1,7 +1,13 @@
-import { CUSTOMER_SIGNUP, UPDATE_CUSTOMER } from "../Actions/types";
+import {
+  CUSTOMER_SIGNUP,
+  CUSTOMER_SIGNUP_FAILURE,
+  UPDATE_CUSTOMER,
+} from "../Actions/types";
 
 const intitalState = {
   user: {},
+  isRegistered: false,
+  errMsg: "",
 };
 export default (state = intitalState, action) => {
   switch (action.type) {
@@ -9,11 +15,20 @@ export default (state = intitalState, action) => {
       return {
         ...state,
         user: action.payload,
+        isRegistered: true,
+        errMsg: "",
+      };
+    case CUSTOMER_SIGNUP_FAILURE:
+      return {
+        ...state,
+        user: action.payload,
+        errMsg: action.payload.status,
       };
     case UPDATE_CUSTOMER:
       return {
         ...state,
         user: action.payload,
+        isRegistered: true,
       };
     default:
       return state;

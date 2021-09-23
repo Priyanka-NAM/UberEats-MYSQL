@@ -60,7 +60,7 @@ class StartPageCanvas extends Component {
                   fontfamily: "UberMoveText, sans-serif",
                   fontSize: "18px",
                 }}
-                to='/'>
+                to='/owner/signup'>
                 Add your Restaurant
               </Link>
             </Row>
@@ -74,7 +74,7 @@ class StartPageCanvas extends Component {
                   fontSize: "18px",
                   letterSpacing: "0.05em",
                 }}
-                to='/'>
+                to='/customer/signup'>
                 Sign up
               </Link>
             </Row>

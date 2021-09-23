@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Nav, Button, Row } from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
 import { Redirect } from "react-router";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import UberELogo from "../Home/HomeIcons/logo";
 import mainstyle from "../Home/HomeIcons/HeaderStyle";
@@ -16,7 +16,7 @@ class StartPage extends Component {
     this.state = {
       showModal: false,
     };
-    this.handleSignInClick = this.handleSignInClick.bind(this);
+    
   }
 
   componentDidMount() {
@@ -42,12 +42,6 @@ class StartPage extends Component {
     });
   };
 
-  handleSignInClick = () => {
-    const history = useHistory();
-    // eslint-disable-next-line react/destructuring-assignment
-    history.push("/home");
-  };
-
   render() {
     const { showModal } = this.state;
     return (
@@ -70,20 +64,21 @@ class StartPage extends Component {
               />
             </Nav.Item>
             <Nav.Item style={{ paddingLeft: "70%" }}>
-              <Button
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "500",
-                  width: "150%",
-                  backgroundColor: "white",
-                  height: "60px",
-                  borderRadius: "40px",
-                  fontFamily: "UberMoveText, sans-serif",
-                }}
-                variant='light'
-                onClick={this.handleSignInClick}>
-                Sign in
-              </Button>
+              <Link to='/signin'>
+                <Button
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "500",
+                    width: "150%",
+                    backgroundColor: "white",
+                    height: "60px",
+                    borderRadius: "40px",
+                    fontFamily: "UberMoveText, sans-serif",
+                  }}
+                  variant='light'>
+                  Sign in
+                </Button>
+              </Link>
             </Nav.Item>
           </Nav>
         </Row>

@@ -1,5 +1,9 @@
 import axios from "axios";
-import { CUSTOMER_SIGNUP, UPDATE_CUSTOMER } from "./types";
+import {
+  CUSTOMER_SIGNUP,
+  CUSTOMER_SIGNUP_FAILURE,
+  UPDATE_CUSTOMER,
+} from "./types";
 import backendServer from "../backEndConfig";
 
 export const addCustomer = (signupdata) => async (dispatch) => {
@@ -9,15 +13,18 @@ export const addCustomer = (signupdata) => async (dispatch) => {
       `${backendServer}/ubereats/signup/customer`,
       signupdata
     );
-    const customerSignupData = await res;
+    const response = await res;
+    localStorage.setItem("jwtToken", response.data.token);
+    localStorage.setItem("user_id", response.data.userid);
     dispatch({
       type: CUSTOMER_SIGNUP,
-      payload: customerSignupData.data,
+      payload: response.data,
     });
   } catch (err) {
+    console.log("Customer Signup error: ", JSON.stringify(err.response));
     dispatch({
-      type: CUSTOMER_SIGNUP,
-      payload: err.response.customerSignupData.data,
+      type: CUSTOMER_SIGNUP_FAILURE,
+      payload: err.response.data,
     });
   }
 };

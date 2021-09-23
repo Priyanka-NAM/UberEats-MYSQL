@@ -1,7 +1,13 @@
+const configure = require("config");
+
 const mysql = require("mysql");
 
 require("dotenv").config();
 
+// if (!configure.get("jwtPrivateKey")) {
+//   console.log("FATAL ERROR: jwtPrivateKet is not defined");
+//   process.exit(1);
+// }
 // Pool supports pool of requests.
 const dbPoolConnection = mysql.createPool({
   connectionLimit: 500,

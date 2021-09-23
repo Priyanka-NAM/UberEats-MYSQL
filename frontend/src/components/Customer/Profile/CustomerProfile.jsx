@@ -2,22 +2,9 @@ import React, { Component } from "react";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import TimePicker from "react-times";
 import Avatar from "react-avatar";
-import { Link } from "react-router-dom";
-import { FaBars } from "react-icons/fa";
-
 import "react-times/css/classic/default.css";
-import {
-  Button,
-  Form,
-  Nav,
-  Container,
-  Col,
-  Card,
-  Row,
-  Navbar,
-} from "react-bootstrap";
-import UberELogo from "../../Home/HomeIcons/logo";
-import mainstyle from "../../Home/HomeIcons/HeaderStyle";
+import { Button, Form, Container, Col, Card, Row } from "react-bootstrap";
+import Header from "../../Home/HomeIcons/Header";
 
 class CustomerProfile extends Component {
   constructor(props) {
@@ -63,28 +50,7 @@ class CustomerProfile extends Component {
     return (
       <Container fluid='true' style={{ overflow: "hidden", marginLeft: "2%" }}>
         <Row>
-          <Col style={{ flex: "1.5", backgroundColor: "white" }} fluid='true'>
-            <Nav style={{ marginTop: "2%" }}>
-              <Nav.Item>
-                <FaBars
-                  style={{ height: "50px" }}
-                  xs='6'
-                  size='24px'
-                  color='black'
-                  onClick={this.handleShow}
-                />
-              </Nav.Item>
-              <Nav.Item style={mainstyle.paddingLeft}>
-                <Link to={{ pathname: "/home", state: "" }}>
-                  <img
-                    style={{ paddingLeft: "15px", height: "50px" }}
-                    src={UberELogo.UberEBLogo.src}
-                    alt={UberELogo.UberEBLogo.alt}
-                  />
-                </Link>
-              </Nav.Item>
-            </Nav>
-          </Col>
+          <Header />
         </Row>
         <Row style={{ marginTop: "3%" }}>
           <Col align='left'>

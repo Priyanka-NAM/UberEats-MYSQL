@@ -28,25 +28,32 @@ class CustomerSignUp extends React.Component {
 
   handleChange = (e) => {
     this.setState({
-      [e.target.type]: e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
   render() {
-    const { custosignup } = this.props;
-    const { status, userid } = custosignup;
-    let redirectpage = null;
+    const { custosignup, isRegistered, errMsg } = this.props;
+    // const { status, userid } = custosignup;
+    // let redirectpage = null;
+    // let errorMessage = "";
+    // if (!custosignup && userid) {
+    //   localStorage.setItem("userid", userid);
+    //   redirectpage = <Redirect to='/home' />;
+    // } else if (status === "Authentication Failed") {
+    //   errorMessage = "user already already exists";
+    // }
     let errorMessage = "";
-    if (!custosignup && userid) {
-      localStorage.setItem("userid", userid);
-      redirectpage = <Redirect to='/home' />;
-    } else if (status === "Authentication Failed") {
-      errorMessage = "user already already exists";
+    if (isRegistered || localStorage.getItem("user_id")) {
+      return <Redirect to='/home' />;
+    }
+    if (errMsg) {
+      errorMessage = errMsg;
+      console.log(errorMessage);
     }
 
     return (
       <>
-        {redirectpage}
         <SignInUpNAV />
         <Container
           align='right'
@@ -125,7 +132,7 @@ class CustomerSignUp extends React.Component {
                 type='submit'>
                 Next
               </Button>
-              {status && (
+              {errorMessage && (
                 <p
                   style={{
                     width: "100%",
@@ -146,9 +153,13 @@ class CustomerSignUp extends React.Component {
 
 CustomerSignUp.propTypes = {
   addCustomer: PropTypes.func.isRequired,
+  isRegistered: PropTypes.bool.isRequired,
   custosignup: PropTypes.object.isRequired,
+  errMsg: PropTypes.string.isRequired,
 };
 const mapStateToProps = (state) => ({
+  isRegistered: state.customersignup.isRegistered,
   custosignup: state.customersignup.user,
+  errMsg: state.customersignup.errMsg,
 });
 export default connect(mapStateToProps, { addCustomer })(CustomerSignUp);

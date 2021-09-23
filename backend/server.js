@@ -1,5 +1,4 @@
 const app = require("./app");
-
 const db = require("./dbPoolConnection");
 const signin = require("./routes/signin");
 const signup = require("./routes/signup");

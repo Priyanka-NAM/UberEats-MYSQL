@@ -34,34 +34,17 @@ class SignIn extends Component {
   };
 
   render() {
-    const { signinuser } = this.props;
-    let redirectpage = null;
+    const { isLoggedin, errMsg } = this.props;
     let errorMessage = null;
-    if (signinuser) {
-      const { status } = signinuser;
-      if (status === "Authentication Failed") {
-        errorMessage = "user does not exist";
-      } else {
-        const { userid } = signinuser;
-        if (userid) {
-          localStorage.setItem("userid", userid);
-          redirectpage = <Redirect to='/home' />;
-        }
-      }
+
+    if (isLoggedin || localStorage.getItem("user_id")) {
+      return <Redirect to='/home' />;
     }
-
-    // let redirectpage = null;
-    // let errorMessage = "";
-    // if (signinuser && userid) {
-    //   localStorage.setItem("userid", userid);
-    //   redirectpage = <Redirect to='/home' />;
-    // } else if (status === "Authentication Failed") {
-    //   errorMessage = "user does not exist";
-    // }
-
+    if (errMsg) {
+      errorMessage = errMsg;
+    }
     return (
       <Container>
-        {redirectpage}
         <Row align='center' style={{ marginTop: "100px" }}>
           <img
             style={{ paddingLeft: "0" }}
@@ -163,7 +146,7 @@ class SignIn extends Component {
                     style={{
                       color: "green",
                     }}
-                    to='/signup'>
+                    to='/customer/signup'>
                     Create an account
                   </Link>
                 </Col>
@@ -178,9 +161,11 @@ class SignIn extends Component {
 
 SignIn.propTypes = {
   userSignin: PropTypes.func.isRequired,
-  signinuser: PropTypes.object.isRequired,
+  isLoggedin: PropTypes.bool.isRequired,
+  errMsg: PropTypes.string.isRequired,
 };
 const mapStateToProps = (state) => ({
-  signinuser: state.signin.user,
+  isLoggedin: state.signin.isLoggedin,
+  errMsg: state.signin.errMsg,
 });
 export default connect(mapStateToProps, { userSignin })(SignIn);
