@@ -158,8 +158,9 @@ CustomerSignUp.propTypes = {
   errMsg: PropTypes.string.isRequired,
 };
 const mapStateToProps = (state) => ({
-  isRegistered: state.customersignup.isRegistered,
-  custosignup: state.customersignup.user,
-  errMsg: state.customersignup.errMsg,
+  isRegistered: state.customer.isRegistered,
+  custosignup: state.customer.user,
+  errMsg: state.customer.errMsg,
 });
 export default connect(mapStateToProps, { addCustomer })(CustomerSignUp);
+ 

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { FaRegHeart } from "react-icons/fa";
 import "@fortawesome/fontawesome-free/css/fontawesome.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import PropTypes from "prop-types";

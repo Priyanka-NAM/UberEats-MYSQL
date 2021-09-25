@@ -27,7 +27,7 @@ export const updateOwner = (signupdata) => async (dispatch) => {
   try {
     axios.defaults.withCredentials = true;
     const res = await axios.get(
-      `${backendServer}/ubereats/profileupdate/owner`,
+      `${backendServer}/ubereats/profile/owner`,
       signupdata
     );
     const ownerSignupData = await res;

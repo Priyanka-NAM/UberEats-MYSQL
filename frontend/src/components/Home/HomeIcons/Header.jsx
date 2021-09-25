@@ -165,10 +165,10 @@ class Header extends React.Component {
                 </Nav.Item>
                 <Nav.Item align='center' style={mainstyle.paddingLeft}>
                   <Cart
-                    title='Hello'
-                    description='Nasheville startbird'
-                    quantity='2'
-                    price='10.00'
+                    title=''
+                    description=''
+                    quantity=''
+                    price=''
                   />
                 </Nav.Item>
               </>

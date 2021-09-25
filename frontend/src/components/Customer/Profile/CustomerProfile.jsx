@@ -1,24 +1,60 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
-import TimePicker from "react-times";
 import Avatar from "react-avatar";
+import PropTypes from "prop-types";
 import "react-times/css/classic/default.css";
+import { connect } from "react-redux";
 import { Button, Form, Container, Col, Card, Row } from "react-bootstrap";
 import Header from "../../Home/HomeIcons/Header";
+import ProfileRow from "./ProfileRow";
+import { updateCustomer } from "../../../Actions/CustomerActions";
 
 class CustomerProfile extends Component {
   constructor(props) {
     super(props);
-    this.state = { country: "", region: "", hour: "", minute: "", file: null };
+    this.state = { country: "", region: "", file: null };
     this.uploadSingleFile = this.uploadSingleFile.bind(this);
     this.upload = this.upload.bind(this);
   }
 
-  onTimeChange(options) {
-    const { hour, minute } = options;
+  handleChange = (e) => {
+    e.preventDefault();
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    this.setState({ hour, minute });
-  }
+  handleChangesSubmit = (e) => {
+    e.preventDefault();
+    const {
+      country,
+      region,
+      AddressLine,
+      dob,
+      city,
+      zipcode,
+      file,
+      emailId,
+      name,
+      phoneNumber,
+      nickname,
+    } = this.state;
+    const details = {
+      country,
+      region,
+      AddressLine,
+      dob,
+      city,
+      zipcode,
+      file,
+      emailId,
+      name,
+      phoneNumber,
+      nickname,
+    };
+    this.props.updateCustomer(details);
+  };
 
   selectCountry(val) {
     this.setState({ country: val });
@@ -42,10 +78,28 @@ class CustomerProfile extends Component {
   }
 
   render() {
-    const { country, region, hour, minute, file } = this.state;
+    const {
+      country,
+      region,
+      AddressLine,
+      dob,
+      city,
+      zipcode,
+      file,
+      emailId,
+      name,
+      phoneNumber,
+      nickname,
+    } = this.state;
+    const { updateerrMsg } = this.props;
     let imgPreview;
     if (file) {
       imgPreview = <img src={file} alt='' />;
+    }
+    let errorMessage = "";
+    if (updateerrMsg) {
+      errorMessage = updateerrMsg;
+      console.log(errorMessage);
     }
     return (
       <Container fluid='true' style={{ overflow: "hidden", marginLeft: "2%" }}>
@@ -53,126 +107,134 @@ class CustomerProfile extends Component {
           <Header />
         </Row>
         <Row style={{ marginTop: "3%" }}>
-          <Col align='left'>
-            <Row style={{ padding: "0px" }}>
-              <Col style={{ marginLeft: "30px" }}>
-                <h4>Profile Update</h4>
-                <Card style={{ width: "16rem", height: "12rem" }}>
-                  <div style={{ width: "16rem", height: "8rem" }}>
-                    {imgPreview}
-                  </div>
-                  <input
-                    type='file'
-                    className='form-control'
-                    onChange={this.uploadSingleFile}
-                    style={{ display: "none" }}
-                    // eslint-disable-next-line no-return-assign
-                    ref={(fileInput) => (this.fileInput = fileInput)}
+          <Form
+            onSubmit={this.handleChangesSubmit}
+            style={{ fontSize: "18px", fontFamily: "sans-serif" }}>
+            <Col align='left'>
+              <Row style={{ padding: "0px" }}>
+                <Col style={{ marginLeft: "30px" }}>
+                  <h4>Profile Update</h4>
+                  <Card style={{ width: "16rem", height: "12rem" }}>
+                    <div style={{ width: "16rem", height: "8rem" }}>
+                      {imgPreview}
+                    </div>
+                    <input
+                      type='file'
+                      name='image'
+                      className='form-control'
+                      onChange={this.uploadSingleFile}
+                      style={{ display: "none" }}
+                      // eslint-disable-next-line no-return-assign
+                      ref={(fileInput) => (this.fileInput = fileInput)}
+                    />
+                    <Card.Footer align='center'>
+                      <Button
+                        variant='light'
+                        style={{
+                          paddingTop: "10px",
+                          width: "40%",
+                          paddingRight: "15px",
+                        }}
+                        onClick={() => this.fileInput.click()}>
+                        Add File
+                      </Button>
+                      <Button
+                        variant='dark'
+                        style={{ paddingTop: "10px", width: "40%" }}
+                        onClick={this.upload}>
+                        Upload
+                      </Button>
+                    </Card.Footer>
+                  </Card>
+                  <br />
+                  <br />
+                  <h5>Basic Info</h5>
+                  <ProfileRow
+                    FieldName='Name'
+                    nameField='name'
+                    typeField='text'
+                    valueField={name}
+                    patternField='^[A-Za-z]+$'
+                    requiredField
+                    onChange={this.handleChange}
                   />
-                  <Card.Footer align='center'>
-                    <Button
-                      variant='light'
-                      style={{
-                        paddingTop: "10px",
-                        width: "40%",
-                        paddingRight: "15px",
-                      }}
-                      onClick={() => this.fileInput.click()}>
-                      Add File
-                    </Button>
-                    <Button
-                      variant='dark'
-                      style={{ paddingTop: "10px", width: "40%" }}
-                      onClick={this.upload}>
-                      Upload
-                    </Button>
-                  </Card.Footer>
-                </Card>
-                <br />
-                <br />
-                <h5>Basic Info</h5>
-                <Form>
-                  <Row>
-                    <Col xs={2}>
-                      <Form.Label>Name</Form.Label>
-                    </Col>
-                    <Col xs={6}>
-                      <Form.Control placeholder='' />
-                    </Col>
-                  </Row>
-                </Form>
-                <br />
-                <Form>
-                  <Row>
-                    <Col xs={2}>
-                      <Form.Label>Nick Name</Form.Label>
-                    </Col>
-                    <Col xs={6}>
-                      <Form.Control placeholder='' />
-                    </Col>
-                  </Row>
-                </Form>
-                <br />
-                <Form>
-                  <Row>
-                    <Col xs={2}>
-                      <Form.Label>Date of Birth</Form.Label>
-                    </Col>
-                    <Col xs={6}>
-                      <Form.Control placeholder='' />
-                    </Col>
-                  </Row>
-                </Form>
-                <br />
-              </Col>
-              <Col>
-                <h4>Contact Info</h4>
-                <Form>
-                  <Row>
-                    <Col xs={2}>
-                      <Form.Label>Email</Form.Label>
-                    </Col>
-                    <Col xs={6}>
-                      <Form.Control placeholder='' />
-                    </Col>
-                  </Row>
-                </Form>
-                <br />
-                <Form>
-                  <Row>
-                    <Col xs={2}>
-                      <Form.Label>Phone Number</Form.Label>
-                    </Col>
-                    <Col xs={6}>
-                      <Form.Control placeholder='' />
-                    </Col>
-                  </Row>
-                </Form>
-
-                <h4>Address Info</h4>
-                <Form>
-                  <Row>
-                    <Col xs={2}>
-                      <Form.Label>Addres Line1</Form.Label>
-                    </Col>
-                    <Col xs={6}>
-                      <Form.Control placeholder='' />
-                    </Col>
-                  </Row>
-                </Form>
-                <br />
-                <Form>
-                  <Row>
-                    <Col xs={2}>
-                      <Form.Label>City</Form.Label>
-                    </Col>
-                    <Col xs={6}>
-                      <Form.Control placeholder='' />
-                    </Col>
-                  </Row>
-                </Form>
-                <br />
-                <Form>
+                  <ProfileRow
+                    FieldName='Nick Name'
+                    nameField='nickname'
+                    typeField='text'
+                    valueField={nickname}
+                    patternField='^[A-Za-z0-9 ]+$'
+                    requiredField={false}
+                    onChange={this.handleChange}
+                  />
+                  <ProfileRow
+                    FieldName='Date of Birth'
+                    nameField='dob'
+                    typeField='date'
+                    valueField={dob}
+                    patternField={null}
+                    requiredField={false}
+                    onChange={this.handleChange}
+                  />
+                  <h5>Security Info</h5>
+                  <ProfileRow
+                    FieldName='Old Password'
+                    nameField='oldpassword'
+                    typeField='password'
+                    valueField={null}
+                    patternField='^[A-Za-z0-9 ]+$'
+                    requiredField
+                    onChange={this.handleChange}
+                  />
+                  <ProfileRow
+                    FieldName='New Password'
+                    nameField='newpassword'
+                    typeField='password'
+                    valueField={null}
+                    patternField='^[A-Za-z0-9 ]+$'
+                    requiredField
+                    onChange={this.handleChange}
+                  />
+                </Col>
+                <Col>
+                  <h4>Contact Info</h4>
+                  <ProfileRow
+                    FieldName='Email'
+                    nameField='emailId'
+                    typeField='email'
+                    valueField={emailId}
+                    patternField={null}
+                    requiredField
+                    onChange={this.handleChange}
+                  />
+                  <ProfileRow
+                    FieldName='Phone Number'
+                    nameField='phoneNumber'
+                    typeField='number'
+                    valueField={phoneNumber}
+                    patternField='^[0-9]+$'
+                    requiredField
+                    onChange={this.handleChange}
+                  />
+                  <h4>Address Info</h4>
+                  <ProfileRow
+                    FieldName='Address Line1'
+                    nameField='AddressLine'
+                    typeField='text'
+                    valueField={AddressLine}
+                    patternField={null}
+                    requiredField
+                    onChange={this.handleChange}
+                  />
+                  <ProfileRow
+                    FieldName='City'
+                    nameField='City'
+                    typeField='text'
+                    valueField={city}
+                    patternField={null}
+                    requiredField
+                    onChange={this.handleChange}
+                  />
                   <Row>
                     <Col xs={2}>
                       <Form.Label>State</Form.Label>
@@ -184,6 +246,7 @@ class CustomerProfile extends Component {
                           height: "2.6rem",
                           borderColor: "#eeeee",
                         }}
+                        name='region'
                         disableWhenEmpty
                         country={country}
                         value={region}
@@ -191,9 +254,7 @@ class CustomerProfile extends Component {
                       />
                     </Col>
                   </Row>
-                </Form>
-                <br />
-                <Form>
+                  <br />
                   <Row>
                     <Col xs={2}>
                       <Form.Label>Country</Form.Label>
@@ -205,42 +266,62 @@ class CustomerProfile extends Component {
                           height: "2.6rem",
                           borderColor: "#eeeee",
                         }}
-                        whitelist={["CA", "US"]}
+                        name='country'
+                        whitelist={["US"]}
                         value={country}
                         onChange={(val) => this.selectCountry(val)}
                       />
                     </Col>
                   </Row>
-                </Form>
-                <br />
-                <Form>
+                  <br />
+                  <ProfileRow
+                    FieldName='Zip Code'
+                    nameField='zipCode'
+                    typeField='number'
+                    valueField={zipcode}
+                    patternField='^[0-9]+$'
+                    requiredField
+                    onChange={this.handleChange}
+                  />
+                  <br />
                   <Row>
                     <Col xs={2}>
-                      <Form.Label>Zip Code</Form.Label>
-                    </Col>
-                    <Col xs={6}>
-                      <Form.Control placeholder='' />
+                      <Button variant='dark' type='submit'>
+                        Save Changes
+                      </Button>
+                      {errorMessage && (
+                        <p
+                          style={{
+                            width: "100%",
+                            marginTop: "15px",
+                            fontFamily:
+                              "UberMoveText-Medium,Helvetica,sans-serif",
+                          }}
+                          className='alert alert-danger'>
+                          {errorMessage}
+                        </p>
+                      )}
                     </Col>
                   </Row>
-                </Form>
-                <br />
-
-                <br />
-                <Form>
-                  <Row>
-                    <Col xs={2}>
-                      <Button variant='dark'>Save Changes</Button>
-                    </Col>
-                  </Row>
-                </Form>
-              </Col>
-            </Row>
-          </Col>
+                </Col>
+              </Row>
+            </Col>
+          </Form>
         </Row>
-        {/* end of the profile page */}
       </Container>
     );
   }
 }
 
-export default CustomerProfile;
+CustomerProfile.propTypes = {
+  updateCustomer: PropTypes.func.isRequired,
+  updateerrMsg: PropTypes.string.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  isRegistered: state.customer.isRegistered,
+  custosignup: state.customer.user,
+  errMsg: state.customer.errMsg,
+});
+
+export default connect(mapStateToProps, { updateCustomer })(CustomerProfile);

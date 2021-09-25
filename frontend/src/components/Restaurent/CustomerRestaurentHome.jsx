@@ -22,9 +22,15 @@ class RestaurentHome extends Component {
     const { restaurant } = state;
     const { restaurant_id } = restaurant;
     console.log("restaurant_id", restaurant_id);
+    const jwtToken = localStorage.getItem("token");
     axios
       .get(
-        `http://localhost:5000/ubereats/customerrestaurant/restaurantdetails/${restaurant_id}`
+        `http://localhost:5000/ubereats/customerrestaurant/restaurantdetails/${restaurant_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
       )
       .then((response) => {
         if (response.data) {
@@ -47,7 +53,12 @@ class RestaurentHome extends Component {
       });
     axios
       .get(
-        `http://localhost:5000/ubereats/customerrestaurant/dishdetails/${restaurant_id}`
+        `http://localhost:5000/ubereats/customerrestaurant/dishdetails/${restaurant_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        }
       )
       .then((response) => {
         if (response.data) {
