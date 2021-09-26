@@ -5,6 +5,7 @@ const signup = require("./routes/signup");
 const customerrestaurant = require("./routes/customerrestaurant");
 const profile = require("./routes/profile");
 const verifyToken = require("./routes/tokenVerification");
+const upload = require("./routes/fileUpload");
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
@@ -15,6 +16,7 @@ app.use("/ubereats/signin", signin);
 app.use("/ubereats/signup", signup);
 
 app.use(verifyToken);
+app.use("/ubereats/upload", upload);
 app.use("/ubereats/profile", profile);
 app.use("/ubereats/customerrestaurant", customerrestaurant);
 

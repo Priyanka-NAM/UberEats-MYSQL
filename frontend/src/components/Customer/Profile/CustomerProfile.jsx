@@ -2,13 +2,17 @@
 import React, { Component } from "react";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import Avatar from "react-avatar";
+import Gravatar from "react-gravatar";
 import PropTypes from "prop-types";
+import axios from "axios";
 import "react-times/css/classic/default.css";
 import { connect } from "react-redux";
 import { Button, Form, Container, Col, Card, Row } from "react-bootstrap";
+import { getToken } from "../../Service/authService";
 import Header from "../../Home/HomeIcons/Header";
 import ProfileRow from "./ProfileRow";
 import { updateCustomer } from "../../../Actions/CustomerActions";
+import backendServer from "../../../backEndConfig";
 
 class CustomerProfile extends Component {
   constructor(props) {
@@ -19,6 +23,7 @@ class CustomerProfile extends Component {
       phoneNumber: "",
       dob: "",
       nickname: "",
+      name: "",
       emailId: "",
       newpassword: "",
       oldpassword: "",
@@ -26,10 +31,15 @@ class CustomerProfile extends Component {
       city: "",
       zipcode: "",
       file: null,
+      preview: null,
+      src: "",
     };
     this.uploadSingleFile = this.uploadSingleFile.bind(this);
     this.upload = this.upload.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.onCrop = this.onCrop.bind(this);
+    this.onClose = this.onClose.bind(this);
+    this.handleUploadImage = this.handleUploadImage.bind(this);
   }
 
   handleChange = (e) => {
@@ -44,6 +54,45 @@ class CustomerProfile extends Component {
     const details = { ...this.state };
     this.props.updateCustomer(details);
   };
+
+  handleUploadImage(e) {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("file", this.fileInput.files[0]);
+    console.log("File Details ", this.fileInput.files);
+    // data.append("filename", this.fileName.value);
+    axios.defaults.headers.common.authorization = getToken();
+    axios.defaults.withCredentials = true;
+    axios
+      .post(`${backendServer}/ubereats/upload/profile_upload`, data)
+      .then((response) => {
+        console.log("Response from server ", response.data);
+        this.setState({
+          src: `${backendServer}/${response.data.file}`,
+        });
+      })
+      .catch((err) => {
+        console.log("Upload file error: ", err.response);
+      });
+
+    // fetch("http://localhost:8000/upload", {
+    //   method: "POST",
+    //   body: data,
+    // }).then((response) => {
+    //   response.json().then((body) => {
+    //     this.setState({ imageURL: `http://localhost:8000/${body.file}` });
+    //   });
+    // });
+  }
+
+  onClose() {
+    this.setState({ preview: null });
+  }
+
+  onCrop(preview) {
+    this.setState({ preview });
+  }
 
   selectCountry(val) {
     this.setState({ country: val });
@@ -81,12 +130,13 @@ class CustomerProfile extends Component {
       oldpassword,
       phoneNumber,
       nickname,
+      src,
     } = this.state;
     const { updateerrMsg } = this.props;
-    let imgPreview;
-    if (file) {
-      imgPreview = <img src={file} alt='' />;
-    }
+    // let imgPreview;
+    // if (file) {
+    //   imgPreview = <img src={file} alt='' />;
+    // }
     let errorMessage = "";
     if (updateerrMsg) {
       errorMessage = updateerrMsg;
@@ -107,7 +157,15 @@ class CustomerProfile extends Component {
                   <h4>Profile Update</h4>
                   <Card style={{ width: "16rem", height: "12rem" }}>
                     <div style={{ width: "16rem", height: "8rem" }}>
-                      {imgPreview}
+                      {/* <Avatar
+                        width={390}
+                        height={295}
+                        onCrop={this.onCrop}
+                        onClose={this.onClose}
+                        src={this.state.src}
+                      /> */}
+                      <img src={src} alt='Preview' />
+                      {/* {imgPreview} */}
                     </div>
                     <input
                       type='file'
@@ -132,7 +190,7 @@ class CustomerProfile extends Component {
                       <Button
                         variant='dark'
                         style={{ paddingTop: "10px", width: "40%" }}
-                        onClick={this.upload}>
+                        onClick={this.handleUploadImage}>
                         Upload
                       </Button>
                     </Card.Footer>
@@ -145,7 +203,8 @@ class CustomerProfile extends Component {
                     nameField='name'
                     typeField='text'
                     valueField={name}
-                    patternField='^[A-Za-z]+$'
+                    maxLength='32'
+                    patternField='^[A-Za-z ]+$'
                     requiredField
                     changeHandler={this.handleChange}
                   />
@@ -153,6 +212,7 @@ class CustomerProfile extends Component {
                     FieldName='Nick Name'
                     nameField='nickname'
                     typeField='text'
+                    maxLength='32'
                     valueField={nickname}
                     patternField='^[A-Za-z0-9 ]+$'
                     requiredField={false}
@@ -162,6 +222,7 @@ class CustomerProfile extends Component {
                     FieldName='Date of Birth'
                     nameField='dob'
                     typeField='date'
+                    maxLength={null}
                     valueField={dob}
                     patternField={null}
                     requiredField={false}
@@ -171,6 +232,7 @@ class CustomerProfile extends Component {
                   <ProfileRow
                     FieldName='Old Password'
                     nameField='oldpassword'
+                    maxLength='32'
                     typeField='password'
                     valueField={oldpassword}
                     patternField='^[A-Za-z0-9 ]+$'
@@ -180,10 +242,10 @@ class CustomerProfile extends Component {
                   <ProfileRow
                     FieldName='New Password'
                     nameField='newpassword'
+                    maxLength='32'
                     typeField='password'
                     valueField={newpassword}
                     patternField='^[A-Za-z0-9 ]+$'
-                    requiredField
                     changeHandler={this.handleChange}
                   />
                 </Col>
@@ -193,6 +255,7 @@ class CustomerProfile extends Component {
                     FieldName='Email'
                     nameField='emailId'
                     typeField='email'
+                    maxLength='32'
                     valueField={emailId}
                     patternField={null}
                     requiredField
@@ -201,9 +264,10 @@ class CustomerProfile extends Component {
                   <ProfileRow
                     FieldName='Phone Number'
                     nameField='phoneNumber'
-                    typeField='number'
+                    typeField='text'
                     valueField={phoneNumber}
                     patternField='^[0-9]+$'
+                    maxLength='10'
                     requiredField
                     changeHandler={this.handleChange}
                   />
@@ -214,6 +278,7 @@ class CustomerProfile extends Component {
                     typeField='text'
                     valueField={addressline1}
                     patternField={null}
+                    maxLength='32'
                     requiredField
                     changeHandler={this.handleChange}
                   />
@@ -224,6 +289,7 @@ class CustomerProfile extends Component {
                     valueField={city}
                     patternField={null}
                     requiredField
+                    maxLength='32'
                     changeHandler={this.handleChange}
                   />
                   <Row>
@@ -270,6 +336,7 @@ class CustomerProfile extends Component {
                     nameField='zipcode'
                     typeField='number'
                     valueField={zipcode}
+                    maxLength='32'
                     patternField='^[0-9]+$'
                     requiredField
                     changeHandler={this.handleChange}

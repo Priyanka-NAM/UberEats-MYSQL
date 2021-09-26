@@ -23,6 +23,7 @@ class ProfileRow extends Component {
       nameField,
       requiredField,
       patternField,
+      maxLength,
     } = this.props;
 
     return (
@@ -37,6 +38,7 @@ class ProfileRow extends Component {
               name={nameField}
               onChange={this.handleChange}
               value={valueField}
+              maxLength={maxLength}
               required={requiredField}
               pattern={patternField}
             />
@@ -56,6 +58,7 @@ ProfileRow.propTypes = {
   typeField: PropTypes.string.isRequired,
   requiredField: PropTypes.bool.isRequired,
   changeHandler: PropTypes.func.isRequired,
+  maxLength: PropTypes.string.isRequired,
 };
 
 export default ProfileRow;
