@@ -55,35 +55,66 @@ class CustomerProfile extends Component {
     this.props.updateCustomer(details);
   };
 
+  // handleUploadImage(e) {
+  //   e.preventDefault();
+
+  //   const data = new FormData();
+  //   data.append("file", this.fileInput.files[0]);
+  //   console.log("File Details ", this.fileInput.files);
+  //   // data.append("filename", this.fileName.value);
+  //   axios.defaults.headers.common.authorization = getToken();
+  //   axios.defaults.withCredentials = true;
+  //   axios
+  //     .post(`${backendServer}/ubereats/upload/profile_upload`, data)
+  //     .then((response) => {
+  //       console.log("Response from server ", response.data);
+  //       this.setState({
+  //         src: `${backendServer}/${response.data.file}`,
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log("Upload file error: ", err.response);
+  //     });
+
+  //   // fetch("http://localhost:8000/upload", {
+  //   //   method: "POST",
+  //   //   body: data,
+  //   // }).then((response) => {
+  //   //   response.json().then((body) => {
+  //   //     this.setState({ imageURL: `http://localhost:8000/${body.file}` });
+  //   //   });
+  //   // });
+  // }
+
   handleUploadImage(e) {
     e.preventDefault();
 
     const data = new FormData();
-    data.append("file", this.fileInput.files[0]);
-    console.log("File Details ", this.fileInput.files);
-    // data.append("filename", this.fileName.value);
-    axios.defaults.headers.common.authorization = getToken();
+    data.append("image", this.fileInput.files[0]);
+
+    const uploadConfig = {
+      headers: {
+        "content-type": "multipart/form-data",
+        authorization: localStorage.getItem("jwtToken"),
+      },
+    };
     axios.defaults.withCredentials = true;
+    axios.defaults.headers.common.authorization = getToken();
     axios
-      .post(`${backendServer}/ubereats/upload/profile_upload`, data)
+      .post(
+        `${backendServer}/ubereats/upload/profile_upload`,
+        data,
+        uploadConfig
+      )
       .then((response) => {
         console.log("Response from server ", response.data);
         this.setState({
-          src: `${backendServer}/${response.data.file}`,
+          src: `${backendServer}/public/${response.data}`,
         });
       })
       .catch((err) => {
         console.log("Upload file error: ", err.response);
       });
-
-    // fetch("http://localhost:8000/upload", {
-    //   method: "POST",
-    //   body: data,
-    // }).then((response) => {
-    //   response.json().then((body) => {
-    //     this.setState({ imageURL: `http://localhost:8000/${body.file}` });
-    //   });
-    // });
   }
 
   onClose() {
@@ -133,10 +164,7 @@ class CustomerProfile extends Component {
       src,
     } = this.state;
     const { updateerrMsg } = this.props;
-    // let imgPreview;
-    // if (file) {
-    //   imgPreview = <img src={file} alt='' />;
-    // }
+
     let errorMessage = "";
     if (updateerrMsg) {
       errorMessage = updateerrMsg;
@@ -170,6 +198,7 @@ class CustomerProfile extends Component {
                     <input
                       type='file'
                       name='image'
+                      encType='multipart/form-data'
                       className='form-control'
                       onChange={this.uploadSingleFile}
                       style={{ display: "none" }}

@@ -3,11 +3,12 @@ const jwt = require("jsonwebtoken");
 const tokenKey = "jwtPrivateKey";
 
 const verifyToken = (req, res, next) => {
-  console.log(req.headers);
+  console.log("Request headers hurray cjskbfhjksfk", req.headers);
   const token =
     req.body.token ||
     req.query.token ||
     req.headers["x-auth-token"] ||
+    req.headers["content-type"] ||
     req.headers.authorization;
 
   if (!token) {

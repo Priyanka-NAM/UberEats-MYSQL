@@ -142,18 +142,7 @@ class OwnerHomePage extends Component {
         />
       ));
     }
-    // const base64Data = newImageData.replace(/^data:image\/png;base64,/, "");
-    // if (newImageData !== "") {
-    //   // eslint-disable-next-line consistent-return
-    //   fs.writeFile("./test.png", base64Data, "base64", (err) => {
-    //     if (err) {
-    //       return console.log("File system Write Error: ", err);
-    //     }
-    //   });
-    //   this.setState({
-    //     newImageData: "",
-    //   });
-    // }
+
     const pageContent = (
       <Col style={{ padding: "0%", margin: "0%" }}>
         <Container fluid>

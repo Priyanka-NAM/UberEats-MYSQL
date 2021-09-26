@@ -1,3 +1,6 @@
+const express = require("express");
+const path = require("path");
+
 const app = require("./app");
 const db = require("./dbPoolConnection");
 const signin = require("./routes/signin");
@@ -14,6 +17,12 @@ app.listen(port, () => {
 
 app.use("/ubereats/signin", signin);
 app.use("/ubereats/signup", signup);
+
+app.use("/public", express.static(path.join(__dirname, "/public")));
+app.use(
+  "/public/uploads",
+  express.static(path.join(__dirname, "/public", "/uploads"))
+);
 
 app.use(verifyToken);
 app.use("/ubereats/upload", upload);

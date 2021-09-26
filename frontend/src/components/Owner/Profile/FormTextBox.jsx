@@ -8,8 +8,23 @@ class FormTextBox extends Component {
     this.state = {};
   }
 
+  handleChange = (e) => {
+    e.preventDefault();
+
+    const { changeHandler } = this.props;
+    changeHandler(e);
+  };
+
   render() {
-    const { FieldName } = this.props;
+    const {
+      FieldName,
+      valueField,
+      typeField,
+      nameField,
+      requiredField,
+      patternField,
+      maxLength,
+    } = this.props;
 
     return (
       <Form>
@@ -18,7 +33,15 @@ class FormTextBox extends Component {
             <Form.Label>{FieldName}</Form.Label>
           </Col>
           <Col xs={6}>
-            <Form.Control placeholder='' required />
+            <Form.Control
+              type={typeField}
+              name={nameField}
+              onChange={this.handleChange}
+              value={valueField}
+              maxLength={maxLength}
+              required={requiredField}
+              pattern={patternField}
+            />
           </Col>
         </Row>
       </Form>
@@ -27,7 +50,13 @@ class FormTextBox extends Component {
 }
 
 FormTextBox.propTypes = {
+  nameField: PropTypes.string.isRequired,
   FieldName: PropTypes.string.isRequired,
+  valueField: PropTypes.string.isRequired,
+  patternField: PropTypes.string.isRequired,
+  typeField: PropTypes.string.isRequired,
+  requiredField: PropTypes.bool.isRequired,
+  changeHandler: PropTypes.func.isRequired,
+  maxLength: PropTypes.string.isRequired,
 };
-
 export default FormTextBox;

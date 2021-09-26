@@ -12,7 +12,13 @@ class OwnerProfile extends Component {
     super(props);
     this.state = {
       country: "",
-      region: "",
+      state: "",
+      phoneNumber: "",
+      emailId: "",
+      newpassword: "",
+      addressline1: "",
+      city: "",
+      zipcode: "",
       hour: "",
       minute: "",
       ehour: "",
@@ -22,7 +28,15 @@ class OwnerProfile extends Component {
     this.onEndTimeChange = this.onEndTimeChange.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
+
+  handleChange = (e) => {
+    e.preventDefault();
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
 
   onStartTimeChange(options) {
     const { hour, minute } = options;
@@ -40,11 +54,25 @@ class OwnerProfile extends Component {
   }
 
   selectRegion(val) {
-    this.setState({ region: val });
+    this.setState({ state: val });
   }
 
   render() {
-    const { country, region, ehour, eminute, hour, minute } = this.state;
+    const {
+      country,
+      addressline1,
+      city,
+      state,
+      zipcode,
+      emailId,
+      restaurantname,
+      newpassword,
+      phoneNumber,
+      ehour,
+      eminute,
+      hour,
+      minute,
+    } = this.state;
     const pageContent = (
       <Col align='left'>
         <Row style={{ padding: "0px" }}>
@@ -71,7 +99,16 @@ class OwnerProfile extends Component {
             </Card>
             <br />
             <h5>Basic Info</h5>
-            <FormTextBox FieldName='Restaurant Name' />
+            <FormTextBox
+              FieldName='Restaurant Name'
+              nameField='name'
+              typeField='text'
+              valueField={restaurantname}
+              maxLength='32'
+              patternField='^[A-Za-z ]+$'
+              requiredField
+              changeHandler={this.handleChange}
+            />
             <br />
             <Form>
               <Row>
@@ -85,17 +122,61 @@ class OwnerProfile extends Component {
             </Form>
             <br />
             <h4>Contact Info</h4>
-            <FormTextBox FieldName='Email' />
+            <FormTextBox
+              FieldName='Email'
+              nameField='emailId'
+              typeField='email'
+              maxLength='32'
+              valueField={emailId}
+              patternField={null}
+              requiredField
+              changeHandler={this.handleChange}
+            />
             <br />
-            <FormTextBox FieldName='Phone Number' />
+            <FormTextBox
+              FieldName='Phone Number'
+              nameField='phoneNumber'
+              typeField='text'
+              valueField={phoneNumber}
+              patternField='^[0-9]+$'
+              maxLength='10'
+              requiredField
+              changeHandler={this.handleChange}
+            />
             <br />
-            <FormTextBox FieldName='Password' />
+            <FormTextBox
+              FieldName='New Password'
+              nameField='newpassword'
+              maxLength='32'
+              typeField='password'
+              valueField={newpassword}
+              patternField='^[A-Za-z0-9 ]+$'
+              changeHandler={this.handleChange}
+            />
           </Col>
           <Col>
             <h5>Address Info</h5>
-            <FormTextBox FieldName='Addres Line1' />
+            <FormTextBox
+              FieldName='Address Line1'
+              nameField='addressline1'
+              typeField='text'
+              valueField={addressline1}
+              patternField={null}
+              maxLength='32'
+              requiredField
+              changeHandler={this.handleChange}
+            />
             <br />
-            <FormTextBox FieldName='City' />
+            <FormTextBox
+              FieldName='City'
+              nameField='city'
+              typeField='text'
+              valueField={city}
+              patternField={null}
+              requiredField
+              maxLength='32'
+              changeHandler={this.handleChange}
+            />
             <br />
             <Form>
               <Row>
@@ -111,7 +192,7 @@ class OwnerProfile extends Component {
                     }}
                     disableWhenEmpty
                     country={country}
-                    value={region}
+                    value={state}
                     onChange={(val) => this.selectRegion(val)}
                   />
                 </Col>
@@ -138,7 +219,16 @@ class OwnerProfile extends Component {
               </Row>
             </Form>
             <br />
-            <FormTextBox FieldName='Zip Code' />
+            <FormTextBox
+              FieldName='Zip Code'
+              nameField='zipcode'
+              typeField='number'
+              valueField={zipcode}
+              maxLength='32'
+              patternField='^[0-9]+$'
+              requiredField
+              changeHandler={this.handleChange}
+            />
             <br />
             <h4>Restaurant Timings</h4>
             <Form>
