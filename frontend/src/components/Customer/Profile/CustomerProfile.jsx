@@ -13,9 +13,23 @@ import { updateCustomer } from "../../../Actions/CustomerActions";
 class CustomerProfile extends Component {
   constructor(props) {
     super(props);
-    this.state = { country: "", region: "", file: null };
+    this.state = {
+      country: "",
+      state: "",
+      phoneNumber: "",
+      dob: "",
+      nickname: "",
+      emailId: "",
+      newpassword: "",
+      oldpassword: "",
+      addressline1: "",
+      city: "",
+      zipcode: "",
+      file: null,
+    };
     this.uploadSingleFile = this.uploadSingleFile.bind(this);
     this.upload = this.upload.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange = (e) => {
@@ -27,32 +41,7 @@ class CustomerProfile extends Component {
 
   handleChangesSubmit = (e) => {
     e.preventDefault();
-    const {
-      country,
-      region,
-      AddressLine,
-      dob,
-      city,
-      zipcode,
-      file,
-      emailId,
-      name,
-      phoneNumber,
-      nickname,
-    } = this.state;
-    const details = {
-      country,
-      region,
-      AddressLine,
-      dob,
-      city,
-      zipcode,
-      file,
-      emailId,
-      name,
-      phoneNumber,
-      nickname,
-    };
+    const details = { ...this.state };
     this.props.updateCustomer(details);
   };
 
@@ -61,7 +50,7 @@ class CustomerProfile extends Component {
   }
 
   selectRegion(val) {
-    this.setState({ region: val });
+    this.setState({ state: val });
   }
 
   uploadSingleFile(e) {
@@ -80,14 +69,16 @@ class CustomerProfile extends Component {
   render() {
     const {
       country,
-      region,
-      AddressLine,
+      state,
+      addressline1,
       dob,
       city,
       zipcode,
       file,
       emailId,
       name,
+      newpassword,
+      oldpassword,
       phoneNumber,
       nickname,
     } = this.state;
@@ -156,7 +147,7 @@ class CustomerProfile extends Component {
                     valueField={name}
                     patternField='^[A-Za-z]+$'
                     requiredField
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                   <ProfileRow
                     FieldName='Nick Name'
@@ -165,7 +156,7 @@ class CustomerProfile extends Component {
                     valueField={nickname}
                     patternField='^[A-Za-z0-9 ]+$'
                     requiredField={false}
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                   <ProfileRow
                     FieldName='Date of Birth'
@@ -174,26 +165,26 @@ class CustomerProfile extends Component {
                     valueField={dob}
                     patternField={null}
                     requiredField={false}
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                   <h5>Security Info</h5>
                   <ProfileRow
                     FieldName='Old Password'
                     nameField='oldpassword'
                     typeField='password'
-                    valueField={null}
+                    valueField={oldpassword}
                     patternField='^[A-Za-z0-9 ]+$'
                     requiredField
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                   <ProfileRow
                     FieldName='New Password'
                     nameField='newpassword'
                     typeField='password'
-                    valueField={null}
+                    valueField={newpassword}
                     patternField='^[A-Za-z0-9 ]+$'
                     requiredField
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                 </Col>
                 <Col>
@@ -205,7 +196,7 @@ class CustomerProfile extends Component {
                     valueField={emailId}
                     patternField={null}
                     requiredField
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                   <ProfileRow
                     FieldName='Phone Number'
@@ -214,26 +205,26 @@ class CustomerProfile extends Component {
                     valueField={phoneNumber}
                     patternField='^[0-9]+$'
                     requiredField
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                   <h4>Address Info</h4>
                   <ProfileRow
                     FieldName='Address Line1'
-                    nameField='AddressLine'
+                    nameField='addressline1'
                     typeField='text'
-                    valueField={AddressLine}
+                    valueField={addressline1}
                     patternField={null}
                     requiredField
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                   <ProfileRow
                     FieldName='City'
-                    nameField='City'
+                    nameField='city'
                     typeField='text'
                     valueField={city}
                     patternField={null}
                     requiredField
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                   <Row>
                     <Col xs={2}>
@@ -246,10 +237,10 @@ class CustomerProfile extends Component {
                           height: "2.6rem",
                           borderColor: "#eeeee",
                         }}
-                        name='region'
+                        name='state'
                         disableWhenEmpty
                         country={country}
-                        value={region}
+                        value={state}
                         onChange={(val) => this.selectRegion(val)}
                       />
                     </Col>
@@ -276,12 +267,12 @@ class CustomerProfile extends Component {
                   <br />
                   <ProfileRow
                     FieldName='Zip Code'
-                    nameField='zipCode'
+                    nameField='zipcode'
                     typeField='number'
                     valueField={zipcode}
                     patternField='^[0-9]+$'
                     requiredField
-                    onChange={this.handleChange}
+                    changeHandler={this.handleChange}
                   />
                   <br />
                   <Row>

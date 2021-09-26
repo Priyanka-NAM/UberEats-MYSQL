@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Container, Row } from "react-bootstrap";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { getToken } from "../Service/authService";
 
 import Header from "../Home/HomeIcons/Header";
 import RestaBanner from "./RestaurentPageIcons/RestaBanner";
@@ -21,16 +22,10 @@ class RestaurentHome extends Component {
     const { state } = location;
     const { restaurant } = state;
     const { restaurant_id } = restaurant;
-    console.log("restaurant_id", restaurant_id);
-    const jwtToken = localStorage.getItem("token");
+    axios.defaults.headers.common.authorization = getToken();
     axios
       .get(
-        `http://localhost:5000/ubereats/customerrestaurant/restaurantdetails/${restaurant_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        }
+        `http://localhost:5000/ubereats/customerrestaurant/restaurantdetails/${restaurant_id}`
       )
       .then((response) => {
         if (response.data) {
@@ -53,12 +48,7 @@ class RestaurentHome extends Component {
       });
     axios
       .get(
-        `http://localhost:5000/ubereats/customerrestaurant/dishdetails/${restaurant_id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        }
+        `http://localhost:5000/ubereats/customerrestaurant/dishdetails/${restaurant_id}`
       )
       .then((response) => {
         if (response.data) {

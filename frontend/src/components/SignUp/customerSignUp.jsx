@@ -33,18 +33,10 @@ class CustomerSignUp extends React.Component {
   };
 
   render() {
-    const { custosignup, isRegistered, errMsg } = this.props;
-    // const { status, userid } = custosignup;
-    // let redirectpage = null;
-    // let errorMessage = "";
-    // if (!custosignup && userid) {
-    //   localStorage.setItem("userid", userid);
-    //   redirectpage = <Redirect to='/home' />;
-    // } else if (status === "Authentication Failed") {
-    //   errorMessage = "user already already exists";
-    // }
+    const { custosignup, errMsg } = this.props;
+
     let errorMessage = "";
-    if (isRegistered || localStorage.getItem("user_id")) {
+    if (localStorage.getItem("user_id")) {
       return <Redirect to='/home' />;
     }
     if (errMsg) {
@@ -153,7 +145,6 @@ class CustomerSignUp extends React.Component {
 
 CustomerSignUp.propTypes = {
   addCustomer: PropTypes.func.isRequired,
-  isRegistered: PropTypes.bool.isRequired,
   custosignup: PropTypes.object.isRequired,
   errMsg: PropTypes.string.isRequired,
 };
@@ -163,4 +154,3 @@ const mapStateToProps = (state) => ({
   errMsg: state.customer.errMsg,
 });
 export default connect(mapStateToProps, { addCustomer })(CustomerSignUp);
- 

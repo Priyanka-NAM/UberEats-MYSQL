@@ -10,9 +10,9 @@ class ProfileRow extends Component {
 
   handleChange = (e) => {
     e.preventDefault();
-    this.setState({
-      [e.target.name]: e.target.value,
-    });
+
+    const { changeHandler } = this.props;
+    changeHandler(e);
   };
 
   render() {
@@ -55,6 +55,7 @@ ProfileRow.propTypes = {
   patternField: PropTypes.string.isRequired,
   typeField: PropTypes.string.isRequired,
   requiredField: PropTypes.bool.isRequired,
+  changeHandler: PropTypes.func.isRequired,
 };
 
 export default ProfileRow;

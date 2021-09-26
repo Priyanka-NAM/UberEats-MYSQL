@@ -7,6 +7,7 @@ import axios from "axios";
 import Header from "./HomeIcons/Header";
 import RestaurantCarousel from "./HomeIcons/RestaurarntCarousel";
 import RestoCard from "./HomeIcons/RestoCard";
+import { getToken } from "../Service/authService";
 
 import SideBar from "./HomeIcons/SideBar";
 import "../Styles/Home.css";
@@ -30,6 +31,7 @@ class HomePage extends Component {
 
   componentDidMount() {
     this.hasMounted = true;
+    axios.defaults.headers.common.authorization = getToken();
     axios
       .get(
         "http://localhost:5000/ubereats/customerrestaurant/restaurantsearch/_"
