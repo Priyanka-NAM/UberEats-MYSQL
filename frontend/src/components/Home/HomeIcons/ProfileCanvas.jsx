@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { Button, Row, Container, Col } from "react-bootstrap";
+import { Button, Row, Container } from "react-bootstrap";
 import { OffCanvas, OffCanvasMenu } from "react-offcanvas";
 import { FaUserCircle, FaHeart } from "react-icons/fa";
 import PropTypes from "prop-types";
@@ -158,7 +158,6 @@ class ProfileCanvas extends Component {
 ProfileCanvas.propTypes = {
   showModal: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/no-unused-prop-types
   userSignOut: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({

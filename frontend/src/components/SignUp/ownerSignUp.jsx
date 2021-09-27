@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import { Redirect } from "react-router";
@@ -33,20 +32,19 @@ class OwnerSignUp extends Component {
   };
 
   render() {
-    const { ownersignup } = this.props;
-    const { status, userid } = ownersignup;
-    let redirectpage = null;
+    const { errMsg } = this.props;
+
     let errorMessage = "";
-    if (!ownersignup && userid) {
-      localStorage.setItem("userid", userid);
-      redirectpage = <Redirect to='/home' />;
-    } else if (status === "Authentication Failed") {
-      errorMessage = "user already already exists";
+    if (localStorage.getItem("user_id")) {
+      return <Redirect to='/owner/home' />;
+    }
+    if (errMsg) {
+      errorMessage = errMsg;
+      console.log(errorMessage);
     }
 
     return (
       <>
-        {redirectpage}
         <SignInUpNAV />
         <Container
           align='right'
@@ -134,7 +132,7 @@ class OwnerSignUp extends Component {
                 type='submit'>
                 Submit
               </Button>
-              {status && (
+              {errorMessage && (
                 <p
                   style={{
                     width: "100%",
@@ -155,10 +153,10 @@ class OwnerSignUp extends Component {
 
 OwnerSignUp.propTypes = {
   addOwner: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  ownersignup: PropTypes.object.isRequired,
+  errMsg: PropTypes.string.isRequired,
 };
 const mapStateToProps = (state) => ({
-  ownersignup: state.ownersignup.user,
+  ownersignup: state.owner.user,
+  errMsg: state.customer.errMsg,
 });
 export default connect(mapStateToProps, { addOwner })(OwnerSignUp);

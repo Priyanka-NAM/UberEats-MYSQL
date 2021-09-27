@@ -1,6 +1,12 @@
 import axios from "axios";
-import { OWNER_SIGNUP, UPDATE_OWNER } from "./types";
+import {
+  OWNER_SIGNUP,
+  OWNER_SIGNUP_FAILURE,
+  OWNER_UPDATE,
+  OWNER_UPDATE_FAILURE,
+} from "./types";
 import backendServer from "../backEndConfig";
+import { getToken } from "../components/Service/authService";
 
 export const addOwner = (signupdata) => async (dispatch) => {
   try {
@@ -9,36 +15,39 @@ export const addOwner = (signupdata) => async (dispatch) => {
       `${backendServer}/ubereats/signup/owner`,
       signupdata
     );
-    const ownerSignupData = await res;
+    const response = await res;
+    localStorage.setItem("jwtToken", response.data.token);
+    localStorage.setItem("user_id", response.data.userid);
     dispatch({
       type: OWNER_SIGNUP,
-      payload: ownerSignupData.data,
+      payload: response.data,
     });
   } catch (err) {
     console.log(err.response);
     dispatch({
-      type: OWNER_SIGNUP,
-      payload: err.response.ownerSignupData.data,
+      type: OWNER_SIGNUP_FAILURE,
+      payload: err.response.data,
     });
   }
 };
 
-export const updateOwner = (signupdata) => async (dispatch) => {
+export const updateOwner = (ownerUpdateData) => async (dispatch) => {
   try {
     axios.defaults.withCredentials = true;
-    const res = await axios.get(
+    axios.defaults.headers.common.authorization = getToken();
+    const res = await axios.post(
       `${backendServer}/ubereats/profile/owner`,
-      signupdata
+      ownerUpdateData
     );
-    const ownerSignupData = await res;
+    const response = await res;
     dispatch({
-      type: UPDATE_OWNER,
-      payload: ownerSignupData.data,
+      type: OWNER_UPDATE,
+      payload: response.data,
     });
   } catch (err) {
     dispatch({
-      type: UPDATE_OWNER,
-      payload: err.response.ownerSignupData.data,
+      type: OWNER_UPDATE_FAILURE,
+      payload: err.response.data,
     });
   }
 };

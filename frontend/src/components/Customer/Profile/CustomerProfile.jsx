@@ -34,8 +34,7 @@ class CustomerProfile extends Component {
       preview: null,
       src: "",
     };
-    this.uploadSingleFile = this.uploadSingleFile.bind(this);
-    this.upload = this.upload.bind(this);
+
     this.handleChange = this.handleChange.bind(this);
     this.onCrop = this.onCrop.bind(this);
     this.onClose = this.onClose.bind(this);
@@ -55,47 +54,14 @@ class CustomerProfile extends Component {
     this.props.updateCustomer(details);
   };
 
-  // handleUploadImage(e) {
-  //   e.preventDefault();
-
-  //   const data = new FormData();
-  //   data.append("file", this.fileInput.files[0]);
-  //   console.log("File Details ", this.fileInput.files);
-  //   // data.append("filename", this.fileName.value);
-  //   axios.defaults.headers.common.authorization = getToken();
-  //   axios.defaults.withCredentials = true;
-  //   axios
-  //     .post(`${backendServer}/ubereats/upload/profile_upload`, data)
-  //     .then((response) => {
-  //       console.log("Response from server ", response.data);
-  //       this.setState({
-  //         src: `${backendServer}/${response.data.file}`,
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.log("Upload file error: ", err.response);
-  //     });
-
-  //   // fetch("http://localhost:8000/upload", {
-  //   //   method: "POST",
-  //   //   body: data,
-  //   // }).then((response) => {
-  //   //   response.json().then((body) => {
-  //   //     this.setState({ imageURL: `http://localhost:8000/${body.file}` });
-  //   //   });
-  //   // });
-  // }
-
   handleUploadImage(e) {
     e.preventDefault();
-
     const data = new FormData();
     data.append("image", this.fileInput.files[0]);
-
     const uploadConfig = {
       headers: {
         "content-type": "multipart/form-data",
-        authorization: localStorage.getItem("jwtToken"),
+        authorization: getToken(),
       },
     };
     axios.defaults.withCredentials = true;
@@ -133,19 +99,6 @@ class CustomerProfile extends Component {
     this.setState({ state: val });
   }
 
-  uploadSingleFile(e) {
-    e.preventDefault();
-    this.setState({
-      file: URL.createObjectURL(e.target.files[0]),
-    });
-  }
-
-  upload(e) {
-    e.preventDefault();
-    const { file } = this.state;
-    console.log(file);
-  }
-
   render() {
     const {
       country,
@@ -154,7 +107,6 @@ class CustomerProfile extends Component {
       dob,
       city,
       zipcode,
-      file,
       emailId,
       name,
       newpassword,
@@ -192,15 +144,14 @@ class CustomerProfile extends Component {
                         onClose={this.onClose}
                         src={this.state.src}
                       /> */}
+
                       <img src={src} alt='Preview' />
-                      {/* {imgPreview} */}
                     </div>
                     <input
                       type='file'
                       name='image'
                       encType='multipart/form-data'
                       className='form-control'
-                      onChange={this.uploadSingleFile}
                       style={{ display: "none" }}
                       // eslint-disable-next-line no-return-assign
                       ref={(fileInput) => (this.fileInput = fileInput)}
@@ -334,6 +285,7 @@ class CustomerProfile extends Component {
                         }}
                         name='state'
                         disableWhenEmpty
+                        whitelist={{ US: ["CA"] }}
                         country={country}
                         value={state}
                         onChange={(val) => this.selectRegion(val)}

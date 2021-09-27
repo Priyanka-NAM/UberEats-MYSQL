@@ -1,7 +1,15 @@
-import { OWNER_SIGNUP, UPDATE_OWNER } from "../Actions/types";
+import {
+  OWNER_SIGNUP,
+  OWNER_UPDATE,
+  OWNER_SIGNUP_FAILURE,
+  OWNER_UPDATE_FAILURE,
+} from "../Actions/types";
 
 const intitalState = {
   user: {},
+  isRegistered: false,
+  errMsg: "",
+  updateerrMsg: "",
 };
 export default (state = intitalState, action) => {
   switch (action.type) {
@@ -9,11 +17,26 @@ export default (state = intitalState, action) => {
       return {
         ...state,
         user: action.payload,
+        errMsg: "",
       };
-    case UPDATE_OWNER:
+    case OWNER_SIGNUP_FAILURE:
       return {
         ...state,
         user: action.payload,
+        errMsg: action.payload.status,
+      };
+    case OWNER_UPDATE:
+      return {
+        ...state,
+        user: action.payload,
+        updateerrMsg: "",
+      };
+
+    case OWNER_UPDATE_FAILURE:
+      return {
+        ...state,
+        user: action.payload,
+        updateerrMsg: action.payload.status,
       };
     default:
       return state;

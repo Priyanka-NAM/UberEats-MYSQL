@@ -7,9 +7,11 @@ import {
   MdContactPhone,
 } from "react-icons/md";
 import PropTypes from "prop-types";
-
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import { Button, Nav, Container, Col, Row, Navbar } from "react-bootstrap";
 import UberELogo from "./HomeIcons/logo";
+import { userSignOut } from "../../Actions/signinAction";
 
 class OwnerHome extends Component {
   constructor(props) {
@@ -17,42 +19,59 @@ class OwnerHome extends Component {
     this.state = {};
   }
 
+  handleSignOut = () => {
+    // eslint-disable-next-line react/destructuring-assignment
+    this.props.userSignOut();
+    console.log("inside handlesignout");
+  };
+
   render() {
     const { pageContent } = this.props;
     return (
       <>
-        <Navbar bg='dark' variant='dark'>
+        <Navbar
+          bg='dark'
+          variant='dark'
+          style={{
+            width: "100%",
+          }}>
           <Container
-            align='right'
+            fluid='true'
             style={{
+              height: "60px",
+              width: "100%",
               padding: "0px",
               margin: "0px",
             }}>
-            <Navbar.Brand href='#home'>
-              <Nav>
-                <Nav.Item
-                  style={{
-                    marginLeft: "50px",
-                    width: "100%",
-                  }}>
+            <Row>
+              <Col>
+                <Navbar.Brand href='#home'>
                   <img
-                    style={{ height: "55px", marginRight: "100px" }}
+                    style={{
+                      height: "55px",
+                      marginLeft: "30px",
+                    }}
                     src={UberELogo.UberEWLogo.src}
-                    alt={UberELogo.UberEWLogo.alt}
+                    alt=''
                   />
-                </Nav.Item>
-                <Nav.Item
-                  style={{
-                    marginLeft: "350%",
-                    marginRight: "0",
-                    paddingRight: "10px",
-                  }}>
-                  <Button active='true' variant='dark' type='submit'>
+                </Navbar.Brand>
+              </Col>
+              <Col xs={2} style={{ paddingTop: "10px" }}>
+                <Link to='/' onClick={this.handleSignOut}>
+                  <Button
+                    active='true'
+                    variant='dark'
+                    type='submit'
+                    style={{
+                      width: "40%",
+                      fontSize: "16px",
+                      fontFamily: "sans-serif",
+                    }}>
                     Sign Out
-                  </Button>
-                </Nav.Item>
-              </Nav>
-            </Navbar.Brand>
+                  </Button>{" "}
+                </Link>
+              </Col>
+            </Row>
           </Container>
         </Navbar>
 
@@ -138,6 +157,10 @@ class OwnerHome extends Component {
 
 OwnerHome.propTypes = {
   pageContent: PropTypes.object.isRequired,
+  userSignOut: PropTypes.func.isRequired,
 };
 
-export default OwnerHome;
+const mapStateToProps = (state) => ({
+  isLoggedin: state.signin.isLoggedin,
+});
+export default connect(mapStateToProps, { userSignOut })(OwnerHome);
