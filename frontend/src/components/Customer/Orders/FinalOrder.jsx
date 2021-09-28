@@ -1,21 +1,24 @@
+/* eslint-disable prefer-destructuring */
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import "../../Styles/SideBar.css";
 import { Link } from "react-router-dom";
-
-import { Button, Col, Row, Container, Nav, Form } from "react-bootstrap";
+import { connect } from "react-redux";
+import { BiX } from "react-icons/bi";
+import { Button, Col, Row, Container, Nav, Form, Modal } from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import UberELogo from "../../Home/HomeIcons/logo";
 import mainstyle from "../../Home/HomeIcons/HeaderStyle";
 import "../../Styles/SignInUp.css";
 import ProfileCanvas from "../../Home/HomeIcons/ProfileCanvas";
-import Location from "../../Home/HomeIcons/Location";
+import "../../../Actions/CartActions";
 
 class FinalOrder extends Component {
   constructor(props) {
     super(props);
-    this.state = { showModal: false };
+    this.state = { showModal: false, showOrderSucess: false };
   }
 
   handleShow = () => {
@@ -30,8 +33,69 @@ class FinalOrder extends Component {
     });
   };
 
+  handlePlaceOrder = () => {
+    this.setState({
+      showOrderSucess: true,
+    });
+  };
+
   render() {
-    const { showModal } = this.state;
+    const { showModal, showOrderSucess } = this.state;
+    const { restaurantName, cartItems, currentLocation, userLocation } =
+      this.props;
+    console.log("currentLocation", currentLocation);
+    console.log("userLocation", userLocation);
+    // eslint-disable-next-line no-unneeded-ternary
+    const location = currentLocation ? currentLocation : userLocation;
+    let addressLine1 = userLocation.addressLine1;
+    let state = userLocation.state;
+    let city = userLocation.city;
+    let country = userLocation.country;
+    let zipcode = userLocation.zipcode;
+    if (currentLocation.addressLine1 !== "") {
+      addressLine1 = currentLocation.addressLine1;
+      state = currentLocation.state;
+      city = currentLocation.city;
+      country = currentLocation.country;
+      zipcode = currentLocation.zipcode;
+    }
+    console.log("location", location);
+    let cartRows = null;
+    let totalCartValue = 0;
+    let deliveryfee = 0;
+    let cadriverbenefit = 0;
+    let ordertotal = 0;
+    if (cartItems) {
+      cartRows = cartItems.map((cartitem) => {
+        totalCartValue += cartitem.price;
+        deliveryfee = 0.1 * totalCartValue;
+        cadriverbenefit = 0.05 * totalCartValue;
+        ordertotal = totalCartValue + deliveryfee + cadriverbenefit;
+        return (
+          <Row
+            style={{ textAlign: "left", width: "70%", paddingBottom: "10px" }}>
+            <Col xs={1} className='locationIcon'>
+              <Button
+                variant='light'
+                style={{
+                  borderRadius: "20px",
+                  backgroundColor: "#eeeeee",
+                  width: "3rem",
+                }}>
+                {cartitem.quantity}
+              </Button>
+            </Col>
+            <Col style={{ textAlign: "left" }}>
+              <h5 className='addressdetails'>{cartitem.title}</h5>
+            </Col>
+            <Col style={{ textAlign: "right" }}>
+              <h6 className='priceDetails'>{cartitem.price}</h6>
+            </Col>
+          </Row>
+        );
+      });
+    }
+    console.log("restaurantName", restaurantName);
     return (
       <Container fluid='true' style={{ overflow: "hidden" }}>
         <Row
@@ -63,7 +127,7 @@ class FinalOrder extends Component {
             </Nav>
             <div style={{ width: "85%" }}>
               <Row style={{ marginTop: "4%" }}>
-                <h1 className='restaName'>Everest Cuisine</h1>
+                <h1 className='restaName'>{restaurantName}</h1>
               </Row>
               <hr style={{ border: "1px", width: "70%" }} />
               <Row style={{ marginTop: "2%" }}>
@@ -77,8 +141,10 @@ class FinalOrder extends Component {
                     <MdLocationOn size='30px' />
                   </Col>
                   <Col style={{ textAlign: "left" }}>
-                    <h5 className='addressdetails'>Shadow brook apartments</h5>
-                    <h6 className='detailsadd'>235 Bernado</h6>
+                    <h5 className='addressdetails'>{addressLine1}</h5>
+                    <h6 className='detailsadd'>
+                      {city},{state},{country}
+                    </h6>
                   </Col>
                   <Col style={{ textAlign: "right" }}>
                     <Button
@@ -95,7 +161,6 @@ class FinalOrder extends Component {
               <hr style={{ border: "1px", width: "70%" }} />
               <Row style={{ marginTop: "2%" }}>
                 <h4 className='subtitle'>Payment</h4>
-
                 <Row style={{ paddingBottom: "20px" }}>
                   <Col xs={1} style={{ paddingRight: "0%" }}>
                     <input
@@ -132,7 +197,7 @@ class FinalOrder extends Component {
                   </Col>
                   <Col>
                     <Form.Check.Label className='addressdetails'>
-                      Credit Card
+                      Card on Delivery
                     </Form.Check.Label>
                   </Col>
                 </Row>
@@ -141,25 +206,7 @@ class FinalOrder extends Component {
               <Row style={{ marginTop: "2%" }}>
                 <h4 className='subtitle'>Your items</h4>
               </Row>
-              <Row style={{ textAlign: "left", width: "70%" }}>
-                <Col xs={1} className='locationIcon'>
-                  <Button
-                    variant='light'
-                    style={{
-                      borderRadius: "20px",
-                      backgroundColor: "#eeeeee",
-                      width: "3rem",
-                    }}>
-                    3
-                  </Button>
-                </Col>
-                <Col style={{ textAlign: "left" }}>
-                  <h5 className='addressdetails'>Brown Rice</h5>
-                </Col>
-                <Col style={{ textAlign: "right" }}>
-                  <h6 className='priceDetails'>$45</h6>
-                </Col>
-              </Row>
+              {cartRows}
             </div>
           </Col>
           <Col
@@ -167,7 +214,10 @@ class FinalOrder extends Component {
             align='center'
             fluid='true'>
             <Row style={{ paddingTop: "40px", width: "80%" }}>
-              <Button className='placeorderbtn' variant='light'>
+              <Button
+                className='placeorderbtn'
+                variant='light'
+                onClick={this.handlePlaceOrder}>
                 Place Order
               </Button>
             </Row>
@@ -180,7 +230,6 @@ class FinalOrder extends Component {
             </Row>
             <hr style={{ border: "1px black" }} />
             <Row
-              // className='orderDetailsRow'
               style={{
                 width: "80%",
                 paddingTop: "40px",
@@ -193,7 +242,7 @@ class FinalOrder extends Component {
                   className=' d-flex justify-content-between align-items-center'
                   style={{ paddingBottom: "10px" }}>
                   Subtotal
-                  <span>$4.00</span>
+                  <span>${totalCartValue}</span>
                 </li>
                 <li
                   className=' d-flex justify-content-between align-items-center'
@@ -205,13 +254,13 @@ class FinalOrder extends Component {
                   className='d-flex justify-content-between align-items-center'
                   style={{ paddingBottom: "10px" }}>
                   Delivery Fee
-                  <span>$1.00</span>
+                  <span>${deliveryfee}</span>
                 </li>
                 <li
                   className='d-flex justify-content-between align-items-center'
                   style={{ paddingBottom: "10px" }}>
                   CA Driver Benefits
-                  <span>$1.00</span>
+                  <span>${cadriverbenefit}</span>
                 </li>
               </ul>
             </Row>
@@ -228,16 +277,66 @@ class FinalOrder extends Component {
                   className=' d-flex justify-content-between align-items-center'
                   style={{ paddingBottom: "10px" }}>
                   Total
-                  <span>$40.00</span>
+                  <span>${ordertotal.toFixed(2)}</span>
                 </li>
               </ul>
             </Row>
           </Col>
         </Row>
         <ProfileCanvas handleClose={this.handleClose} showModal={showModal} />
+        <Modal
+          show={showOrderSucess}
+          onHide={this.handleSecClose}
+          backdrop='static'
+          keyboard={false}
+          style={{ width: "100%", display: "flex", alignItems: "center" }}>
+          <Modal.Header>
+            <BiX
+              size='35px'
+              style={{ color: "black" }}
+              onClick={this.handleSecClose}
+            />
+          </Modal.Header>
+          <Modal.Body>
+            <Modal.Title
+              style={{
+                fontSize: "36px",
+                fontFamily: "UberMove, sans-serif",
+                marginBottom: "20px",
+              }}>
+              Order is placed Successfully
+            </Modal.Title>
+          </Modal.Body>
+          <Modal.Footer>
+            <Link to='/home'>
+            <Button
+              variant='dark'
+              style={{
+                width: "100%",
+                height: "60px",
+                fontSize: "18px",
+                fontFamily: "UberMove, sans-serif",
+              }}>
+              Return to home
+            </Button>
+            </Link>
+          </Modal.Footer>
+        </Modal>
       </Container>
     );
   }
 }
 
-export default FinalOrder;
+FinalOrder.propTypes = {
+  restaurantName: PropTypes.string.isRequired,
+  cartItems: PropTypes.array.isRequired,
+  currentLocation: PropTypes.object.isRequired,
+  userLocation: PropTypes.object.isRequired,
+};
+const mapStateToProps = (state) => ({
+  restaurantName: state.cartDetails.restaurantName,
+  currentLocation: state.currentLocation,
+  userLocation: state.signin.address,
+  cartItems: state.cartDetails.items,
+});
+export default connect(mapStateToProps, {})(FinalOrder);

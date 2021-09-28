@@ -162,5 +162,6 @@ ProfileCanvas.propTypes = {
 };
 const mapStateToProps = (state) => ({
   isLoggedin: state.signin.isLoggedin,
+  user: state.signin.user,
 });
 export default connect(mapStateToProps, { userSignOut })(ProfileCanvas);

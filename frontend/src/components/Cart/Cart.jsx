@@ -2,7 +2,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { Modal, Row, Col, Button } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { BiX } from "react-icons/bi";
 import { Link } from "react-router-dom";

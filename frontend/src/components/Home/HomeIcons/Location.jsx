@@ -122,13 +122,30 @@ class Location extends React.Component {
     }
     return (
       <>
-        <Button
+        {/* <Button
           style={isLong ? mainstyle.longlocation : mainstyle.location}
           variant='light'
           onClick={this.handleShow}>
           <MdLocationOn size='25px' />
           {AddressDescription}
-        </Button>
+        </Button> */}
+
+        <InputGroup className='mb-3'>
+          <Button
+            style={isLong ? mainstyle.longlocation : mainstyle.location}
+            variant='light'
+            onClick={this.handleShow}>
+            <MdLocationOn
+              style={{
+                display: "flex",
+                justifyContent: "flex-start",
+                marginRight: "10px",
+              }}
+              size='25px'
+            />
+            {AddressDescription}
+          </Button>
+        </InputGroup>
         <Modal
           show={showModal}
           onHide={this.handleClose}
@@ -152,11 +169,13 @@ class Location extends React.Component {
               Delivery Details
             </Modal.Title>
             <Row style={{ display: "flex" }}>
-              <Row style={{ display: "flex", paddingBottom: "0px" }}>
-                <Col style={{ flex: "6" }}>
+              <Row>
+                <Col style={{ flex: "1" }}>
                   <MdLocationOn size='35px' />
                 </Col>
-                {AddressDescription}
+                <Col style={{ flex: "8", fontFamily: "UberMove, sans-serif" }}>
+                  {AddressDescription}
+                </Col>
                 <Col>
                   <Button
                     variant='secondary'

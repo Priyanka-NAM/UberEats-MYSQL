@@ -33,15 +33,18 @@ class CustomerSignUp extends React.Component {
   };
 
   render() {
-    const { custosignup, errMsg } = this.props;
+    const { errMsg } = this.props;
 
     let errorMessage = "";
-    if (localStorage.getItem("user_id")) {
-      return <Redirect to='/home' />;
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      if (user.is_owner === 0) {
+        return <Redirect to='/home' />;
+      }
+      return <Redirect to='/' />;
     }
     if (errMsg) {
       errorMessage = errMsg;
-      console.log(errorMessage);
     }
 
     return (
@@ -87,6 +90,7 @@ class CustomerSignUp extends React.Component {
                   }}
                   type='name'
                   name='name'
+                  required
                   placeholder='Name'
                   onChange={this.handleChange}
                 />
@@ -98,6 +102,9 @@ class CustomerSignUp extends React.Component {
                   }}
                   type='email'
                   name='email'
+                  pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$"
+                  title='Please enter valid email id'
+                  required
                   placeholder='Enter email'
                   onChange={this.handleChange}
                 />
@@ -109,6 +116,7 @@ class CustomerSignUp extends React.Component {
                   }}
                   type='password'
                   name='password'
+                  required
                   placeholder='Password'
                   onChange={this.handleChange}
                 />
@@ -145,12 +153,10 @@ class CustomerSignUp extends React.Component {
 
 CustomerSignUp.propTypes = {
   addCustomer: PropTypes.func.isRequired,
-  custosignup: PropTypes.object.isRequired,
   errMsg: PropTypes.string.isRequired,
 };
 const mapStateToProps = (state) => ({
   isRegistered: state.customer.isRegistered,
-  custosignup: state.customer.user,
   errMsg: state.customer.errMsg,
 });
 export default connect(mapStateToProps, { addCustomer })(CustomerSignUp);

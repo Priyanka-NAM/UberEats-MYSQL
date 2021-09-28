@@ -14,8 +14,9 @@ export const userSignin = (signindata) => async (dispatch) => {
       signindata
     );
     const response = await res;
+    console.log(" for user", response.data.user);
     localStorage.setItem("jwtToken", response.data.token);
-    localStorage.setItem("user_id", response.data.userid);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
     dispatch({
       type: USER_SIGNIN_SUCCESS,
       payload: response.data,

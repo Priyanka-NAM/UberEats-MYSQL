@@ -1,13 +1,12 @@
 import React, { Fragment, Component } from "react";
 import { Route } from "react-router-dom";
-import jwtDecode from "jwt-decode";
-import OwnerHome from "./Home/OwnerHome";
+// import OwnerHome from "./Home/OwnerHome";
 import OwnerSignUp from "./SignUp/OwnerSignUp";
 import CustomerSignUp from "./SignUp/CustomerSignUp";
-import HomePage from "./Home/home";
+import HomePage from "./Home/CustomerHome";
 import SignIn from "./SignIn/signIn";
 import RestaurentHome from "./Restaurent/CustomerRestaurentHome";
-import Rough from "./Restaurent/rough";
+// import Rough from "./Restaurent/rough";
 import StartPage from "./StartPage/StartPage";
 import FinalOrder from "./Customer/Orders/FinalOrder";
 import CustomerOrders from "./Customer/Orders/CustomerOrders";
@@ -25,16 +24,6 @@ class Main extends Component {
     super(props);
     this.state = {};
   }
-
-  // componentDidMount() {
-  //   try {
-  //     const jwt = localStorage.getItem("token");
-  //     const user = jwtDecode(jwt);
-  //     this.setState({ user });
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
 
   render() {
     return (
@@ -66,32 +55,4 @@ class Main extends Component {
   }
 }
 
-// function Main() {
-//   return (
-//     <Fragment key='key'>
-//       <main>
-//         <Route path='/signin' component={SignIn} />
-//         <Route path='/customer/signup' component={CustomerSignUp} />
-//         <Route path='/owner/signup' component={OwnerSignUp} />
-//         <Route path='/restaurents' component={RestaurentHome} />
-//         {/* <Route path='/rough' component={Rough} /> */}
-//         <Route path='/home' component={HomePage} />
-//         <Route path='/order/checkout' component={FinalOrder} />
-//         <Route path='/customerorder' component={CustomerOrders} />
-//         <Route path='/owner/menuupdate' component={MenuUpdate} />
-//         <Route
-//           path='/owner/updatecategories'
-//           component={MenuUpdateCategories}
-//         />
-//         <Route path='/owner/orders' component={OwnerOrders} />
-//         <Route path='/owner/deliveredorders' component={DeliveredOrders} />
-//         <Route path='/owner/cancelledorders' component={CancelledOrders} />
-//         <Route path='/owner/profile' component={OwnerProfile} />
-//         <Route path='/customer/profile' component={CustomerProfile} />
-//         <Route path='/owner/home' component={OwnerHomePage} />
-//         <Route path='/' exact component={StartPage} />
-//       </main>
-//     </Fragment>
-//   );
-// }
 export default Main;

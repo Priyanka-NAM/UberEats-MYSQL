@@ -1,8 +1,10 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable camelcase */
 import React, { Component } from "react";
 import { Container, Row } from "react-bootstrap";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { getToken } from "../Service/authService";
 
 import Header from "../Home/HomeIcons/Header";
@@ -73,7 +75,7 @@ class RestaurentHome extends Component {
 
   render() {
     const { dishesList, restaurentDetails } = this.state;
-
+    const { currentLocation, userLocation } = this.props;
     let restaurentMenu = null;
     let restaurentBanner = null;
     if (dishesList && restaurentDetails) {
@@ -110,12 +112,15 @@ class RestaurentHome extends Component {
           restoSearch={null}
           searchBarCallback={null}
           hideDeliveryPickup={false}
-          defaultUserLocationDescription=''
+          defaultUserLocationDescription={
+            currentLocation.addressDescription
+              ? currentLocation.addressDescription
+              : userLocation.addressDescription
+          }
         />
         <>
           {restaurentBanner}
           <Container fluid>
-            {" "}
             <Row
               style={{
                 paddingLeft: "15px",
@@ -162,8 +167,12 @@ class RestaurentHome extends Component {
 }
 
 RestaurentHome.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
   location: PropTypes.object.isRequired,
+  currentLocation: PropTypes.object.isRequired,
+  userLocation: PropTypes.object.isRequired,
 };
-
-export default RestaurentHome;
+const mapStateToProps = (state) => ({
+  currentLocation: state.currentLocation,
+  userLocation: state.signin.address,
+});
+export default connect(mapStateToProps, {})(RestaurentHome);

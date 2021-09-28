@@ -36,8 +36,11 @@ class SignIn extends Component {
   render() {
     const { isLoggedin, errMsg } = this.props;
     let errorMessage = null;
-
-    if (isLoggedin || localStorage.getItem("user_id")) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (isLoggedin || user) {
+      if (user.is_owner === 1) {
+        return <Redirect to='/owner/home' />;
+      }
       return <Redirect to='/home' />;
     }
     if (errMsg) {

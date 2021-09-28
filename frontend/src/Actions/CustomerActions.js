@@ -18,7 +18,7 @@ export const addCustomer = (signupdata) => async (dispatch) => {
     );
     const response = await res;
     localStorage.setItem("jwtToken", response.data.token);
-    localStorage.setItem("user_id", response.data.userid);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
     dispatch({
       type: CUSTOMER_SIGNUP,
       payload: response.data,

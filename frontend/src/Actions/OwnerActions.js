@@ -17,7 +17,7 @@ export const addOwner = (signupdata) => async (dispatch) => {
     );
     const response = await res;
     localStorage.setItem("jwtToken", response.data.token);
-    localStorage.setItem("user_id", response.data.userid);
+    localStorage.setItem("user", JSON.stringify(response.data.user));
     dispatch({
       type: OWNER_SIGNUP,
       payload: response.data,

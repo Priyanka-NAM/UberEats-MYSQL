@@ -42,6 +42,20 @@ router.post("/profile_upload", (req, res) => {
   });
 });
 
+router.post("/owner/profile", (req, res) => {
+  useruploads(req, res, (err) => {
+    console.log("request of the ", req.file);
+    if (!err) {
+      res.writeHead(200, {
+        "Content-Type": "text/plain",
+      });
+      res.end(req.file.filename);
+    } else {
+      console.log("Error!");
+    }
+  });
+});
+
 // router.post("/profile_upload", async (req, res) => {
 //   // console.log(req);
 //   const imageFile = req.files.file;

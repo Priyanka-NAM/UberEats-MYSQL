@@ -8,7 +8,6 @@ const verifyToken = (req, res, next) => {
     req.body.token ||
     req.query.token ||
     req.headers["x-auth-token"] ||
-    req.headers["content-type"] ||
     req.headers.authorization;
 
   if (!token) {

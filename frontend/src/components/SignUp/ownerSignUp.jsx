@@ -35,12 +35,15 @@ class OwnerSignUp extends Component {
     const { errMsg } = this.props;
 
     let errorMessage = "";
-    if (localStorage.getItem("user_id")) {
-      return <Redirect to='/owner/home' />;
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      if (user.is_owner === 1) {
+        return <Redirect to='/owner/home' />;
+      }
+      return <Redirect to='/' />;
     }
     if (errMsg) {
       errorMessage = errMsg;
-      console.log(errorMessage);
     }
 
     return (
@@ -85,6 +88,7 @@ class OwnerSignUp extends Component {
                   type='name'
                   placeholder='Restaurant Name'
                   name='name'
+                  required
                   onChange={this.handleChange}
                 />
               </Form.Group>
@@ -95,6 +99,7 @@ class OwnerSignUp extends Component {
                   }}
                   type='Location'
                   name='location'
+                  required
                   placeholder='Restaurant Location'
                   onChange={this.handleChange}
                 />
@@ -106,6 +111,9 @@ class OwnerSignUp extends Component {
                   }}
                   type='email'
                   name='email'
+                  pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$"
+                  title='Please enter valid email id'
+                  required
                   placeholder='Enter email'
                   onChange={this.handleChange}
                 />
@@ -117,6 +125,7 @@ class OwnerSignUp extends Component {
                   }}
                   type='password'
                   name='password'
+                  required
                   placeholder='Password'
                   onChange={this.handleChange}
                 />

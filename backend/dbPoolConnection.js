@@ -9,13 +9,22 @@ require("dotenv").config();
 //   process.exit(1);
 // }
 // Pool supports pool of requests.
+
+// for aws
+// DB_HOST=ubereats.cgpwh4cefk7y.us-east-2.rds.amazonaws.com
+// DB_USER=admin
+// DB_PASS=ubereats
+// DB_CONNECTIONLIMIT=500
+// DB_PORT=3306
+
 const dbPoolConnection = mysql.createPool({
   connectionLimit: 500,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   port: process.env.DB_PORT,
   password: process.env.DB_PASS,
-  database: "uber_eats",
+  database: "uber_eats_test",
+  insecureAuth: true,
 });
 dbPoolConnection.getConnection((error) => {
   if (error) {
