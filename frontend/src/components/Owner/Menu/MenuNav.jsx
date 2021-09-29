@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { Container, Navbar, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 class MenuNav extends Component {
   constructor(props) {
@@ -15,15 +16,17 @@ class MenuNav extends Component {
           fluid='true'
           style={{ paddingLeft: "40px", fontSize: "20px" }}>
           <Nav className='me-auto'>
-            <Nav.Link href='/owner/menuupdate' style={{ paddingLeft: "40px" }}>
+            <Link
+              to='/owner/menuupdate'
+              style={{ paddingLeft: "40px", color: "black" }}>
               Menus
-            </Nav.Link>
-            <Nav.Link
-              href='/owner/updatecategories'
-              style={{ paddingLeft: "40px" }}
+            </Link>
+            <Link
+              to='/owner/updatecategories'
+              style={{ paddingLeft: "40px", color: "black" }}
               active>
               Categories
-            </Nav.Link>
+            </Link>
           </Nav>
         </Container>
       </Navbar>

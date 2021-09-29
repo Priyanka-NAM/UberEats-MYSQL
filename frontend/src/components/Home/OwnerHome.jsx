@@ -98,10 +98,10 @@ class OwnerHome extends Component {
                     fontFamily: "sans-serif",
                     paddingBottom: "20px",
                   }}>
-                  <Nav.Link href='/owner/home' style={{ color: "black" }}>
+                  <Link to='/owner/home' style={{ color: "black" }}>
                     <MdHome style={{ marginRight: "18px" }} />
                     Home
-                  </Nav.Link>
+                  </Link>
                 </Nav.Item>
                 <Nav.Item
                   style={{
@@ -109,13 +109,13 @@ class OwnerHome extends Component {
                     fontFamily: "sans-serif",
                     paddingBottom: "20px",
                   }}>
-                  <Nav.Link
-                    href='/owner/profile'
+                  <Link
+                    to='/owner/profile'
                     eventKey='link-1'
                     style={{ color: "black" }}>
                     <MdContactPhone style={{ marginRight: "18px" }} />
                     Profile
-                  </Nav.Link>
+                  </Link>
                 </Nav.Item>
                 <Nav.Item
                   style={{
@@ -123,13 +123,13 @@ class OwnerHome extends Component {
                     fontFamily: "sans-serif",
                     paddingBottom: "20px",
                   }}>
-                  <Nav.Link
-                    href='/owner/menuupdate'
+                  <Link
+                    to='/owner/menuupdate'
                     eventKey='link-1'
                     style={{ color: "black" }}>
                     <MdRestaurant style={{ marginRight: "18px" }} />
                     Menu
-                  </Nav.Link>
+                  </Link>
                 </Nav.Item>
                 <Nav.Item
                   style={{
@@ -137,13 +137,13 @@ class OwnerHome extends Component {
                     fontFamily: "sans-serif",
                     paddingBottom: "20px",
                   }}>
-                  <Nav.Link
-                    href='/owner/orders'
+                  <Link
+                    to='/owner/orders'
                     eventKey='link-2'
                     style={{ color: "black" }}>
                     <MdBorderColor style={{ marginRight: "18px" }} />
                     Orders
-                  </Nav.Link>
+                  </Link>
                 </Nav.Item>
               </Nav>
             </Col>

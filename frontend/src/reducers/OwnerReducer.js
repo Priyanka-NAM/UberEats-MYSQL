@@ -7,6 +7,7 @@ import {
 
 const intitalState = {
   user: {},
+  isRegistered: false,
   errMsg: "",
   updateerrMsg: "",
 };

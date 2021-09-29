@@ -6,6 +6,7 @@ import { Button, Row, Container } from "react-bootstrap";
 import { OffCanvas, OffCanvasMenu } from "react-offcanvas";
 import { FaUserCircle, FaHeart } from "react-icons/fa";
 import PropTypes from "prop-types";
+import { BiX } from "react-icons/bi";
 import { userSignOut } from "../../../Actions/signinAction";
 import "../../Styles/Header.css";
 
@@ -28,10 +29,10 @@ class ProfileCanvas extends Component {
 
   render() {
     const { showModal } = this.props;
+    const user = JSON.parse(localStorage.getItem("user"));
 
     return (
       <OffCanvas
-        style={{}}
         transitionDuration={1000}
         effect='parallax'
         isMenuOpened={showModal}
@@ -44,10 +45,22 @@ class ProfileCanvas extends Component {
             zIndex: "1000",
           }}>
           <Container align='left'>
+            <div
+              style={{
+                marginTop: "5%",
+                display: "flex",
+                justifyContent: "flex-end",
+              }}>
+              <BiX
+                size='35px'
+                style={{ color: "black" }}
+                onClick={this.handleClose}
+              />
+            </div>
             <div style={{ marginLeft: "10%" }}>
               <div
                 style={{
-                  marginTop: "20%",
+                  marginTop: "10%",
                   display: "flex",
                   flexDirection: "row",
                   alignContent: "center",
@@ -63,11 +76,11 @@ class ProfileCanvas extends Component {
                   <p
                     style={{
                       marginBottom: "0px",
-                      fontWeight: "500",
+                      fontWeight: "550",
                       fontFamily: "UberMoveText, sans-serif",
                       fontSize: "18px",
                     }}>
-                    User Name
+                    {user.name}
                   </p>
                   <Link
                     style={{
@@ -127,7 +140,7 @@ class ProfileCanvas extends Component {
                     fontSize: "18px",
                     marginLeft: "20px",
                   }}
-                  to='/'>
+                  to='/customer/favorites'>
                   Favorites
                 </Link>
               </div>

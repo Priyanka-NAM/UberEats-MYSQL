@@ -1,4 +1,6 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
+const md5 = require("md5");
 const db = require("../dbPoolConnection");
 
 const router = express.Router();
@@ -213,23 +215,81 @@ const dishesList = [
     dish_id: "11",
   },
 ];
+// router.get("/restaurantsearch/:search_input", (req, res) => {
+//   console.log("Search input: ", req.params.search_input);
+//   const restaurantList = {
+//     restaurants: restoList,
+//   };
+
+//   if (req.params.search_input === "_") {
+//     res.send({
+//       status: "Sending All Restaurants",
+//       restaurentsinfo: restaurantList,
+//     });
+//   } else {
+//     res.send({
+//       status: "Sending Filtered Resaturants",
+//       restaurentsinfo: restaurantList,
+//     });
+//   }
+// });
+
 router.get("/restaurantsearch/:search_input", (req, res) => {
   console.log("Search input: ", req.params.search_input);
-  const restaurantList = {
-    restaurants: restoList,
-  };
+  const sql = `CALL get_all_restaurants();`;
+  console.log("Get All restaurants SQL ", sql);
 
-  if (req.params.search_input === "_") {
-    res.send({
-      status: "Sending All Restaurants",
-      restaurentsinfo: restaurantList,
-    });
-  } else {
-    res.send({
-      status: "Sending Filtered Resaturants",
-      restaurentsinfo: restaurantList,
-    });
-  }
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end("Error in Db");
+    }
+    if (result && result.length > 0 && result[0][0]) {
+      const concatAddress = (item) =>
+        "".concat(
+          item.restaurant_address_line_one,
+          ",",
+          item.restaurant_city,
+          ",",
+          item.restaurant_state,
+          ",",
+          item.restaurant_country,
+          ",",
+          item.restaurant_zipcode
+        );
+      let allRestaurnats = result[0];
+      allRestaurnats = allRestaurnats.map((item) => {
+        const foodType = {
+          ContainsNonVegeterian: item.is_non_vegeterian,
+          ContainsVegeterian: item.is_vegeterian,
+          ContainsVegan: item.is_vegan,
+        };
+
+        return {
+          title: item.name,
+          imageurl: item.image_file_path,
+          description: item.description,
+          deliveryType: item.delivery_type,
+          isNationalBrand: item.national_brand,
+          restaurant_id: item.restaurant_id,
+          restaurantAddressDescription: concatAddress(item),
+          restaurantAddressLineOne: item.restaurant_address_line_one,
+          restaurantCity: item.restaurant_city,
+          restaurantState: item.restaurant_state,
+          restaurantCountry: item.restaurant_country,
+          restaurantZipcode: item.restaurant_zipcode,
+          foodtype: foodType,
+        };
+      });
+
+      res.send({
+        status: "Sending All Restaurants",
+        restaurentsinfo: allRestaurnats,
+      });
+    }
+  });
 });
 
 router.get("/restaurantdetails/:restaurent_id", (req, res) => {
@@ -248,5 +308,40 @@ router.get("/dishdetails/:restaurent_id", (req, res) => {
     dishesList,
   });
 });
+
+// router.get("/restaurantsearch/:search_input", (req, res) => {
+//   const sql = `CALL restaurant_get('${req.params.search_input}');`;
+//   db.query(sql, (err, result) => {
+//     if (err) {
+//       res.writeHead(500, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end("Error in Data");
+//     }
+//     if (result && result.length > 0 && result[0][0]) {
+//       res.writeHead(200, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(JSON.stringify(result[0]));
+//     }
+//   });
+// });
+
+// router.get("/restaurantdetails/:restaurent_id", (req, res) => {
+//   const restaurentDetails = restoList.filter(
+//     (restaurant) => restaurant.restaurant_id === req.params.restaurent_id
+//   );
+//   res.send({
+//     status: "Request Successful",
+//     restaurentDetails,
+//   });
+// });
+
+// router.get("/dishdetails/:restaurent_id", (req, res) => {
+//   res.send({
+//     status: "Request Successful",
+//     dishesList,
+//   });
+// });
 
 module.exports = router;

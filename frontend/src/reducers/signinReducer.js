@@ -8,7 +8,7 @@ const intitalState = {
   user: {},
   address: {},
   isLoggedin: false,
-  errMsg: "",
+  // errMsg: "",
 };
 
 const processAddress = (userdata) => {
@@ -46,7 +46,7 @@ export default (state = intitalState, action) => {
     case USER_SIGNIN_FAILURE:
       return {
         ...state,
-        user: action.payload,
+        user: null,
         errMsg: "Username or Password is incorrect",
       };
     case USER_SIGNOUT:
@@ -54,6 +54,7 @@ export default (state = intitalState, action) => {
         ...state,
         user: null,
         isLoggedin: false,
+        errMsg: "",
       };
     default:
       return state;

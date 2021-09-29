@@ -94,7 +94,6 @@ class MenuUpdate extends Component {
             <div
               show={showEdit}
               style={{ display: showEdit ? "block" : "none" }}>
-              {" "}
               <h4
                 style={{
                   fontSize: "28px",

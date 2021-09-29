@@ -1,16 +1,7 @@
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
-import {
-  Button,
-  Form,
-  Col,
-  Container,
-  Navbar,
-  Nav,
-  Card,
-  Dropdown,
-  Row,
-} from "react-bootstrap";
+import { Container, Navbar, Nav } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 class OrdersNav extends Component {
   constructor(props) {
@@ -25,22 +16,22 @@ class OrdersNav extends Component {
           fluid='true'
           style={{ paddingLeft: "40px", fontSize: "20px" }}>
           <Nav className='me-auto'>
-            <Nav.Link
-              href='/owner/orders'
-              style={{ paddingLeft: "40px" }}
+            <Link
+              to='/owner/orders'
+              style={{ paddingLeft: "40px", color: "black" }}
               active>
               New Orders
-            </Nav.Link>
-            <Nav.Link
-              href='/owner/deliveredorders'
-              style={{ paddingLeft: "40px" }}>
+            </Link>
+            <Link
+              to='/owner/deliveredorders'
+              style={{ paddingLeft: "40px", color: "black" }}>
               Delivered Orders
-            </Nav.Link>
-            <Nav.Link
-              href='/owner/cancelledorders'
-              style={{ paddingLeft: "40px" }}>
+            </Link>
+            <Link
+              to='/owner/cancelledorders'
+              style={{ paddingLeft: "40px", color: "black" }}>
               Cancelled Orders
-            </Nav.Link>
+            </Link>
           </Nav>
         </Container>
       </Navbar>

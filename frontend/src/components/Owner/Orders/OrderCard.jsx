@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
+import { Link } from "react-router-dom";
 import { Button, Col, Row, Card } from "react-bootstrap";
 import { PropTypes } from "prop-types";
 import delivered from "../../Svg/delivered.jpg";
@@ -10,44 +11,59 @@ class OrderCard extends Component {
     this.state = {};
   }
 
+  clickHandler = () => {
+    const { orderIndex, handleDisplay } = this.props;
+    handleDisplay(orderIndex);
+  };
+
   render() {
-    const { bccolor } = this.props;
-   
+    const { bccolor, name, orderId, billamount, totalitems } = this.props;
+
     return (
       <Row style={{ paddingBottom: "30px" }}>
-        <Card style={{ width: "35rem", backgroundColor: bccolor }}>
-          <Card.Body
-            style={{
-              padding: "25px",
-              fontSize: "18px",
-              fontFamily: "sans-serif",
-            }}>
-            <Row>
-              <Col>
-                <Card.Title style={{ fontWeight: "550" }}>
-                  Name - <span style={{ fontWeight: "normal" }}>Karen</span>
-                </Card.Title>
-                <Card.Title style={{ fontWeight: "550", paddingTop: "20px" }}>
-                  Order Id - <span style={{ fontWeight: "normal" }}>785D5</span>
-                </Card.Title>
-              </Col>
-              <Col>
-                <Card.Title style={{ fontWeight: "550" }}>
-                  Bill Amount -{" "}
-                  <span style={{ fontWeight: "normal" }}>$785</span>
-                </Card.Title>
-                <Card.Title style={{ fontWeight: "550", paddingTop: "20px" }}>
-                  Total Items - <span style={{ fontWeight: "normal" }}>2</span>
-                </Card.Title>
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
+        <div onClick={this.clickHandler} role='presentation'>
+          <Card style={{ width: "35rem", backgroundColor: bccolor }}>
+            <Card.Body
+              style={{
+                padding: "25px",
+                fontSize: "18px",
+                fontFamily: "sans-serif",
+              }}>
+              <Row>
+                <Col>
+                  <Card.Title style={{ fontWeight: "550" }}>
+                    Name - <span style={{ fontWeight: "normal" }}>{name}</span>
+                  </Card.Title>
+                  <Card.Title style={{ fontWeight: "550", paddingTop: "20px" }}>
+                    Order Id -{" "}
+                    <span style={{ fontWeight: "normal" }}>{orderId}</span>
+                  </Card.Title>
+                </Col>
+                <Col>
+                  <Card.Title style={{ fontWeight: "550" }}>
+                    Bill Amount -{" "}
+                    <span style={{ fontWeight: "normal" }}>${billamount}</span>
+                  </Card.Title>
+                  <Card.Title style={{ fontWeight: "550", paddingTop: "20px" }}>
+                    Total Items -{" "}
+                    <span style={{ fontWeight: "normal" }}>{totalitems}</span>
+                  </Card.Title>
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </div>
       </Row>
     );
   }
 }
 OrderCard.propTypes = {
   bccolor: PropTypes.string.isRequired,
+  orderIndex: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  orderId: PropTypes.string.isRequired,
+  billamount: PropTypes.string.isRequired,
+  totalitems: PropTypes.string.isRequired,
+  handleDisplay: PropTypes.func.isRequired,
 };
 export default OrderCard;

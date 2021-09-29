@@ -18,6 +18,7 @@ import DeliveredOrders from "./Owner/Orders/DeliveredOrders";
 import CancelledOrders from "./Owner/Orders/CancelledOrders";
 import OwnerHomePage from "./Owner/OwnersHome/OwnerHomePage";
 import CustomerProfile from "./Customer/Profile/CustomerProfile";
+import Favorites from "./Customer/Favorites/Favorites";
 
 class Main extends Component {
   constructor(props) {
@@ -47,6 +48,7 @@ class Main extends Component {
           <Route path='/owner/cancelledorders' component={CancelledOrders} />
           <Route path='/owner/profile' component={OwnerProfile} />
           <Route path='/customer/profile' component={CustomerProfile} />
+          <Route path='/customer/favorites' component={Favorites} />
           <Route path='/owner/home' component={OwnerHomePage} />
           <Route path='/' exact component={StartPage} />
         </main>

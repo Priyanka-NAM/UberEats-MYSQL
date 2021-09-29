@@ -9,23 +9,6 @@ const db = require("../dbPoolConnection");
 const saltrounds = 10;
 const router = express.Router();
 
-// router.post("/", async (req, res) => {
-//   const token = jwt.sign({ _id: user }, "jwtPrivateKey");
-//   jwt.verify(token, "jwtPrivateKey", (err, decoded) => {
-//     console.log(decoded.id); // bar
-//   });
-//   if (req.body.email === user.email && req.body.password === user.password) {
-//     res.header("x-auth-token", token).send({
-//       status: "Authentication Successful",
-//       userid: "123",
-//       address,
-//       token,
-//     });
-//   } else {
-//     res.status(400).send({ status: "Authentication Failed" });
-//   }
-// });
-
 router.post("/", (req, res) => {
   const { password } = req.body;
   const hashedPassword = md5(password);
@@ -48,7 +31,9 @@ router.post("/", (req, res) => {
           user: result[0][0],
           token,
         });
-      } else if (result[0][0].status === "FAILED") {
+        return;
+      }
+      if (result[0][0].status === "FAILED") {
         res.status(400).send({ status: "Authentication Failed" });
       }
     }

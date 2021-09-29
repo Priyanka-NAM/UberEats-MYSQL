@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { Col, Row } from "react-bootstrap";
+import axios from "axios";
 import OwnerHome from "../../Home/OwnerHome";
 import OrdersNav from "./OrdersNav";
 import OrderCard from "./OrderCard";
 import OrderDetailsDC from "./OrderDetailsDC";
+import backendServer from "../../../backEndConfig";
+import { getToken } from "../../Service/authService";
 
 class CancelledOrders extends Component {
   constructor(props) {
@@ -12,7 +15,64 @@ class CancelledOrders extends Component {
     this.state = {};
   }
 
+  componentDidMount() {
+    this.hasMounted = true;
+
+    const { restaurant_id: restaurantId } = JSON.parse(
+      localStorage.getItem("user")
+    );
+
+    console.log(" restaurantId: ", restaurantId);
+    if (!restaurantId) return;
+    axios.defaults.headers.common.authorization = getToken();
+    axios
+      .get(
+        `http://localhost:5000/ubereats/orders/cancelledorders/restaurant/${restaurantId}`
+      )
+      .then((response) => {
+        console.log("Get Response: ", JSON.stringify(response.data));
+
+        // if (response.data) {
+        //   console.log("Get Response: ", JSON.stringify(response));
+        //   if (response.data) {
+        //     console.log(
+        //       "Status Filtered Restaurants and setting no state: ",
+        //       response.data.restaurentsinfo.restaurants
+        //     );
+        //     if (this.hasMounted) {
+        //       this.setState({
+        //         allRestaurents: [],
+        //       });
+        //     }
+        //   } else {
+        //     console.log(
+        //       "Status All Restaurants and Setting State: ",
+        //       response.data.restaurentsinfo.restaurants
+        //     );
+        //     if (this.hasMounted) {
+        //       this.setState({
+        //         allRestaurents: response.data.restaurentsinfo.restaurants,
+        //       });
+        //     }
+        //   }
+        // }
+      })
+      .catch((error) => {
+        if (error.response && error.response.data) {
+          this.setState({
+            errormessage: error.response.data,
+          });
+        }
+      });
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false;
+  }
+
   render() {
+    const { errormessage } = this.state;
+
     const pageContent = (
       <Col style={{ padding: "0px" }} align='left'>
         <OrdersNav />
@@ -34,6 +94,18 @@ class CancelledOrders extends Component {
             <OrderDetailsDC IsDeliveredimage={false} />
           </Col>
         </Row>
+        {errormessage && (
+          <p
+            style={{
+              width: "100%",
+              height: "40%",
+              marginTop: "15px",
+              fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+            }}
+            className='alert alert-danger'>
+            No Cancelled Orders to display
+          </p>
+        )}
       </Col>
     );
     return <OwnerHome pageContent={pageContent} />;

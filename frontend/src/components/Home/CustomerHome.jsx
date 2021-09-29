@@ -78,6 +78,8 @@ class HomePage extends Component {
   handleRestaurantFiltering = (foodSelection, deliveryType, location = "") => {
     const { allRestaurents } = this.state;
     const { changedUserLocation } = this.props;
+
+    console.log("Retrieved Restaurant info ", allRestaurents);
     let foodBasedFilteredSet = null;
     let deliveryBasedFilteredSet = null;
     console.log("All Restaurants Length: ", allRestaurents.length);
