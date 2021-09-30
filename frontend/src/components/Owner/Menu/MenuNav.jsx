@@ -18,12 +18,24 @@ class MenuNav extends Component {
           <Nav className='me-auto'>
             <Link
               to='/owner/menuupdate'
-              style={{ paddingLeft: "40px", color: "black" }}>
+              style={{
+                paddingLeft: "40px",
+                color: "black",
+                fontSize: "22px",
+                fontFamily: "sans-serif",
+                textDecoration: "none",
+              }}>
               Menus
             </Link>
             <Link
               to='/owner/updatecategories'
-              style={{ paddingLeft: "40px", color: "black" }}
+              style={{
+                paddingLeft: "40px",
+                color: "black",
+                fontSize: "22px",
+                textDecoration: "none",
+                fontFamily: "sans-serif",
+              }}
               active>
               Categories
             </Link>

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { FaPlus } from "react-icons/fa";
 import axios from "axios";
-import { Col, Dropdown, Button, Row } from "react-bootstrap";
+import { Col, Dropdown, Form, Button, Row } from "react-bootstrap";
 import OrderCard from "./OrderCard";
 import OwnerHome from "../../Home/OwnerHome";
 import OrdersNav from "./OrdersNav";
@@ -141,7 +141,6 @@ class OwnerOrders extends Component {
               New Orders
             </h4>
             <br />
-            {/* <OrderCard bccolor='#05944F' onClick={this.handleDisplay} /> */}
             {orderComps}
             {errormessage}
           </Col>
@@ -189,36 +188,6 @@ class OwnerOrders extends Component {
               </Row>
               <hr style={{ border: "1px soild black" }} />
               {dishes}
-              {/* <Row
-                style={{
-                  fontSize: "18px",
-                  fontFamily: "sans-serif",
-                  fontWeight: "550",
-                }}>
-                <Col>
-                  1<span style={{ paddingLeft: "5%" }}>Pearl Milk Tea</span>
-                </Col>
-                <Col xs={3} style={{ textAlign: "end" }}>
-                  $20
-                </Col>
-              </Row>
-              <hr style={{ border: "1px soild black" }} />
-              <Row
-                style={{
-                  fontSize: "18px",
-                  fontFamily: "sans-serif",
-                  fontWeight: "550",
-                }}>
-                <Col>
-                  1<span style={{ paddingLeft: "5%" }}>Pearl Milk Tea</span>
-                </Col>
-                <Col xs={3} style={{ textAlign: "end" }}>
-                  $20
-                </Col>
-              </Row>
-              <hr style={{ border: "1px soild black" }} /> */}
-
-              {/* <div style={{ display: "flex", alignContent: "left" }}> */}
               <Row
                 style={{
                   fontSize: "18px",
@@ -257,53 +226,32 @@ class OwnerOrders extends Component {
                   fontSize: "20px",
                   fontFamily: "sans-serif",
                   fontWeight: "550",
+                  marginTop: "15%",
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}>
-                <Col style={{ textAlign: "end", paddingTop: "50px" }}>
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      variant='success'
-                      id='dropdown-basic'
-                      style={{
-                        width: "40%",
-                        height: "3.5rem",
-                        fontSize: "20px",
-                        fontFamily: "sans-serif",
-                        fontWeight: "550",
-                        backgroundColor: "#05944F",
-                      }}>
-                      Order Status
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu
-                      style={{
-                        width: "40%",
-                        height: "3.5rem",
-                        fontSize: "20px",
-                        fontFamily: "sans-serif",
-                        fontWeight: "550",
-                      }}>
-                      <Dropdown.Item href='#/action-2'>
-                        Order Received
-                      </Dropdown.Item>
-                      <Dropdown.Item href='#/action-3'>Preparing</Dropdown.Item>
-                      <Dropdown.Item href='#/action-3'>Cancel</Dropdown.Item>
-                      <Dropdown.Item href='#/action-3'>
-                        On the way
-                      </Dropdown.Item>
-                      <Dropdown.Item href='#/action-3'>Delivered</Dropdown.Item>
-                      <Dropdown.Item href='#/action-3'>
-                        Pick up Ready
-                      </Dropdown.Item>
-                      <Dropdown.Item href='#/action-3'>Picked up</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Col>
-              </Row>
-
-              <Row style={{ marginTop: "5%" }}>
+                <Form.Select
+                  name='dishcategory'
+                  style={{
+                    width: "40%",
+                    height: "3.5rem",
+                    fontSize: "20px",
+                    fontFamily: "sans-serif",
+                    fontWeight: "550",
+                  }}
+                  onChange={this.handleChange}
+                  required>
+                  <option>Order Status</option>
+                  <option value='1'> Order Received</option>
+                  <option value='2'>Preparing</option>
+                  <option value='3'>On the way</option>
+                  <option value='5'>Delivered</option>
+                  <option value='4'>Cancel</option>
+                  <option value='6'>Pick up Ready</option>
+                  <option value='6'>Picked up</option>
+                </Form.Select>
                 <Button
                   style={{
-                    marginLeft: "70%",
-                    marginTop: "0%",
                     width: "20%",
                     height: "3rem",
                     fontFamily: "sans-serif",

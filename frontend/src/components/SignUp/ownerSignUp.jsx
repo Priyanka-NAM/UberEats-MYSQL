@@ -165,6 +165,6 @@ OwnerSignUp.propTypes = {
   errMsg: PropTypes.string.isRequired,
 };
 const mapStateToProps = (state) => ({
-  errMsg: state.owner.errMsg,
+  restaurent: state.owner.errMsg,
 });
 export default connect(mapStateToProps, { addOwner })(OwnerSignUp);

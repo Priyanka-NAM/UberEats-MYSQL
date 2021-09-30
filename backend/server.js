@@ -10,6 +10,7 @@ const profile = require("./routes/profile");
 const verifyToken = require("./routes/tokenVerification");
 const upload = require("./routes/fileUpload");
 const orders = require("./routes/orders");
+const dishes = require("./routes/dishes");
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
@@ -29,6 +30,7 @@ app.use(verifyToken);
 app.use("/ubereats/upload", upload);
 app.use("/ubereats/profile", profile);
 app.use("/ubereats/orders", orders);
+app.use("/ubereats/dishes", dishes);
 app.use("/ubereats/customerrestaurant", customerrestaurant);
 
 module.exports = app;

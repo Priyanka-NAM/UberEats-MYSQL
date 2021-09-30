@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { Container, Col, Button, Card, Row, Modal } from "react-bootstrap";
+import {
+  Container,
+  Col,
+  Button,
+  Card,
+  Row,
+  Modal,
+  Dropdown,
+} from "react-bootstrap";
 import { FaRegHeart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { BiX } from "react-icons/bi";
@@ -32,9 +40,51 @@ class CustomerOrders extends Component {
         <Header />
         <Container style={{ marginLeft: "1%" }} fluid>
           <Row>
-            <h1>Past Orders</h1>
+            <Col>
+              <h1>Past Orders</h1>
+            </Col>
+            <Col xs={3}>
+              <Dropdown>
+                <Dropdown.Toggle
+                  variant='success'
+                  id='dropdown-basic'
+                  style={{
+                    width: "40%",
+                    height: "3.5rem",
+                    fontSize: "20px",
+                    fontFamily: "sans-serif",
+                    fontWeight: "550",
+                    backgroundColor: "#05944F",
+                  }}>
+                  Order Status
+                </Dropdown.Toggle>
+                <Dropdown.Menu
+                  style={{
+                    width: "40%",
+                    height: "3.5rem",
+                    fontSize: "20px",
+                    fontFamily: "sans-serif",
+                    fontWeight: "550",
+                    position: "relative",
+                    top: 200,
+                    zIndex: 10000,
+                    overflowX: "visible",
+                    overflowY: "visible",
+                  }}>
+                  <Dropdown.Item href='#/action-3'>
+                    Order Received
+                  </Dropdown.Item>
+                  <Dropdown.Item href='#/action-3'>Preparing</Dropdown.Item>
+                  <Dropdown.Item href='#/action-3'>On the way</Dropdown.Item>
+                  <Dropdown.Item href='#/action-3'>Delivered</Dropdown.Item>
+                  <Dropdown.Item href='#/action-3'>Pick up Ready</Dropdown.Item>
+                  <Dropdown.Item href='#/action-3'>Picked up</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Col>
           </Row>
-
+          <br />
+          <br />
           <Row style={{ paddingRight: "10%" }}>
             <Card
               style={{
@@ -81,7 +131,8 @@ class CustomerOrders extends Component {
                 style={{
                   width: "40%",
                   height: "30%",
-                  fontSize: "18px",
+                  fontSize: "20px",
+                  fontFamily: "sans-serif",
                   fontWeight: "500",
                 }}>
                 Order Details

@@ -96,9 +96,16 @@ class OwnerHome extends Component {
                   style={{
                     fontSize: "20px",
                     fontFamily: "sans-serif",
-                    paddingBottom: "20px",
+                    marginBottom: "15%",
                   }}>
-                  <Link to='/owner/home' style={{ color: "black" }}>
+                  <Link
+                    to='/owner/home'
+                    style={{
+                      color: "black",
+                      textDecoration: "none",
+                      fontFamily: "sans-serif",
+                      fontSize: "22px",
+                    }}>
                     <MdHome style={{ marginRight: "18px" }} />
                     Home
                   </Link>
@@ -107,12 +114,17 @@ class OwnerHome extends Component {
                   style={{
                     fontSize: "20px",
                     fontFamily: "sans-serif",
-                    paddingBottom: "20px",
+                    marginBottom: "15%",
                   }}>
                   <Link
                     to='/owner/profile'
                     eventKey='link-1'
-                    style={{ color: "black" }}>
+                    style={{
+                      color: "black",
+                      textDecoration: "none",
+                      fontFamily: "sans-serif",
+                      fontSize: "22px",
+                    }}>
                     <MdContactPhone style={{ marginRight: "18px" }} />
                     Profile
                   </Link>
@@ -121,26 +133,31 @@ class OwnerHome extends Component {
                   style={{
                     fontSize: "20px",
                     fontFamily: "sans-serif",
-                    paddingBottom: "20px",
+                    marginBottom: "15%",
                   }}>
                   <Link
                     to='/owner/menuupdate'
                     eventKey='link-1'
-                    style={{ color: "black" }}>
+                    style={{
+                      color: "black",
+                      textDecoration: "none",
+                      fontFamily: "sans-serif",
+                      fontSize: "22px",
+                    }}>
                     <MdRestaurant style={{ marginRight: "18px" }} />
                     Menu
                   </Link>
                 </Nav.Item>
                 <Nav.Item
                   style={{
-                    fontSize: "20px",
+                    fontSize: "22px",
                     fontFamily: "sans-serif",
-                    paddingBottom: "20px",
+                    marginBottom: "15%",
                   }}>
                   <Link
                     to='/owner/orders'
                     eventKey='link-2'
-                    style={{ color: "black" }}>
+                    style={{ color: "black", textDecoration: "none" }}>
                     <MdBorderColor style={{ marginRight: "18px" }} />
                     Orders
                   </Link>

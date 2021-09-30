@@ -12,9 +12,21 @@ class OrderDetailsDC extends Component {
   }
 
   render() {
-    const { IsDeliveredimage } = this.props;
+    const {
+      IsDeliveredimage,
+      orderId,
+      name,
+      subTotal,
+      orderTotal,
+      tax,
+      dishes,
+      displayDetails,
+    } = this.props;
+
     return (
-      <>
+      <div
+        show={displayDetails}
+        style={{ display: displayDetails ? "block" : "none" }}>
         <Row
           style={{
             paddingBottom: "0%",
@@ -28,7 +40,7 @@ class OrderDetailsDC extends Component {
                 paddingBottom: "0%",
                 marginBottom: "2%",
               }}>
-              Karen
+              {name}
             </h4>
             <h4
               style={{
@@ -38,7 +50,7 @@ class OrderDetailsDC extends Component {
                 marginTop: "0%",
                 paddingBottom: "0%",
               }}>
-              7120S
+              {orderId}
             </h4>
           </Col>
           <Col xs={3}>
@@ -55,34 +67,7 @@ class OrderDetailsDC extends Component {
         </Row>
         <hr style={{ border: "1px soild black" }} />
 
-        <Row
-          style={{
-            fontSize: "18px",
-            fontFamily: "sans-serif",
-            fontWeight: "550",
-          }}>
-          <Col>
-            1<span style={{ paddingLeft: "5%" }}>Pearl Milk Tea</span>
-          </Col>
-          <Col xs={3} style={{ textAlign: "end" }}>
-            $20
-          </Col>
-        </Row>
-        <hr style={{ border: "1px soild black" }} />
-        <Row
-          style={{
-            fontSize: "18px",
-            fontFamily: "sans-serif",
-            fontWeight: "550",
-          }}>
-          <Col>
-            1<span style={{ paddingLeft: "5%" }}>Pearl Milk Tea</span>
-          </Col>
-          <Col xs={3} style={{ textAlign: "end" }}>
-            $20
-          </Col>
-        </Row>
-        <hr style={{ border: "1px soild black" }} />
+        {dishes}
         <Row
           style={{
             fontSize: "18px",
@@ -90,7 +75,7 @@ class OrderDetailsDC extends Component {
             fontWeight: "550",
           }}>
           <Col style={{ textAlign: "end" }}>
-            Subtotal<span style={{ paddingLeft: "20px" }}>$112</span>
+            Subtotal<span style={{ paddingLeft: "20px" }}>${orderTotal}</span>
           </Col>
         </Row>
         <Row
@@ -100,7 +85,7 @@ class OrderDetailsDC extends Component {
             fontWeight: "550",
           }}>
           <Col style={{ textAlign: "end" }}>
-            Tax<span style={{ paddingLeft: "20px" }}>$2</span>
+            Tax<span style={{ paddingLeft: "20px" }}>${tax}</span>
           </Col>
         </Row>
         <Row
@@ -110,10 +95,9 @@ class OrderDetailsDC extends Component {
             fontWeight: "550",
           }}>
           <Col style={{ textAlign: "end" }}>
-            Total<span style={{ paddingLeft: "20px" }}>$2</span>
+            Total<span style={{ paddingLeft: "20px" }}>${subTotal}</span>
           </Col>
         </Row>
-
         <Row style={{ paddingTop: "20%", marginLeft: "30%" }}>
           <img
             style={{ width: "40%", height: "40%" }}
@@ -121,7 +105,7 @@ class OrderDetailsDC extends Component {
             alt=''
           />
         </Row>
-      </>
+      </div>
     );
   }
 }
@@ -130,4 +114,12 @@ export default OrderDetailsDC;
 
 OrderDetailsDC.propTypes = {
   IsDeliveredimage: PropTypes.bool.isRequired,
+  orderId: PropTypes.number.isRequired,
+  name: PropTypes.string.isRequired,
+  subTotal: PropTypes.number.isRequired,
+  orderTotal: PropTypes.number.isRequired,
+  tax: PropTypes.number.isRequired,
+  displayDetails: PropTypes.bool.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  dishes: PropTypes.object.isRequired,
 };

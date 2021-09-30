@@ -2,7 +2,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Row } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { BiX } from "react-icons/bi";
 import { Link } from "react-router-dom";
@@ -35,6 +35,8 @@ class Cart extends React.Component {
     const { showModal } = this.state;
     const { restaurantName, cartItems } = this.props;
     let cartRows = null;
+    let emptyCart = null;
+    let newCart = null;
     let totalCartValue = 0;
     let totalItems = 0;
     if (cartItems) {
@@ -50,17 +52,40 @@ class Cart extends React.Component {
         );
       });
     }
-
-    return (
-      <>
-        <Button
-          size='lg'
-          style={mainstyle.cart}
-          variant='light'
-          onClick={this.handleShow}>
-          <FaShoppingCart style={{ paddingRight: "3px" }} />
-          Cart.{totalItems}
-        </Button>
+    if (totalCartValue === 0) {
+      emptyCart = (
+        <div>
+          <Modal
+            show={showModal}
+            onHide={this.handleClose}
+            backdrop='static'
+            keyboard={false}
+            style={{ width: "100%", display: "flex", alignItems: "center" }}>
+            <Modal.Header>
+              <BiX
+                size='35px'
+                style={{ color: "black" }}
+                onClick={this.handleClose}
+              />
+            </Modal.Header>
+            <Modal.Body>
+              <Row>
+                <FaShoppingCart
+                  size='100'
+                  style={{ paddingRight: "3px", color: "grey" }}
+                />
+              </Row>
+              <Row>
+                <h6 style={{ fontFamily: "sans-serif", fontSize: "18px" }}>
+                  Add items from a restaurant or store to start a new cart
+                </h6>
+              </Row>
+            </Modal.Body>
+          </Modal>
+        </div>
+      );
+    } else {
+      newCart = (
         <Modal
           show={showModal}
           onHide={this.handleClose}
@@ -101,6 +126,21 @@ class Cart extends React.Component {
             </Link>
           </Modal.Footer>
         </Modal>
+      );
+    }
+
+    return (
+      <>
+        <Button
+          size='lg'
+          style={mainstyle.cart}
+          variant='light'
+          onClick={this.handleShow}>
+          <FaShoppingCart style={{ paddingRight: "3px" }} />
+          Cart.{totalItems}
+        </Button>
+        {emptyCart}
+        {newCart}
       </>
     );
   }

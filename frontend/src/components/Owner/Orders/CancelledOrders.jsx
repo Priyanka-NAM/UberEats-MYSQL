@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { Col, Row } from "react-bootstrap";
@@ -12,7 +13,7 @@ import { getToken } from "../../Service/authService";
 class CancelledOrders extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { showOrder: false };
   }
 
   componentDidMount() {
@@ -26,41 +27,25 @@ class CancelledOrders extends Component {
     if (!restaurantId) return;
     axios.defaults.headers.common.authorization = getToken();
     axios
-      .get(
-        `http://localhost:5000/ubereats/orders/cancelledorders/restaurant/${restaurantId}`
-      )
+      // .get(
+      //   `http://localhost:5000/ubereats/orders/neworders/restaurant/${restaurantId}`
+      // )
+      .get(`http://localhost:5000/ubereats/orders/cancelledorders/restaurant/2`)
       .then((response) => {
-        console.log("Get Response: ", JSON.stringify(response.data));
+        console.log("Response: ", JSON.stringify(response.data));
 
-        // if (response.data) {
-        //   console.log("Get Response: ", JSON.stringify(response));
-        //   if (response.data) {
-        //     console.log(
-        //       "Status Filtered Restaurants and setting no state: ",
-        //       response.data.restaurentsinfo.restaurants
-        //     );
-        //     if (this.hasMounted) {
-        //       this.setState({
-        //         allRestaurents: [],
-        //       });
-        //     }
-        //   } else {
-        //     console.log(
-        //       "Status All Restaurants and Setting State: ",
-        //       response.data.restaurentsinfo.restaurants
-        //     );
-        //     if (this.hasMounted) {
-        //       this.setState({
-        //         allRestaurents: response.data.restaurentsinfo.restaurants,
-        //       });
-        //     }
-        //   }
-        // }
+        if (response.data.status === "CANCELLED_ORDERS") {
+          if (this.hasMounted) {
+            this.setState({
+              cancelledOrders: response.data.orders,
+            });
+          }
+        }
       })
       .catch((error) => {
         if (error.response && error.response.data) {
           this.setState({
-            errormessage: error.response.data,
+            errormessage: "Orders Could not be Fetched",
           });
         }
       });
@@ -70,8 +55,76 @@ class CancelledOrders extends Component {
     this.hasMounted = false;
   }
 
+  handleDisplay = (index) => {
+    const { cancelledOrders, showOrder } = this.state;
+    console.log("cancelledOrders", cancelledOrders[index]);
+    this.setState({
+      showOrder: !showOrder,
+      currentOrder: cancelledOrders[index],
+    });
+  };
+
+  handleSave = (e) => {
+    e.preventDefault();
+    this.setState({
+      showOrder: false,
+    });
+  };
+
   render() {
-    const { errormessage } = this.state;
+    const { errormessage, cancelledOrders, showOrder, currentOrder } =
+      this.state;
+    let orderId = null;
+    let name = null;
+    let subTotal = null;
+    let orderTotal = null;
+    let tax = null;
+    let orderComps = null;
+    let dishes = null;
+    if (!cancelledOrders || cancelledOrders.length === 0) {
+      orderComps = <h1>Orders are empty</h1>;
+    } else {
+      orderComps = cancelledOrders.map((order, index) => (
+        <OrderCard
+          bccolor='#eeeeee'
+          key={index}
+          orderIndex={index}
+          name={order.nick_name}
+          orderId={order.order_id}
+          billamount={order.sub_total}
+          totalitems={order.dishes.length}
+          handleDisplay={this.handleDisplay}
+        />
+      ));
+    }
+
+    if (currentOrder) {
+      orderId = currentOrder.order_id;
+      name = currentOrder.nick_name;
+      subTotal = currentOrder.sub_total;
+      orderTotal = currentOrder.order_total;
+      tax = currentOrder.tax;
+
+      dishes = currentOrder.dishes.map((dish, index) => (
+        <>
+          <Row
+            style={{
+              fontSize: "18px",
+              fontFamily: "sans-serif",
+              fontWeight: "550",
+            }}>
+            <Col>
+              {dish.quantity}
+              <span style={{ paddingLeft: "5%" }}>{dish.name}</span>
+            </Col>
+            <Col xs={3} style={{ textAlign: "end" }}>
+              ${dish.price}
+            </Col>
+          </Row>
+          <hr style={{ border: "1px soild black" }} />
+        </>
+      ));
+    }
 
     const pageContent = (
       <Col style={{ padding: "0px" }} align='left'>
@@ -88,10 +141,23 @@ class CancelledOrders extends Component {
               Cancelled Orders
             </h4>
             <br />
-            <OrderCard bccolor='#eeeeee' />
+            {orderComps}
           </Col>
           <Col xs={5} style={{ padding: "3%" }}>
-            <OrderDetailsDC IsDeliveredimage={false} />
+            <div
+              show={showOrder}
+              style={{ display: showOrder ? "block" : "none" }}>
+              <OrderDetailsDC
+                IsDeliveredimage={false}
+                orderId={orderId}
+                name={name}
+                subTotal={subTotal}
+                orderTotal={orderTotal}
+                tax={tax}
+                displayDetails={showOrder}
+                dishes={dishes}
+              />
+            </div>
           </Col>
         </Row>
         {errormessage && (
