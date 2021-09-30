@@ -8,10 +8,12 @@ import {
 } from "react-icons/md";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { Button, Nav, Container, Col, Row, Navbar } from "react-bootstrap";
 import UberELogo from "./HomeIcons/logo";
 import { userSignOut } from "../../Actions/signinAction";
+import { isOwnerSignedIn } from "../Service/authService";
 
 class OwnerHome extends Component {
   constructor(props) {
@@ -26,9 +28,14 @@ class OwnerHome extends Component {
   };
 
   render() {
+    let redirectVar = null;
+    if (!isOwnerSignedIn()) {
+      redirectVar = <Redirect to='/home' />;
+    }
     const { pageContent } = this.props;
     return (
       <>
+        {redirectVar}
         <Navbar
           bg='dark'
           variant='dark'
@@ -90,7 +97,7 @@ class OwnerHome extends Component {
                 }}
                 align='left'
                 className='col-md-12 d-none d-md-block sidebar'
-                activeKey='/home'>
+                activeKey='/'>
                 <div className='sidebar-sticky' style={{ color: "black" }} />
                 <Nav.Item
                   style={{
@@ -157,7 +164,10 @@ class OwnerHome extends Component {
                   <Link
                     to='/owner/orders'
                     eventKey='link-2'
-                    style={{ color: "black", textDecoration: "none" }}>
+                    style={{
+                      backgroundColor: "#eeeee",
+                      textDecoration: "none",
+                    }}>
                     <MdBorderColor style={{ marginRight: "18px" }} />
                     Orders
                   </Link>

@@ -104,7 +104,7 @@ class Header extends React.Component {
             </Nav.Item>
 
             <Nav.Item style={mainstyle.paddingLeft}>
-              <Link to={{ pathname: "/home", state: "" }}>
+              <Link to={{ pathname: "/customer/home", state: "" }}>
                 <img
                   style={{ paddingLeft: "15px", height: "50px" }}
                   src={UberELogo.UberEBLogo.src}
@@ -113,7 +113,7 @@ class Header extends React.Component {
               </Link>
             </Nav.Item>
 
-            {isCurrentURL("/home") ? (
+            {isCurrentURL("/customer/home") ? (
               <Nav.Item style={{ paddingLeft: "40px" }}>
                 <ButtonGroup style={mainstyle.DeliveryPickupgroup}>
                   <Button
@@ -142,7 +142,7 @@ class Header extends React.Component {
                     paddingRight: "40px",
                   }}>
                   <Location
-                    isLong={!isCurrentURL("/home")}
+                    isLong={!isCurrentURL("/customer/home")}
                     description={defaultUserLocationDescription}
                     changedLocationDescription=''
                     changeLocation={() => {}}
@@ -164,12 +164,7 @@ class Header extends React.Component {
                   </InputGroup>
                 </Nav.Item>
                 <Nav.Item align='center' style={mainstyle.paddingLeft}>
-                  <Cart
-                    title=''
-                    description=''
-                    quantity=''
-                    price=''
-                  />
+                  <Cart title='' description='' quantity='' price='' />
                 </Nav.Item>
               </>
             ) : null}

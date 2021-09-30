@@ -7,7 +7,7 @@ import { OffCanvas, OffCanvasMenu } from "react-offcanvas";
 import PropTypes from "prop-types";
 import "../Styles/Header.css";
 
-class StartPageCanvas extends Component {
+class LandingPageCanvas extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -99,8 +99,8 @@ class StartPageCanvas extends Component {
     );
   }
 }
-StartPageCanvas.propTypes = {
+LandingPageCanvas.propTypes = {
   showModal: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
 };
-export default StartPageCanvas;
+export default LandingPageCanvas;

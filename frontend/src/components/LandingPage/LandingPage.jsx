@@ -7,16 +7,15 @@ import { Link } from "react-router-dom";
 
 import UberELogo from "../Home/HomeIcons/logo";
 import mainstyle from "../Home/HomeIcons/HeaderStyle";
-import StartPageCanvas from "./StartPageCanvas";
+import LandingPageCanvas from "./LandingPageCanvas";
 import "../Styles/Header.css";
 
-class StartPage extends Component {
+class LandingPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showModal: false,
     };
-    
   }
 
   componentDidMount() {
@@ -44,8 +43,17 @@ class StartPage extends Component {
 
   render() {
     const { showModal } = this.state;
+    let redirectVar = null;
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.is_owner === 0) {
+      redirectVar = <Redirect to='/customer/home' />;
+    } else if (user && user.is_owner === 1) {
+      redirectVar = <Redirect to='/owner/home' />;
+    }
+
     return (
       <div className='imgStyle'>
+        {redirectVar}
         <Row fluid='true'>
           <Nav style={mainstyle.headerRow}>
             <Nav.Item style={{ paddingLeft: "50px" }}>
@@ -82,10 +90,13 @@ class StartPage extends Component {
             </Nav.Item>
           </Nav>
         </Row>
-        <StartPageCanvas handleClose={this.handleClose} showModal={showModal} />
+        <LandingPageCanvas
+          handleClose={this.handleClose}
+          showModal={showModal}
+        />
       </div>
     );
   }
 }
 
-export default StartPage;
+export default LandingPage;

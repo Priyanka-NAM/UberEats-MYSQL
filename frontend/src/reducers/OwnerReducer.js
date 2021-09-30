@@ -6,37 +6,30 @@ import {
 } from "../Actions/types";
 
 const intitalState = {
-  user: {},
-  isRegistered: false,
-  errMsg: "",
-  updateerrMsg: "",
+  ownerDetails: {},
 };
 export default (state = intitalState, action) => {
   switch (action.type) {
     case OWNER_SIGNUP:
       return {
         ...state,
-        user: action.payload,
-        errMsg: "",
+        ownerDetails: action.payload,
       };
     case OWNER_SIGNUP_FAILURE:
       return {
         ...state,
-        user: action.payload,
-        errMsg: action.payload.status,
+        ownerDetails: action.payload,
       };
     case OWNER_UPDATE:
       return {
         ...state,
-        user: action.payload,
-        updateerrMsg: "",
+        ownerDetails: action.payload,
       };
 
     case OWNER_UPDATE_FAILURE:
       return {
         ...state,
-        user: action.payload,
-        updateerrMsg: action.payload.status,
+        ownerDetails: action.payload,
       };
     default:
       return state;

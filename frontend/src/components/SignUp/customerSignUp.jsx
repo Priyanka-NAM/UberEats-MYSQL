@@ -33,18 +33,18 @@ class CustomerSignUp extends React.Component {
   };
 
   render() {
-    const { errMsg } = this.props;
-
+    const { user } = this.props;
+    console.log("User from props ", user);
     let errorMessage = "";
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      if (user.is_owner === 0) {
-        return <Redirect to='/home' />;
+
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+
+    if (currentUser) {
+      if (currentUser.is_owner === 0 && user.status === "USER_ADDED") {
+        return <Redirect to='/customer/home' />;
       }
-      return <Redirect to='/' />;
-    }
-    if (errMsg) {
-      errorMessage = errMsg;
+    } else if (user.status === "USER_EXISTS") {
+      errorMessage = "Opps! Email id already exists";
     }
 
     return (
@@ -153,10 +153,9 @@ class CustomerSignUp extends React.Component {
 
 CustomerSignUp.propTypes = {
   addCustomer: PropTypes.func.isRequired,
-  errMsg: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
-  isRegistered: state.customer.isRegistered,
-  errMsg: state.customer.errMsg,
+  user: state.customer.user,
 });
 export default connect(mapStateToProps, { addCustomer })(CustomerSignUp);

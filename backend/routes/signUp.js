@@ -24,12 +24,12 @@ router.post("/customer", async (req, res) => {
         const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
         jwt.verify(token, "jwtPrivateKey");
         res.header("x-auth-token", token).send({
-          status: "User Added Successfully",
+          status: "USER_ADDED",
           user: result[0][0],
           token,
         });
       } else if (result[0][0].status === "USER_EXISTS") {
-        res.status(400).send({ status: "User already exists" });
+        res.status(400).send({ status: "USER_EXISTS" });
       }
     }
   });
@@ -56,12 +56,12 @@ router.post("/owner", async (req, res) => {
         const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
         jwt.verify(token, "jwtPrivateKey");
         res.header("x-auth-token", token).send({
-          status: "Restaurant Added Successfully",
+          status: "RESTAURANT_ADDED",
           user: result[0][0],
           token,
         });
       } else if (result[0][0].status === "RESTAURANT_ALREADY_EXISTS") {
-        res.status(400).send({ status: "Restaurant already exists" });
+        res.status(400).send({ status: "RESTAURANT_ALREADY_EXISTS" });
       }
     }
   });

@@ -116,7 +116,7 @@ class FinalOrder extends Component {
                 />
               </Nav.Item>
               <Nav.Item style={mainstyle.paddingLeft}>
-                <Link to={{ pathname: "/home", state: "" }}>
+                <Link to={{ pathname: "/customer/home", state: "" }}>
                   <img
                     style={{ paddingLeft: "15px", height: "50px" }}
                     src={UberELogo.UberEBLogo.src}
@@ -308,17 +308,17 @@ class FinalOrder extends Component {
             </Modal.Title>
           </Modal.Body>
           <Modal.Footer>
-            <Link to='/home'>
-            <Button
-              variant='dark'
-              style={{
-                width: "100%",
-                height: "60px",
-                fontSize: "18px",
-                fontFamily: "UberMove, sans-serif",
-              }}>
-              Return to home
-            </Button>
+            <Link to='/customer/home'>
+              <Button
+                variant='dark'
+                style={{
+                  width: "100%",
+                  height: "60px",
+                  fontSize: "18px",
+                  fontFamily: "UberMove, sans-serif",
+                }}>
+                Return to home
+              </Button>
             </Link>
           </Modal.Footer>
         </Modal>

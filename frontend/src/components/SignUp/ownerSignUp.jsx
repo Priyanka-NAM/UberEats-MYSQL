@@ -1,9 +1,10 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import { Redirect } from "react-router";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Button, Container, Form } from "react-bootstrap";
+import { Button, Container, Form, Alert } from "react-bootstrap";
 import { addOwner } from "../../Actions/OwnerActions";
 import SignInUpNAV from "./SignInUpNavBar";
 
@@ -32,18 +33,16 @@ class OwnerSignUp extends Component {
   };
 
   render() {
-    const { errMsg } = this.props;
+    const { owner } = this.props;
 
     let errorMessage = "";
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      if (user.is_owner === 1) {
+    const currentOwner = JSON.parse(localStorage.getItem("user"));
+    if (currentOwner) {
+      if (currentOwner.is_owner === 1 && owner.status === "RESTAURANT_ADDED") {
         return <Redirect to='/owner/home' />;
       }
-      return <Redirect to='/' />;
-    }
-    if (errMsg) {
-      errorMessage = errMsg;
+    } else if (owner.status === "RESTAURANT_ALREADY_EXISTS") {
+      errorMessage = "Opps! Email id already exists";
     }
 
     return (
@@ -142,15 +141,15 @@ class OwnerSignUp extends Component {
                 Submit
               </Button>
               {errorMessage && (
-                <p
-                  style={{
-                    width: "100%",
-                    marginTop: "15px",
-                    fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
-                  }}
-                  className='alert alert-danger'>
-                  {errorMessage}
-                </p>
+                // <p
+                //   style={{
+                //     width: "100%",
+                //     marginTop: "15px",
+                //     fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+                //   }}
+                //   className='alert alert-danger'>
+                <Alert variant='danger'>{errorMessage}</Alert>
+                // </p>
               )}
             </Form>
           </Container>
@@ -162,9 +161,9 @@ class OwnerSignUp extends Component {
 
 OwnerSignUp.propTypes = {
   addOwner: PropTypes.func.isRequired,
-  errMsg: PropTypes.string.isRequired,
+  owner: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
-  restaurent: state.owner.errMsg,
+  owner: state.owner.ownerDetails,
 });
 export default connect(mapStateToProps, { addOwner })(OwnerSignUp);

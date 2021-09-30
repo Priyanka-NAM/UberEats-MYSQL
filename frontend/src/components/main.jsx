@@ -3,11 +3,11 @@ import { Route } from "react-router-dom";
 // import OwnerHome from "./Home/OwnerHome";
 import OwnerSignUp from "./SignUp/OwnerSignUp";
 import CustomerSignUp from "./SignUp/CustomerSignUp";
-import HomePage from "./Home/CustomerHome";
+import CustomerHome from "./Home/CustomerHome";
 import SignIn from "./SignIn/signIn";
 import RestaurentHome from "./Restaurent/CustomerRestaurentHome";
 // import Rough from "./Restaurent/rough";
-import StartPage from "./StartPage/StartPage";
+import LandingPage from "./LandingPage/LandingPage";
 import FinalOrder from "./Customer/Orders/FinalOrder";
 import CustomerOrders from "./Customer/Orders/CustomerOrders";
 import MenuUpdate from "./Owner/Menu/MenuUpdate";
@@ -19,6 +19,7 @@ import CancelledOrders from "./Owner/Orders/CancelledOrders";
 import OwnerHomePage from "./Owner/OwnersHome/OwnerHomePage";
 import CustomerProfile from "./Customer/Profile/CustomerProfile";
 import Favorites from "./Customer/Favorites/Favorites";
+import Home from "./Home/Home";
 
 class Main extends Component {
   constructor(props) {
@@ -35,7 +36,7 @@ class Main extends Component {
           <Route path='/owner/signup' component={OwnerSignUp} />
           <Route path='/restaurents' component={RestaurentHome} />
           {/* <Route path='/rough' component={Rough} /> */}
-          <Route path='/home' component={HomePage} />
+          <Route path='/customer/home' component={CustomerHome} />
           <Route path='/order/checkout' component={FinalOrder} />
           <Route path='/customerorder' component={CustomerOrders} />
           <Route path='/owner/menuupdate' component={MenuUpdate} />
@@ -50,7 +51,8 @@ class Main extends Component {
           <Route path='/customer/profile' component={CustomerProfile} />
           <Route path='/customer/favorites' component={Favorites} />
           <Route path='/owner/home' component={OwnerHomePage} />
-          <Route path='/' exact component={StartPage} />
+          <Route path='/home' exact component={Home} />
+          <Route path='/' exact component={LandingPage} />
         </main>
       </Fragment>
     );

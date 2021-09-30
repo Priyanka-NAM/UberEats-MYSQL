@@ -150,61 +150,55 @@ class MenuUpdate extends Component {
             </Button>
             {errormessage}
             <Row style={{ paddingTop: "40px", width: "90%" }}>
-              <thead style={{ marginBottom: "25px" }}>
-                <tr>
-                  <th
-                    style={{
-                      fontSize: "22px",
-                      fontFamily: "sans-serif",
-                    }}>
-                    <FaGripLines style={{ backgroundColor: "#eeeee" }} />
-                    <span style={{ paddingLeft: "15px" }}>Appetizers</span>
-                  </th>
-                </tr>
-              </thead>
+              {/* <thead style={{ marginBottom: "25px" }}> */}
+              <tr>
+                <th
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "sans-serif",
+                  }}>
+                  <FaGripLines style={{ backgroundColor: "#eeeee" }} />
+                  <span style={{ paddingLeft: "15px" }}>Appetizers</span>
+                </th>
+              </tr>
+              {/* </thead> */}
               <Row>{orderComps}</Row>
             </Row>
             <Row style={{ paddingTop: "40px", width: "90%" }}>
-              <thead style={{ marginBottom: "25px" }}>
-                <tr>
-                  <th
-                    style={{
-                      fontSize: "22px",
-                      fontFamily: "sans-serif",
-                    }}>
-                    <FaGripLines style={{ backgroundColor: "#eeeee" }} />
-                    <span style={{ paddingLeft: "15px" }}>Salads</span>
-                  </th>
-                </tr>
-              </thead>
+              <tr>
+                <th
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "sans-serif",
+                  }}>
+                  <FaGripLines style={{ backgroundColor: "#eeeee" }} />
+                  <span style={{ paddingLeft: "15px" }}>Salads</span>
+                </th>
+              </tr>
             </Row>
             <Row style={{ paddingTop: "40px", width: "90%" }}>
-              <thead style={{ marginBottom: "25px" }}>
-                <tr>
-                  <th
-                    style={{
-                      fontSize: "22px",
-                      fontFamily: "sans-serif",
-                    }}>
-                    <FaGripLines style={{ backgroundColor: "#eeeee" }} />
-                    <span style={{ paddingLeft: "15px" }}>Main Course</span>
-                  </th>
-                </tr>
-              </thead>
+              <tr>
+                <th
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "sans-serif",
+                  }}>
+                  <FaGripLines style={{ backgroundColor: "#eeeee" }} />
+                  <span style={{ paddingLeft: "15px" }}>Main Course</span>
+                </th>
+              </tr>
             </Row>
             <Row style={{ paddingTop: "40px", width: "90%" }}>
-              <thead style={{ marginBottom: "25px" }}>
-                <tr>
-                  <th
-                    style={{
-                      fontSize: "22px",
-                      fontFamily: "sans-serif",
-                    }}>
-                    <FaGripLines style={{ backgroundColor: "#eeeee" }} />
-                    <span style={{ paddingLeft: "15px" }}>Salads</span>
-                  </th>
-                </tr>
-              </thead>
+              <tr>
+                <th
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "sans-serif",
+                  }}>
+                  <FaGripLines style={{ backgroundColor: "#eeeee" }} />
+                  <span style={{ paddingLeft: "15px" }}>Salads</span>
+                </th>
+              </tr>
             </Row>
           </Col>
           <Col xs={4} style={{ paddingTop: "10px" }}>

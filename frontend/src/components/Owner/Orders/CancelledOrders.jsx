@@ -2,13 +2,14 @@
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { Col, Row } from "react-bootstrap";
+import { Redirect } from "react-dom";
 import axios from "axios";
 import OwnerHome from "../../Home/OwnerHome";
 import OrdersNav from "./OrdersNav";
 import OrderCard from "./OrderCard";
 import OrderDetailsDC from "./OrderDetailsDC";
 import backendServer from "../../../backEndConfig";
-import { getToken } from "../../Service/authService";
+import { getToken, isOwnerSignedIn } from "../../Service/authService";
 
 class CancelledOrders extends Component {
   constructor(props) {
@@ -28,9 +29,9 @@ class CancelledOrders extends Component {
     axios.defaults.headers.common.authorization = getToken();
     axios
       // .get(
-      //   `http://localhost:5000/ubereats/orders/neworders/restaurant/${restaurantId}`
+      //   `${backendServer}/ubereats/orders/neworders/restaurant/${restaurantId}`
       // )
-      .get(`http://localhost:5000/ubereats/orders/cancelledorders/restaurant/2`)
+      .get(`${backendServer}/ubereats/orders/cancelledorders/restaurant/2`)
       .then((response) => {
         console.log("Response: ", JSON.stringify(response.data));
 
@@ -72,6 +73,9 @@ class CancelledOrders extends Component {
   };
 
   render() {
+    if (!isOwnerSignedIn) {
+      <Redirect to='/' />;
+    }
     const { errormessage, cancelledOrders, showOrder, currentOrder } =
       this.state;
     let orderId = null;

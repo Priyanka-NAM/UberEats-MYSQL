@@ -1,13 +1,16 @@
+/* eslint-disable react/jsx-fragments */
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import { Container, Col } from "react-bootstrap";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
+
 import axios from "axios";
 import Header from "./HomeIcons/Header";
 import RestaurantCarousel from "./HomeIcons/RestaurarntCarousel";
 import RestoCard from "./HomeIcons/RestoCard";
-import { getToken } from "../Service/authService";
+import { getToken, isUserSignedIn } from "../Service/authService";
 
 import SideBar from "./HomeIcons/SideBar";
 import "../Styles/Home.css";
@@ -16,14 +19,13 @@ let favoriteRestos = [];
 let nationalRestos = [];
 let nearToYouRestos = [];
 
-class HomePage extends Component {
+class CustomerHome extends Component {
   hasMounted = false;
 
   constructor(props) {
     super(props);
     this.state = {
       allRestaurents: [],
-
       deliveryType: "delivery",
       foodSelectionType: "allresto",
     };
@@ -31,6 +33,7 @@ class HomePage extends Component {
 
   componentDidMount() {
     this.hasMounted = true;
+
     axios.defaults.headers.common.authorization = getToken();
     axios
       .get(
@@ -75,7 +78,7 @@ class HomePage extends Component {
     this.hasMounted = false;
   }
 
-  handleRestaurantFiltering = (foodSelection, deliveryType, location = "") => {
+  handleRestaurantFiltering = (foodSelection, deliveryType) => {
     const { allRestaurents } = this.state;
     const { changedUserLocation } = this.props;
 
@@ -161,6 +164,12 @@ class HomePage extends Component {
   };
 
   render() {
+    // console.log("isUserSignedIn", isUserSignedIn());
+
+    let redirectVar = null;
+    if (!isUserSignedIn()) {
+      redirectVar = <Redirect to='/home' />;
+    }
     const { allRestaurents, foodSelectionType, deliveryType } = this.state;
     const { userLocation, userAddressDescription } = this.props;
     let nationalbrands = null;
@@ -208,32 +217,37 @@ class HomePage extends Component {
       });
     }
     return (
-      <div style={{ marginLeft: "1%" }}>
-        <Header
-          restoSearch={this.handleRestoSearch}
-          searchBarCallback={this.handleSearchBarInput}
-          defaultUserLocationDescription={
-            // eslint-disable-next-line no-unneeded-ternary
-            userAddressDescription ? userAddressDescription : "Default Location"
-          }
-          hideDeliveryPickup
-        />
-        <Container fluid className='home-container'>
-          <Col md='3'>
-            <SideBar FoodTypeSelection={this.handleFoodSelect} />
-          </Col>
-          <RestaurantCarousel
-            nationalbrands={nationalbrands}
-            favorites={favorites}
-            popularnear={popularnear}
+      <React.Fragment>
+        {redirectVar}
+        <div style={{ marginLeft: "1%" }}>
+          <Header
+            restoSearch={this.handleRestoSearch}
+            searchBarCallback={this.handleSearchBarInput}
+            defaultUserLocationDescription={
+              // eslint-disable-next-line no-unneeded-ternary
+              userAddressDescription
+                ? userAddressDescription
+                : "Default Location"
+            }
+            hideDeliveryPickup
           />
-        </Container>
-      </div>
+          <Container fluid className='home-container'>
+            <Col md='3'>
+              <SideBar FoodTypeSelection={this.handleFoodSelect} />
+            </Col>
+            <RestaurantCarousel
+              nationalbrands={nationalbrands}
+              favorites={favorites}
+              popularnear={popularnear}
+            />
+          </Container>
+        </div>
+      </React.Fragment>
     );
   }
 }
 
-HomePage.propTypes = {
+CustomerHome.propTypes = {
   userAddressDescription: PropTypes.string.isRequired,
   userLocation: PropTypes.object.isRequired,
   changedUserLocation: PropTypes.object.isRequired,
@@ -245,4 +259,4 @@ const mapStateToProps = (state) => ({
   changedUserLocation: state.currentLocation,
 });
 
-export default connect(mapStateToProps, null)(HomePage);
+export default connect(mapStateToProps, null)(CustomerHome);
