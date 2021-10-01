@@ -59,6 +59,7 @@ class MenuUpdate extends Component {
   }
 
   handleEdit = (index) => {
+    console.log("Clicked on Dish Item Index ", index);
     const { allDishes } = this.state;
     this.setState({
       showEdit: true,
@@ -69,8 +70,9 @@ class MenuUpdate extends Component {
 
   handleAdd = (e) => {
     e.preventDefault();
+    const { showAdd } = this.state;
     this.setState({
-      showAdd: true,
+      showAdd: !showAdd,
       showEdit: false,
     });
   };
@@ -89,14 +91,14 @@ class MenuUpdate extends Component {
     });
   };
 
-  visibilityEditHandler = (e) => {
+  visibilityEditHandler = () => {
     const { showEdit } = this.state;
     this.setState({
       showEdit: !showEdit,
     });
   };
 
-  visibilityAddHandler = (e) => {
+  visibilityAddHandler = () => {
     const { showAdd } = this.state;
     this.setState({
       showAdd: !showAdd,
@@ -106,8 +108,8 @@ class MenuUpdate extends Component {
   render() {
     const { showEdit, showAdd, errormessage, allDishes, currentDish } =
       this.state;
-    console.log("allDishes", allDishes);
     let orderComps = null;
+    let MenuAddEditComp = null;
     if (!allDishes || allDishes.length === 0) {
       orderComps = <Alert variant='info'>No Dishes to Display</Alert>;
     } else {
@@ -121,6 +123,32 @@ class MenuUpdate extends Component {
           handleEdit={this.handleEdit}
         />
       ));
+    }
+    if (showEdit) {
+      MenuAddEditComp = (
+        <div
+          show={showEdit.toString()}
+          style={{ display: showEdit ? "block" : "none" }}>
+          <MenuAddEdit
+            visibilityCb={this.visibilityEditHandler}
+            currentDish={currentDish}
+            displayDetails={showEdit}
+            actionType='Edit Item'
+          />
+        </div>
+      );
+    } else if (showAdd) {
+      MenuAddEditComp = (
+        <div
+          show={showAdd.toString()}
+          style={{ display: showAdd ? "block" : "none" }}>
+          <MenuAddEdit
+            visibilityCb={this.visibilityAddHandler}
+            displayDetails={showAdd}
+            actionType='Add Item'
+          />
+        </div>
+      );
     }
     const pageContent = (
       <Col style={{ padding: "0px" }} align='left'>
@@ -202,25 +230,30 @@ class MenuUpdate extends Component {
             </Row>
           </Col>
           <Col xs={4} style={{ paddingTop: "10px" }}>
-            <div
-              show={showEdit.toString()}
-              style={{ display: showEdit ? "block" : "none" }}>
-              <MenuAddEdit
-                visibilityCb={this.visibilityEditHandler}
-                currentDish={currentDish}
-                displayDetails={showEdit}
-                actionType='Edit Item'
-              />
-            </div>
-            <div
-              show={showAdd.toString()}
-              style={{ display: showAdd ? "block" : "none" }}>
-              <MenuAddEdit
-                visibilityCb={this.visibilityAddHandler}
-                displayDetails={showAdd}
-                actionType='Add Item'
-              />
-            </div>
+            {/* {showEdit && (
+              <div
+                show={showEdit.toString()}
+                style={{ display: showEdit ? "block" : "none" }}>
+                <MenuAddEdit
+                  visibilityCb={this.visibilityEditHandler}
+                  currentDish={currentDish}
+                  displayDetails={showEdit}
+                  actionType='Edit Item'
+                />
+              </div>
+            )} */}
+            {MenuAddEditComp}
+            {/* {showAdd && (
+              <div
+                show={showAdd.toString()}
+                style={{ display: showAdd ? "block" : "none" }}>
+                <MenuAddEdit
+                  visibilityCb={this.visibilityAddHandler}
+                  displayDetails={showAdd}
+                  actionType='Add Item'
+                />
+              </div>
+            )} */}
           </Col>
         </Row>
       </Col>

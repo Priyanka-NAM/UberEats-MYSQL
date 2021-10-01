@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { Button, Container, Form } from "react-bootstrap";
 import { addCustomer } from "../../Actions/CustomerActions";
 import SignInUpNAV from "./SignInUpNavBar";
+import { isOwnerSignedIn, isUserSignedIn } from "../Service/authService";
 
 class CustomerSignUp extends React.Component {
   constructor(props) {
@@ -34,6 +35,9 @@ class CustomerSignUp extends React.Component {
 
   render() {
     const { user } = this.props;
+    if (isOwnerSignedIn || isUserSignedIn) {
+      return <Redirect to='/home' />;
+    }
     console.log("User from props ", user);
     let errorMessage = "";
 

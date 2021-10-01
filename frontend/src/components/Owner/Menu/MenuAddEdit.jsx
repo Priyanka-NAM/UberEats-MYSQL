@@ -1,72 +1,161 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { PropTypes } from "prop-types";
 import axios from "axios";
-import { Button, Form, Col, Image, Alert, Row } from "react-bootstrap";
+import { Button, Form, Col, Image, Alert, Row, Card } from "react-bootstrap";
 import backendServer from "../../../backEndConfig";
 import { getToken } from "../../Service/authService";
 
 class MenuAddEdit extends Component {
+  hasMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {};
     this.handleUploadImage = this.handleUploadImage.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.setStateFromProps = this.setStateFromProps.bind(this);
   }
 
-  handleSubmit = (e) => {
+  componentDidMount() {
+    this.hasMounted = true;
+    this.setStateFromProps(this.props);
+    console.log("Menu AddEdit State after mount ", this.state);
+  }
+
+  componentDidUpdate(prevProps) {
+    // eslint-disable-next-line react/destructuring-assignment
+    if (this.props.currentDish !== prevProps.currentDish) {
+      this.setStateFromProps(this.props);
+    }
+  }
+
+  componentWillUnmount() {
+    this.hasMounted = false;
+  }
+
+  handleAddSave = (e) => {
     const { visibilityCb } = this.props;
     e.preventDefault();
+    console.log("Inside Handle Add Save ", this.state);
+    const {
+      restaurentId,
+      dishname,
+      dishdescription,
+      dishcategory,
+      dishtype,
+      ingredients,
+      price,
+      imageFilePath,
+    } = this.state;
+
+    const dishdata = {
+      restaurentId,
+      dishname,
+      dishdescription,
+      imageFilePath,
+      dishcategory,
+      dishtype,
+      ingredients,
+      price,
+    };
+    console.log("Before the add dish call ");
+    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common.authorization = getToken();
+    axios
+      .post(`${backendServer}/ubereats/dishes/adddish`, dishdata)
+      .then((response) => {
+        console.log("Response for dish add ", response.data);
+        if (this.hasMounted) {
+          this.setState({
+            updateStatus: response.data.status,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error for dish add ", err.response);
+        if (err.response && err.response.data) {
+          if (this.hasMounted) {
+            this.setState({
+              updateStatus: err.response.data,
+            });
+          }
+        }
+      });
+    visibilityCb();
+  };
+
+  handleEditSave = (e) => {
+    const { visibilityCb } = this.props;
+    e.preventDefault();
+    console.log("Inside Handle Submit ", this.state);
+    const isActive = "1";
     const {
       dishId,
       restaurentId,
       dishname,
       dishdescription,
-      image,
       dishcategory,
       dishtype,
       ingredients,
       price,
+      imageFilePath,
     } = this.state;
+
+    // isActive (should be '0' for deleting)
     const dishdata = {
       dishId,
       restaurentId,
       dishname,
       dishdescription,
-      image,
+      imageFilePath,
       dishcategory,
       dishtype,
       ingredients,
       price,
+      isActive,
     };
-
-    const uploadConfig = {
-      headers: {
-        "content-type": "multipart/form-data",
-        authorization: getToken(),
-      },
-    };
+    console.log("Before the update dish call ");
+    // const uploadConfig = {
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //     authorization: getToken(),
+    //   },
+    // };
     axios.defaults.withCredentials = true;
     axios.defaults.headers.common.authorization = getToken();
     axios
-      .post(
-        `${backendServer}/ubereats/dishes/updatedish`,
-        dishdata,
-        uploadConfig
-      )
+      .post(`${backendServer}/ubereats/dishes/updatedish`, dishdata)
       .then((response) => {
-        this.setState({
-          updateStatus: response.data.status,
-        });
+        console.log("Response for dish update ", response.data);
+        if (this.hasMounted) {
+          this.setState({
+            updateStatus: response.data.status,
+          });
+        }
       })
       .catch((err) => {
+        console.log("Error for dish update ", err.response);
         if (err.response && err.response.data) {
-          this.setState({
-            updateStatus: err.response.data,
-          });
+          if (this.hasMounted) {
+            this.setState({
+              updateStatus: err.response.data,
+            });
+          }
         }
       });
     visibilityCb();
+  };
+
+  handleSubmit = (e) => {
+    const { actionType } = this.props;
+    if (actionType === "Add Item") {
+      this.handleAddSave(e);
+    } else {
+      this.handleEditSave(e);
+    }
   };
 
   handleUploadImage(e) {
@@ -88,14 +177,44 @@ class MenuAddEdit extends Component {
         uploadConfig
       )
       .then((response) => {
+        console.log("Response from server ", response.data);
         this.setState({
           src: `${backendServer}/public/${response.data}`,
+          imageFilePath: `${response.data}`,
         });
       })
       .catch((err) => {
         console.log("Upload file error: ", err.response);
       });
   }
+
+  setStateFromProps = (updatedProps) => {
+    const { currentDish } = updatedProps;
+    const {
+      name,
+      description,
+      ingredients,
+      price,
+      category,
+      dish_type,
+      dish_id,
+      restaurant_id,
+      image_file_path,
+    } = currentDish || {};
+
+    this.setState({
+      dishId: dish_id,
+      restaurentId: restaurant_id,
+      dishname: name,
+      dishdescription: description,
+      image: image_file_path,
+      dishcategory: category,
+      dishtype: dish_type,
+      ingredients: ingredients,
+      price: price,
+      imageFilePath: image_file_path,
+    });
+  };
 
   handleChange = (e) => {
     e.preventDefault();
@@ -106,22 +225,36 @@ class MenuAddEdit extends Component {
 
   render() {
     const { displayDetails, actionType, currentDish } = this.props;
-    let name = "";
-    let description = "";
-    let ingredients = "";
-    let price = "";
-    let category = "";
-    let dishType = "";
-    if (currentDish) {
-      name = currentDish.name;
-      description = currentDish.description;
-      ingredients = currentDish.ingredients;
-      price = currentDish.price;
-      category = currentDish.category;
-      dishType = currentDish.dish_type;
-    }
-
-    const { updateStatus, src } = this.state;
+    // let name = "";
+    // let description = "";
+    // let ingredients = "";
+    // let price = "";
+    // let category = "";
+    // let dishType = "";
+    // if (currentDish) {
+    //   name = currentDish.name;
+    //   description = currentDish.description;
+    //   ingredients = currentDish.ingredients;
+    //   //   price = currentDish.price;
+    //   //   category = currentDish.category;
+    //   dishType = currentDish.dish_type;
+    // }
+    console.log("state inside render of menu add edit ", this.state);
+    const {
+      dishname: name,
+      dishdescription: description,
+      dishcategory: category,
+      dishtype: dishType,
+      ingredients,
+      price,
+      imageFilePath,
+      updateStatus,
+    } = this.state;
+    const src = `${backendServer}/public/${imageFilePath}`;
+    // const {
+    //   updateStatus,
+    //   src
+    // } = this.state;
     let alertmessage = null;
     if (updateStatus === "DISH_UPDATE_SUCCESS") {
       alertmessage = <Alert variant='success'>Dish is updated.</Alert>;
@@ -148,7 +281,8 @@ class MenuAddEdit extends Component {
             fontFamily: "sans-serif",
             fontSize: "18px",
           }}
-          onSubmit={this.handleSubmit}>
+          //   onSubmit={this.handleSubmit}
+        >
           <Button
             style={{
               marginLeft: "70%",
@@ -159,7 +293,8 @@ class MenuAddEdit extends Component {
               fontSize: "18px",
             }}
             variant='dark'
-            type='submit'>
+            // type='submit'
+            onClick={this.handleSubmit}>
             Save
           </Button>
           <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
@@ -191,7 +326,47 @@ class MenuAddEdit extends Component {
               </Col>
               <Col>
                 <Form.Label>Picture</Form.Label>
-                <Form
+                <Card style={{ width: "16rem", height: "12rem" }}>
+                  <div style={{ width: "16rem", height: "8rem" }}>
+                    {/* <Avatar
+                        width={390}
+                        height={295}
+                        onCrop={this.onCrop}
+                        onClose={this.onClose}
+                        src={this.state.src}
+                      /> */}
+
+                    <img src={src} alt='Preview' />
+                  </div>
+                  <input
+                    type='file'
+                    name='image'
+                    encType='multipart/form-data'
+                    className='form-control'
+                    style={{ display: "none" }}
+                    // eslint-disable-next-line no-return-assign
+                    ref={(fileInput) => (this.fileInput = fileInput)}
+                  />
+                  <Card.Footer align='center'>
+                    <Button
+                      variant='light'
+                      style={{
+                        paddingTop: "10px",
+                        width: "40%",
+                        paddingRight: "15px",
+                      }}
+                      onClick={() => this.fileInput.click()}>
+                      Add File
+                    </Button>
+                    <Button
+                      variant='dark'
+                      style={{ paddingTop: "10px", width: "40%" }}
+                      onClick={this.handleUploadImage}>
+                      Upload
+                    </Button>
+                  </Card.Footer>
+                </Card>
+                {/* <Form
                   name='image'
                   style={{
                     height: "100%",
@@ -222,7 +397,7 @@ class MenuAddEdit extends Component {
                       //   src={src}
                     />
                   </div>
-                </Form>
+                </Form> */}
               </Col>
             </Row>
           </Form.Group>
@@ -240,12 +415,12 @@ class MenuAddEdit extends Component {
                 onChange={this.handleChange}
                 required>
                 <option>Select Category</option>
-                <option value='1'>Appetizer</option>
-                <option value='2'>Salads</option>
-                <option value='3'>Main Course</option>
-                <option value='4'>Desserts</option>
-                <option value='5'>Beverages</option>
-                <option value='6'>Others</option>
+                <option value='Appetizer'>Appetizer</option>
+                <option value='Salads'>Salads</option>
+                <option value='Main Course'>Main Course</option>
+                <option value='Desserts'>Desserts</option>
+                <option value='Beverages'>Beverages</option>
+                <option value='Others'>Others</option>
               </Form.Select>
               <br />
             </Col>
@@ -260,9 +435,9 @@ class MenuAddEdit extends Component {
                 value={dishType}
                 required>
                 <option>Select Dietary</option>
-                <option value='1'>Veg</option>
-                <option value='2'>NonVeg</option>
-                <option value='3'>Vegan</option>
+                <option value='Vegetarian'>Veg</option>
+                <option value='Non Vegetarian'>NonVeg</option>
+                <option value='Vegan'>Vegan</option>
               </Form.Select>
               <br />
             </Col>
@@ -281,27 +456,24 @@ class MenuAddEdit extends Component {
               style={{ backgroundColor: "#eeee" }}
             />
           </Form.Group>
-          <Form>
-            <Form.Group
-              as={Row}
-              className='mb-3'
-              controlId='formHorizontalEmail'>
-              <Form.Label column sm={8}>
-                Price
-              </Form.Label>
-              <Col sm={4}>
-                <Form.Control
-                  type='number'
-                  name='price'
-                  value={price}
-                  onChange={this.handleChange}
-                  required
-                  placeholder='$'
-                  style={{ backgroundColor: "#eeee" }}
-                />
-              </Col>
-            </Form.Group>
-          </Form>
+          {/* <Form> */}
+          <Form.Group as={Row} className='mb-3' controlId='formHorizontalEmail'>
+            <Form.Label column sm={8}>
+              Price
+            </Form.Label>
+            <Col sm={4}>
+              <Form.Control
+                type='number'
+                name='price'
+                value={price}
+                onChange={this.handleChange}
+                required
+                placeholder='$'
+                style={{ backgroundColor: "#eeee" }}
+              />
+            </Col>
+          </Form.Group>
+          {/* </Form> */}
           {alertmessage}
         </Form>
       </div>

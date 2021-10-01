@@ -4,18 +4,21 @@ const db = require("../dbPoolConnection");
 const router = express.Router();
 
 router.post("/updatedish", (req, res) => {
+  console.log("Request of Dish Update ", req);
+  console.log("Request Body of Dish Update ", req.body);
   const {
     dishId,
     restaurentId,
     dishname,
     dishdescription,
-    image,
+    imageFilePath,
     dishcategory,
     dishtype,
     ingredients,
     price,
+    isActive,
   } = req.body;
-  const sql = `CALL dishes_update('${dishname}',${dishId},'${dishdescription}','${ingredients}','${price}','${image}','${dishcategory}',null,'${dishtype}',${restaurentId},null,null,'1');`;
+  const sql = `CALL dishes_update('${dishname}',${dishId},'${dishdescription}','${ingredients}','${price}','${imageFilePath}','${dishcategory}',null,'${dishtype}',${restaurentId},null,null,${isActive});`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -45,14 +48,13 @@ router.post("/adddish", (req, res) => {
     restaurentId,
     dishname,
     dishdescription,
-    image,
-
+    imageFilePath,
     dishcategory,
     dishtype,
     ingredients,
     price,
   } = req.body;
-  const sql = `CALL dishes_put('${dishname}','${dishdescription}','${ingredients}','${price}','${image}','${dishcategory}',"",'${dishtype}',${restaurentId},"","",'1');`;
+  const sql = `CALL dishes_put('${dishname}','${dishdescription}','${ingredients}','${price}','${imageFilePath}','${dishcategory}',"",'${dishtype}',${restaurentId},"","",'1');`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {

@@ -165,7 +165,9 @@ class OwnerHome extends Component {
                     to='/owner/orders'
                     eventKey='link-2'
                     style={{
-                      backgroundColor: "#eeeee",
+                      color: "black",
+                      fontFamily: "sans-serif",
+                      fontSize: "22px",
                       textDecoration: "none",
                     }}>
                     <MdBorderColor style={{ marginRight: "18px" }} />

@@ -49,11 +49,13 @@ class SignIn extends Component {
     return (
       <Container>
         <Row align='center' style={{ marginTop: "100px" }}>
-          <img
-            style={{ paddingLeft: "0" }}
-            src={UberELogo.UberEBLogo.src}
-            alt={UberELogo.UberEBLogo.alt}
-          />
+          <Link to='/'>
+            <img
+              style={{ paddingLeft: "0" }}
+              src={UberELogo.UberEBLogo.src}
+              alt=''
+            />
+          </Link>
         </Row>
         <Row>
           <Form onSubmit={this.handleSubmit}>

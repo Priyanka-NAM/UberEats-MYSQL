@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { Button, Container, Form, Alert } from "react-bootstrap";
 import { addOwner } from "../../Actions/OwnerActions";
 import SignInUpNAV from "./SignInUpNavBar";
+import { isOwnerSignedIn, isUserSignedIn } from "../Service/authService";
 
 class OwnerSignUp extends Component {
   constructor(props) {
@@ -34,7 +35,9 @@ class OwnerSignUp extends Component {
 
   render() {
     const { owner } = this.props;
-
+    if (isOwnerSignedIn || isUserSignedIn) {
+      return <Redirect to='/home' />;
+    }
     let errorMessage = "";
     const currentOwner = JSON.parse(localStorage.getItem("user"));
     if (currentOwner) {

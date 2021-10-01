@@ -1,8 +1,8 @@
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
-import { Button, Row, Container, Col } from "react-bootstrap";
+import { BiX } from "react-icons/bi";
+import { Button, Row, Container } from "react-bootstrap";
 import { OffCanvas, OffCanvasMenu } from "react-offcanvas";
 import PropTypes from "prop-types";
 import "../Styles/Header.css";
@@ -35,63 +35,58 @@ class LandingPageCanvas extends Component {
             height: "100%",
             zIndex: "1000",
           }}>
+          <Row style={{ marginTop: "5%", marginLeft: "50%" }}>
+            <BiX
+              size='35px'
+              style={{ color: "black" }}
+              onClick={this.handleClose}
+            />
+          </Row>
           <Container align='left' style={{ marginLeft: "15px" }}>
-            <Row style={{ marginTop: "40px" }}>
-              <Button
-                variant='dark'
-                style={{
-                  width: "80%",
-                  height: "60px",
-                  fontWeight: "500",
-                  fontfamily: "UberMoveText, sans-serif",
-                  fontSize: "20px",
-                  letterSpacing: "0.05em",
-                }}
-                onClick={this.handleClose}>
-                Sign In
-              </Button>
-            </Row>
-            <Row style={{ marginTop: "20px" }}>
+            <Row style={{ marginTop: "20%" }}>
               <Link
                 style={{
                   textDecoration: "none",
                   color: "black",
                   fontWeight: "500",
                   fontfamily: "UberMoveText, sans-serif",
-                  fontSize: "18px",
+                  fontSize: "22px",
+                  letterSpacing: "0.05em",
                 }}
                 to='/owner/signup'>
                 Add your Restaurant
               </Link>
             </Row>
-            <Row style={{ marginTop: "20px" }}>
+            <Row style={{ marginTop: "10%" }}>
               <Link
                 style={{
                   textDecoration: "none",
                   color: "black",
                   fontWeight: "500",
                   fontfamily: "UberMoveText, sans-serif",
-                  fontSize: "18px",
+                  fontSize: "22px",
                   letterSpacing: "0.05em",
                 }}
                 to='/customer/signup'>
-                Sign up
+                Sign up to order
               </Link>
             </Row>
-            <Row style={{ marginTop: "30px" }}>
-              <Button
-                variant='light'
-                style={{
-                  width: "80%",
-                  height: "60px",
-                  fontWeight: "500",
-                  fontfamily: "UberMoveText, sans-serif",
-                  fontSize: "20px",
-                  letterSpacing: "0.05em",
-                }}
-                onClick={this.handleClose}>
-                Signout
-              </Button>
+            <Row style={{ marginTop: "15%" }}>
+              <Link to='/signin'>
+                <Button
+                  variant='dark'
+                  style={{
+                    width: "60%",
+                    height: "60px",
+                    fontWeight: "500",
+                    fontfamily: "UberMoveText, sans-serif",
+                    fontSize: "22px",
+                    letterSpacing: "0.05em",
+                  }}
+                  onClick={this.handleClose}>
+                  Sign In
+                </Button>
+              </Link>
             </Row>
           </Container>
         </OffCanvasMenu>
