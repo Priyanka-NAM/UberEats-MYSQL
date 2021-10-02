@@ -1,13 +1,16 @@
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { Col, Row, Alert } from "react-bootstrap";
-import axios from "axios";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import OrdersNav from "./OrdersNav";
 import OwnerHome from "../../Home/OwnerHome";
 import OrderCard from "./OrderCard";
 import OrderDetailsDC from "./OrderDetailsDC";
-import backendServer from "../../../backEndConfig";
-import { getToken } from "../../Service/authService";
+import { ownerDeliveredOrders } from "../../../Actions/OwnerActions";
 
 class DeliveredOrders extends Component {
   constructor(props) {
@@ -15,51 +18,60 @@ class DeliveredOrders extends Component {
     this.state = {};
   }
 
+  // componentDidMount() {
+  //   this.hasMounted = true;
+
+  //   const { restaurant_id: restaurantId } = JSON.parse(
+  //     localStorage.getItem("user")
+  //   );
+
+  //   console.log(" restaurantId: ", restaurantId);
+  //   if (!restaurantId) return;
+  //   axios.defaults.headers.common.authorization = getToken();
+  //   axios
+  //     // .get(
+  //     //   `http://localhost:5000/ubereats/orders/neworders/restaurant/${restaurantId}`
+  //     // )
+  //     .get(`http://localhost:5000/ubereats/orders/completedorders/restaurant/2`)
+  //     .then((response) => {
+  //       console.log("Response: ", JSON.stringify(response.data));
+
+  //       if (response.data.status === "COMPLETED_ORDERS") {
+  //         if (this.hasMounted) {
+  //           this.setState({
+  //             deliveredOrders: response.data.orders,
+  //           });
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       if (error.response && error.response.data) {
+  //         this.setState({
+  //           errormessage: "Orders Could not be Fetched",
+  //         });
+  //       }
+  //     });
+  // }
+
   componentDidMount() {
-    this.hasMounted = true;
+    this.props.ownerDeliveredOrders();
+  }
 
-    const { restaurant_id: restaurantId } = JSON.parse(
-      localStorage.getItem("user")
-    );
-
-    console.log(" restaurantId: ", restaurantId);
-    if (!restaurantId) return;
-    axios.defaults.headers.common.authorization = getToken();
-    axios
-      // .get(
-      //   `http://localhost:5000/ubereats/orders/neworders/restaurant/${restaurantId}`
-      // )
-      .get(`http://localhost:5000/ubereats/orders/completedorders/restaurant/2`)
-      .then((response) => {
-        console.log("Response: ", JSON.stringify(response.data));
-
-        if (response.data.status === "COMPLETED_ORDERS") {
-          if (this.hasMounted) {
-            this.setState({
-              cancelledOrders: response.data.orders,
-            });
-          }
-        }
-      })
-      .catch((error) => {
-        if (error.response && error.response.data) {
-          this.setState({
-            errormessage: "Orders Could not be Fetched",
-          });
-        }
+  componentDidUpdate = (prevprops) => {
+    const { deliveredOrders } = this.props;
+    if (deliveredOrders !== prevprops.deliveredOrders) {
+      this.setState({
+        deliveredOrders,
       });
-  }
-
-  componentWillUnmount() {
-    this.hasMounted = false;
-  }
+    }
+  };
 
   handleDisplay = (index) => {
-    const { cancelledOrders, showOrder } = this.state;
-    console.log("cancelledOrders", cancelledOrders[index]);
+    const { deliveredOrders, showOrder } = this.state;
+    console.log("deliveredOrders", deliveredOrders[index]);
     this.setState({
       showOrder: !showOrder,
-      currentOrder: cancelledOrders[index],
+      currentOrder: deliveredOrders[index],
     });
   };
 
@@ -71,8 +83,8 @@ class DeliveredOrders extends Component {
   };
 
   render() {
-    const { errormessage, cancelledOrders, showOrder, currentOrder } =
-      this.state;
+    const { errormessage, showOrder, currentOrder } = this.state;
+    const { deliveredOrders } = this.props;
     let orderId = null;
     let name = null;
     let subTotal = null;
@@ -80,10 +92,14 @@ class DeliveredOrders extends Component {
     let tax = null;
     let orderComps = null;
     let dishes = null;
-    if (!cancelledOrders || cancelledOrders.length === 0) {
-      orderComps = <h1>Orders are empty</h1>;
+    if (!deliveredOrders || deliveredOrders.length === 0) {
+      orderComps = (
+        <Alert variant='info' style={{ fontFamily: "sans-serif" }}>
+          No Delivered orders
+        </Alert>
+      );
     } else {
-      orderComps = cancelledOrders.map((order, index) => (
+      orderComps = deliveredOrders.map((order, index) => (
         <OrderCard
           bccolor='#eeeeee'
           // eslint-disable-next-line react/no-array-index-key
@@ -169,4 +185,15 @@ class DeliveredOrders extends Component {
   }
 }
 
-export default DeliveredOrders;
+DeliveredOrders.propTypes = {
+  deliveredOrders: PropTypes.object.isRequired,
+  ownerDeliveredOrders: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  deliveredOrders: state.owner.deliveredOrders,
+});
+
+export default connect(mapStateToProps, {
+  ownerDeliveredOrders,
+})(DeliveredOrders);

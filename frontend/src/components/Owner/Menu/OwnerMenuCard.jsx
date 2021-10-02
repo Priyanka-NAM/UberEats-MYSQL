@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
-import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { Image } from "react-bootstrap";
 import { PropTypes } from "prop-types";
@@ -11,6 +10,7 @@ class OwnerMenuCard extends Component {
     super(props);
     this.state = {};
     this.clickHandler = this.clickHandler.bind(this);
+    this.clickDelete = this.clickDelete.bind(this);
   }
 
   clickHandler = () => {
@@ -59,8 +59,6 @@ class OwnerMenuCard extends Component {
               }}
             />
             <Image src={src} />
-
-            {/* <Image src='https://images.unsplash.com/photo-1580554530778-ca36943938b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' /> */}
           </div>
         </div>
       </div>

@@ -1,68 +1,42 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { FaPlus, FaGripLines } from "react-icons/fa";
-import axios from "axios";
-import { Button, Col, Image, Alert, Row } from "react-bootstrap";
+import { Button, Col, Alert, Row } from "react-bootstrap";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import OwnerHome from "../../Home/OwnerHome";
-import { getToken } from "../../Service/authService";
 import MenuNav from "./MenuNav";
 import MenuAddEdit from "./MenuAddEdit";
-import backendServer from "../../../backEndConfig";
 import OwnerMenuCard from "./OwnerMenuCard";
+import { ownerMenu, ownerMenuUpdate } from "../../../Actions/OwnerActions";
 
 class MenuUpdate extends Component {
-  hasMounted = false;
-
   constructor(props) {
     super(props);
     this.state = { showEdit: false, showAdd: false };
   }
 
   componentDidMount() {
-    this.hasMounted = true;
+    this.props.ownerMenu();
+  }
 
-    const { restaurant_id: restaurantId } = JSON.parse(
-      localStorage.getItem("user")
-    );
-
-    console.log(" restaurantId: ", restaurantId);
-    if (!restaurantId) return;
-    axios.defaults.headers.common.authorization = getToken();
-    axios
-      // .get(
-      //   `http://localhost:5000/ubereats/dishes/alldishes/${restaurantId}`
-      // )
-      .get(`http://localhost:5000/ubereats/dishes/alldishes/2`)
-      .then((response) => {
-        console.log("Response: ", JSON.stringify(response.data));
-
-        if (response.data.status === "ALL_DISHES") {
-          if (this.hasMounted) {
-            this.setState({
-              allDishes: response.data.allDishes,
-            });
-          }
-        }
-      })
-      .catch((error) => {
-        if (error.response && error.response.data) {
-          this.setState({
-            errormessage: "Dishes Could not be Fetched",
-          });
-        }
+  componentDidUpdate = (prevprops) => {
+    const { allDishes } = this.props;
+    if (allDishes !== prevprops.allDishes) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        allDishes,
       });
-  }
-
-  componentWillUnmount() {
-    this.hasMounted = false;
-  }
+    }
+  };
 
   handleEdit = (index) => {
-    console.log("Clicked on Dish Item Index ", index);
-    const { allDishes } = this.state;
+    const { allDishes, showEdit } = this.state;
     this.setState({
-      showEdit: true,
+      showEdit: !showEdit,
       showAdd: false,
       currentDish: allDishes[index],
     });
@@ -106,6 +80,9 @@ class MenuUpdate extends Component {
   };
 
   handleDelete = (index) => {
+    this.setState({
+      showEdit: false,
+    });
     const isActive = "0";
     const { allDishes } = this.state;
     const delDish = allDishes[index];
@@ -132,50 +109,69 @@ class MenuUpdate extends Component {
       price,
       isActive,
     };
-    axios.defaults.withCredentials = true;
-    axios.defaults.headers.common.authorization = getToken();
-    axios
-      .post(`${backendServer}/ubereats/dishes/updatedish`, dishdata)
-      .then((response) => {
-        console.log("Response for dish update ", response.data);
-        if (this.hasMounted) {
-          this.setState({
-            // updateStatus: response.data.status,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("Error for dish update ", err.response);
-        if (err.response && err.response.data) {
-          if (this.hasMounted) {
-            this.setState({
-              // updateStatus: err.response.data,
-            });
-          }
-        }
-      });
+    this.props.ownerMenuUpdate(dishdata);
   };
+
+  createMenuCardComps = (dishes) =>
+    dishes.map((dish, index) => (
+      <OwnerMenuCard
+        key={index}
+        orderIndex={index}
+        dishName={dish.name}
+        dishDescription={dish.description}
+        dishPrice={dish.price}
+        dishImage={dish.image_file_path}
+        handleEdit={this.handleEdit}
+        handleDelete={this.handleDelete}
+      />
+    ));
 
   render() {
     const { showEdit, showAdd, errormessage, allDishes, currentDish } =
       this.state;
-    let orderComps = null;
+    // let orderComps = null;
+    let appetizerComp = null;
+    let saladsComp = null;
+    let mainCourseComp = null;
+    let dessertsComp = null;
+    let beveragesComp = null;
+    let otherComp = null;
     let MenuAddEditComp = null;
     if (!allDishes || allDishes.length === 0) {
-      orderComps = <Alert variant='info'>No Dishes to Display</Alert>;
+      appetizerComp = <Alert variant='info'>No Dishes to Display</Alert>;
     } else {
-      orderComps = allDishes.map((dish, index) => (
-        <OwnerMenuCard
-          key={index}
-          orderIndex={index}
-          dishName={dish.name}
-          dishDescription={dish.description}
-          dishPrice={dish.price}
-          dishImage={dish.image_file_path}
-          handleEdit={this.handleEdit}
-          handleDelete={this.handleDelete}
-        />
-      ));
+      const appetizers = allDishes.filter(
+        (dish) => dish.category === "Appetizer"
+      );
+      const salads = allDishes.filter((dish) => dish.category === "Salads");
+      const mainCourse = allDishes.filter(
+        (dish) => dish.category === "Main Course"
+      );
+      const desserts = allDishes.filter((dish) => dish.category === "Desserts");
+      const beverages = allDishes.filter(
+        (dish) => dish.category === "Beverages"
+      );
+      const other = allDishes.filter((dish) => dish.category === "Others");
+
+      appetizerComp = this.createMenuCardComps(appetizers);
+      saladsComp = this.createMenuCardComps(salads);
+      mainCourseComp = this.createMenuCardComps(mainCourse);
+      dessertsComp = this.createMenuCardComps(desserts);
+      beveragesComp = this.createMenuCardComps(beverages);
+      otherComp = this.createMenuCardComps(other);
+
+      // orderComps = allDishes.map((dish, index) => (
+      //   <OwnerMenuCard
+      //     key={index}
+      //     orderIndex={index}
+      //     dishName={dish.name}
+      //     dishDescription={dish.description}
+      //     dishPrice={dish.price}
+      //     dishImage={dish.image_file_path}
+      //     handleEdit={this.handleEdit}
+      //     handleDelete={this.handleDelete}
+      //   />
+      // ));
     }
     if (showEdit) {
       MenuAddEditComp = (
@@ -248,7 +244,7 @@ class MenuUpdate extends Component {
                 </th>
               </tr>
               {/* </thead> */}
-              <Row>{orderComps}</Row>
+              <Row>{appetizerComp}</Row>
             </Row>
             <Row style={{ paddingTop: "40px", width: "90%" }}>
               <tr>
@@ -261,6 +257,7 @@ class MenuUpdate extends Component {
                   <span style={{ paddingLeft: "15px" }}>Salads</span>
                 </th>
               </tr>
+              <Row>{saladsComp}</Row>
             </Row>
             <Row style={{ paddingTop: "40px", width: "90%" }}>
               <tr>
@@ -273,6 +270,7 @@ class MenuUpdate extends Component {
                   <span style={{ paddingLeft: "15px" }}>Main Course</span>
                 </th>
               </tr>
+              <Row>{mainCourseComp}</Row>
             </Row>
             <Row style={{ paddingTop: "40px", width: "90%" }}>
               <tr>
@@ -282,36 +280,40 @@ class MenuUpdate extends Component {
                     fontFamily: "sans-serif",
                   }}>
                   <FaGripLines style={{ backgroundColor: "#eeeee" }} />
-                  <span style={{ paddingLeft: "15px" }}>Salads</span>
+                  <span style={{ paddingLeft: "15px" }}>Beverages</span>
                 </th>
               </tr>
+              <Row>{beveragesComp}</Row>
+            </Row>
+            <Row style={{ paddingTop: "40px", width: "90%" }}>
+              <tr>
+                <th
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "sans-serif",
+                  }}>
+                  <FaGripLines style={{ backgroundColor: "#eeeee" }} />
+                  <span style={{ paddingLeft: "15px" }}>Desserts</span>
+                </th>
+              </tr>
+              <Row>{dessertsComp}</Row>
+            </Row>
+            <Row style={{ paddingTop: "40px", width: "90%" }}>
+              <tr>
+                <th
+                  style={{
+                    fontSize: "22px",
+                    fontFamily: "sans-serif",
+                  }}>
+                  <FaGripLines style={{ backgroundColor: "#eeeee" }} />
+                  <span style={{ paddingLeft: "15px" }}>Others</span>
+                </th>
+              </tr>
+              <Row>{otherComp}</Row>
             </Row>
           </Col>
           <Col xs={4} style={{ paddingTop: "10px" }}>
-            {/* {showEdit && (
-              <div
-                show={showEdit.toString()}
-                style={{ display: showEdit ? "block" : "none" }}>
-                <MenuAddEdit
-                  visibilityCb={this.visibilityEditHandler}
-                  currentDish={currentDish}
-                  displayDetails={showEdit}
-                  actionType='Edit Item'
-                />
-              </div>
-            )} */}
             {MenuAddEditComp}
-            {/* {showAdd && (
-              <div
-                show={showAdd.toString()}
-                style={{ display: showAdd ? "block" : "none" }}>
-                <MenuAddEdit
-                  visibilityCb={this.visibilityAddHandler}
-                  displayDetails={showAdd}
-                  actionType='Add Item'
-                />
-              </div>
-            )} */}
           </Col>
         </Row>
       </Col>
@@ -320,4 +322,17 @@ class MenuUpdate extends Component {
   }
 }
 
-export default MenuUpdate;
+MenuUpdate.propTypes = {
+  allDishes: PropTypes.object.isRequired,
+  ownerMenu: PropTypes.func.isRequired,
+  ownerMenuUpdate: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  allDishes: state.owner.allDishes,
+});
+
+export default connect(mapStateToProps, {
+  ownerMenu,
+  ownerMenuUpdate,
+})(MenuUpdate);

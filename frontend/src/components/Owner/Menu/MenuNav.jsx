@@ -27,7 +27,7 @@ class MenuNav extends Component {
               }}>
               Menus
             </Link>
-            <Link
+            {/* <Link
               to='/owner/updatecategories'
               style={{
                 paddingLeft: "40px",
@@ -38,7 +38,7 @@ class MenuNav extends Component {
               }}
               active>
               Categories
-            </Link>
+            </Link> */}
           </Nav>
         </Container>
       </Navbar>

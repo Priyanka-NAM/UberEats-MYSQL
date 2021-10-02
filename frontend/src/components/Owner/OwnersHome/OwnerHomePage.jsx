@@ -1,7 +1,9 @@
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import Jimp from "jimp";
 import { FaPlus } from "react-icons/fa";
 import {
@@ -19,6 +21,8 @@ import RestaBanner from "../../Restaurent/RestaurentPageIcons/RestaBanner";
 import resizeFile from "../../Svg/ImageResizing";
 import OwnerHome from "../../Home/OwnerHome";
 import MenuCard from "../../Restaurent/RestaurentPageIcons/MenuCard";
+import backendServer from "../../../backEndConfig";
+import { ownerMenu } from "../../../Actions/OwnerActions";
 
 const fs = require("fs");
 
@@ -107,40 +111,74 @@ class OwnerHomePage extends Component {
   }
 
   componentDidMount() {
-    Jimp.read(
-      "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
-      (err, newImage) => {
-        if (err) {
-          console.log("Error in Jimp Processing, ", JSON.stringify(err));
-          throw err;
-        }
-        newImage.resize(300, 300).quality(60);
-        newImage.getBase64(Jimp.AUTO, (err2, data) => {
-          console.log(data);
-          this.setState({
-            newImageData: data,
-          });
-        });
-     
-      }
-    );
+    const { ownerMenu: ownerMenuRenamed } = this.props;
+    ownerMenuRenamed();
   }
+
+  componentDidUpdate = (prevprops) => {
+    const { allDishes, ownerDetails } = this.props;
+    if (
+      allDishes !== prevprops.allDishes ||
+      ownerDetails !== prevprops.ownerDetails
+    ) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({
+        allDishes,
+        ownerDetails,
+      });
+    }
+  };
+
+  // componentDidMount() {
+  //   Jimp.read(
+  //     "https://images.unsplash.com/photo-1551024506-0bccd828d307?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80",
+  //     (err, newImage) => {
+  //       if (err) {
+  //         console.log("Error in Jimp Processing, ", JSON.stringify(err));
+  //         throw err;
+  //       }
+  //       newImage.resize(300, 300).quality(60);
+  //       newImage.getBase64(Jimp.AUTO, (err2, data) => {
+  //         console.log(data);
+  //         this.setState({
+  //           newImageData: data,
+  //         });
+  //       });
+  //     }
+  //   );
+  // }
 
   render() {
     let restaurentMenu = null;
     const { newImageData } = this.state;
-    if (restadata) {
-      restaurentMenu = restadata.map((dish) => (
-        <MenuCard
-          key={dish.dish_id}
-          src={dish.imageurl}
-          title={dish.name}
-          price={dish.price}
-          description={dish.description}
-          quantity='2'
-          isOwnerHome
-        />
-      ));
+    const { allDishes, ownerDetails } = this.state;
+    if (allDishes) {
+      restaurentMenu = allDishes.map((dish) => {
+        const imagePath = `${backendServer}/public/${dish.image_file_path}`;
+        return (
+          <MenuCard
+            key={dish.dish_id}
+            src={imagePath}
+            title={dish.name}
+            price={dish.price}
+            description={dish.description}
+            quantity='2'
+            isOwnerHome
+          />
+        );
+      });
+    }
+    let src = null;
+    let restaTitle = null;
+    let restaAddress = null;
+    let otherDetails = null;
+    let description = null;
+    if (ownerDetails) {
+      src = `${backendServer}/public/${ownerDetails.image_file_path}`;
+      restaTitle = ownerDetails.name;
+      restaAddress = ownerDetails.restaurant_address_line_one;
+      otherDetails = `Timings ${ownerDetails.restaurant_start_time} - ${ownerDetails.restaurant_end_time}`;
+      description = ownerDetails.description;
     }
 
     const pageContent = (
@@ -149,12 +187,12 @@ class OwnerHomePage extends Component {
           <Row style={{ paddingTop: "2%" }}>
             <RestaBanner
               key='1'
-              src='https://images.unsplash.com/photo-1551024506-0bccd828d307?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'
-              restaTitle='Hello WOrld'
-              restaAddress='Hello WOrld'
+              src={src}
+              restaTitle={restaTitle}
+              restaAddress={restaAddress}
               isOwnerHome
-              otherDetails='fsdfnbsjfkdgnjkf'
-              restauDescri='One of the most popular items on the menu among Uber Eats users is the Chicken Wings and the Quarter Pound Big Bite and the Steak & Cheese Taquito are two of the items most commonly ordered together at this late night go-to. • $ • Convenience • Everyday Essentials • Grocery • Snacks • Home & Personal Care'
+              otherDetails={otherDetails}
+              restauDescri={description}
             />
           </Row>
           <Row style={{ padding: "0%", margin: "0%", width: "100%" }}>
@@ -167,6 +205,17 @@ class OwnerHomePage extends Component {
   }
 }
 
+OwnerHomePage.propTypes = {
+  allDishes: PropTypes.object.isRequired,
+  ownerDetails: PropTypes.object.isRequired,
+  ownerMenu: PropTypes.func.isRequired,
+};
 
+const mapStateToProps = (state) => ({
+  allDishes: state.owner.allDishes,
+  ownerDetails: state.owner.ownerDetails.user,
+});
 
-export default OwnerHomePage;
+export default connect(mapStateToProps, {
+  ownerMenu,
+})(OwnerHomePage);

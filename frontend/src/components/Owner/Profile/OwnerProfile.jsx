@@ -5,7 +5,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import axios from "axios";
-import TimePicker from "react-times";
 import "react-times/css/classic/default.css";
 import PropTypes from "prop-types";
 import { Button, Form, Col, Card, Row } from "react-bootstrap";
@@ -18,20 +17,7 @@ import { updateOwner } from "../../../Actions/OwnerActions";
 class OwnerProfile extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // country: "",
-      // state: "",
-      // phoneNumber: "",
-      // emailId: "",
-      // newpassword: "",
-      // addressline1: "",
-      // city: "",
-      // zipcode: "",
-      // hour: "",
-      // minute: "",
-      // ehour: "",
-      // eminute: "",
-    };
+    this.state = {};
     this.onStartTimeChange = this.onStartTimeChange.bind(this);
     this.onEndTimeChange = this.onEndTimeChange.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
@@ -63,7 +49,6 @@ class OwnerProfile extends Component {
   handleChangesSubmit = (e) => {
     e.preventDefault();
     const details = { ...this.state };
-    console.log("Details before calling update owner action ", details);
     this.props.updateOwner(details);
   };
 

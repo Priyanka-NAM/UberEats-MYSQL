@@ -1,16 +1,17 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { PropTypes } from "prop-types";
 import axios from "axios";
+import { connect } from "react-redux";
 import { Button, Form, Col, Alert, Row, Card } from "react-bootstrap";
 import backendServer from "../../../backEndConfig";
 import { getToken } from "../../Service/authService";
+import { ownerMenuAdd, ownerMenuUpdate } from "../../../Actions/OwnerActions";
 
 class MenuAddEdit extends Component {
-  hasMounted = false;
-
   constructor(props) {
     super(props);
     this.state = {};
@@ -22,7 +23,6 @@ class MenuAddEdit extends Component {
   componentDidMount() {
     this.hasMounted = true;
     this.setStateFromProps(this.props);
-    console.log("Menu AddEdit State after mount ", this.state);
   }
 
   componentDidUpdate(prevProps) {
@@ -30,10 +30,6 @@ class MenuAddEdit extends Component {
     if (this.props.currentDish !== prevProps.currentDish) {
       this.setStateFromProps(this.props);
     }
-  }
-
-  componentWillUnmount() {
-    this.hasMounted = false;
   }
 
   handleAddSave = (e) => {
@@ -61,29 +57,31 @@ class MenuAddEdit extends Component {
       ingredients,
       price,
     };
+
+    this.props.ownerMenuAdd(dishdata);
     console.log("Before the add dish call ");
-    axios.defaults.withCredentials = true;
-    axios.defaults.headers.common.authorization = getToken();
-    axios
-      .post(`${backendServer}/ubereats/dishes/adddish`, dishdata)
-      .then((response) => {
-        console.log("Response for dish add ", response.data);
-        if (this.hasMounted) {
-          this.setState({
-            updateStatus: response.data.status,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("Error for dish add ", err.response);
-        if (err.response && err.response.data) {
-          if (this.hasMounted) {
-            this.setState({
-              updateStatus: err.response.data,
-            });
-          }
-        }
-      });
+    // axios.defaults.withCredentials = true;
+    // axios.defaults.headers.common.authorization = getToken();
+    // axios
+    //   .post(`${backendServer}/ubereats/dishes/adddish`, dishdata)
+    //   .then((response) => {
+    //     console.log("Response for dish add ", response.data);
+    //     if (this.hasMounted) {
+    //       this.setState({
+    //         updateStatus: response.data.status,
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log("Error for dish add ", err.response);
+    //     if (err.response && err.response.data) {
+    //       if (this.hasMounted) {
+    //         this.setState({
+    //           updateStatus: err.response.data,
+    //         });
+    //       }
+    //     }
+    //   });
     visibilityCb();
   };
 
@@ -117,6 +115,7 @@ class MenuAddEdit extends Component {
       price,
       isActive,
     };
+    this.props.ownerMenuUpdate(dishdata);
     console.log("Before the update dish call ");
 
     axios.defaults.withCredentials = true;
@@ -410,11 +409,18 @@ class MenuAddEdit extends Component {
   }
 }
 
-export default MenuAddEdit;
-
 MenuAddEdit.propTypes = {
   displayDetails: PropTypes.bool.isRequired,
   actionType: PropTypes.string.isRequired,
   visibilityCb: PropTypes.func.isRequired,
   currentDish: PropTypes.object.isRequired,
+  ownerMenuAdd: PropTypes.func.isRequired,
+  ownerMenuUpdate:PropTypes.func.isRequired,
 };
+
+const mapStateToProps = (state) => ({});
+
+export default connect(mapStateToProps, {
+  ownerMenuAdd,
+  ownerMenuUpdate,
+})(MenuAddEdit);
