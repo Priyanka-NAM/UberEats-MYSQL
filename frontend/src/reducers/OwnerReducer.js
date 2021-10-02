@@ -4,10 +4,13 @@ import {
   OWNER_SIGNUP_FAILURE,
   OWNER_UPDATE_FAILURE,
   USER_SIGNIN_SUCCESS,
+  OWNER_NEW_ORDER,
+  OWNER_NEW_ORDER_FAILURE,
 } from "../Actions/types";
 
 const intitalState = {
   ownerDetails: {},
+  newOrders: {},
 };
 export default (state = intitalState, action) => {
   switch (action.type) {
@@ -36,6 +39,16 @@ export default (state = intitalState, action) => {
       return {
         ...state,
         ownerDetails: action.payload,
+      };
+    case OWNER_NEW_ORDER:
+      return {
+        ...state,
+        newOrders: action.payload,
+      };
+    case OWNER_NEW_ORDER_FAILURE:
+      return {
+        ...state,
+        newOrders: action.payload,
       };
     default:
       return state;

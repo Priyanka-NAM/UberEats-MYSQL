@@ -4,6 +4,8 @@ import {
   OWNER_SIGNUP_FAILURE,
   OWNER_UPDATE,
   OWNER_UPDATE_FAILURE,
+  OWNER_NEW_ORDER,
+  OWNER_NEW_ORDER_FAILURE,
 } from "./types";
 import backendServer from "../backEndConfig";
 import { getToken } from "../components/Service/authService";
@@ -52,4 +54,37 @@ export const updateOwner = (ownerUpdateData) => async (dispatch) => {
       payload: err.response.data,
     });
   }
+};
+
+export const ownerNewOrders = () => async (dispatch) => {
+  const { restaurant_id: restaurantId } = JSON.parse(
+    localStorage.getItem("user")
+  );
+  console.log(" restaurantId: ", restaurantId);
+  if (!restaurantId) return;
+  axios.defaults.withCredentials = true;
+  axios.defaults.headers.common.authorization = getToken();
+  axios
+    // .get(
+    //   `${backendServer}/ubereats/orders/neworders/restaurant/${restaurantId}`
+    // )
+    .get(`${backendServer}/ubereats/orders/neworders/restaurant/2`)
+    .then((response) => {
+      console.log("Response: ", JSON.stringify(response.data));
+
+      if (response.data.status === "NEW_ORDERS") {
+        dispatch({
+          type: OWNER_NEW_ORDER,
+          payload: response.data.orders,
+        });
+      }
+    })
+    .catch((error) => {
+      if (error.response && error.response.data) {
+        dispatch({
+          type: OWNER_NEW_ORDER_FAILURE,
+          payload: error.response.data,
+        });
+      }
+    });
 };

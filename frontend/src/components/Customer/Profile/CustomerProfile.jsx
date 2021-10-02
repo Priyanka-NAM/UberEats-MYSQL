@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
@@ -76,6 +77,7 @@ class CustomerProfile extends Component {
         console.log("Response from server ", response.data);
         this.setState({
           src: `${backendServer}/public/${response.data}`,
+          image_file_path: response.data,
         });
       })
       .catch((err) => {
@@ -113,8 +115,9 @@ class CustomerProfile extends Component {
       oldpassword,
       phoneNumber,
       nickname,
-      src,
+      image_file_path,
     } = this.state;
+    const src = `${backendServer}/public/${image_file_path}`;
     const { updateerrMsg } = this.props;
 
     let errorMessage = "";

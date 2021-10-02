@@ -365,7 +365,7 @@ class OwnerProfile extends Component {
                 nameField='restaurant_start_time'
                 typeField='text'
                 valueField={restaurant_start_time}
-                patternField={null}
+                patternField='([01]?[0-9]|2[0-3]):[0-5][0-9]'
                 maxLength='10'
                 requiredField='true'
                 changeHandler={this.handleChange}
@@ -393,7 +393,7 @@ class OwnerProfile extends Component {
                 typeField='text'
                 valueField={restaurant_end_time}
                 maxLength='10'
-                patternField={null}
+                patternField='([01]?[0-9]|2[0-3]):[0-5][0-9]'
                 requiredField='true'
                 changeHandler={this.handleChange}
               />

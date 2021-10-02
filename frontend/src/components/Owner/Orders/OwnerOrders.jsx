@@ -1,14 +1,19 @@
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
-import { FaPlus } from "react-icons/fa";
+// import { FaPlus } from "react-icons/fa";
 import axios from "axios";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import { Col, Alert, Form, Button, Row } from "react-bootstrap";
 import OrderCard from "./OrderCard";
 import OwnerHome from "../../Home/OwnerHome";
 import OrdersNav from "./OrdersNav";
-import backendServer from "../../../backEndConfig";
-import { getToken } from "../../Service/authService";
+// import backendServer from "../../../backEndConfig";
+// import { getToken } from "../../Service/authService";
+import { ownerNewOrders } from "../../../Actions/OwnerActions";
 
 class OwnerOrders extends Component {
   hasMounted = false;
@@ -18,44 +23,58 @@ class OwnerOrders extends Component {
     this.state = { showEdit: false };
   }
 
+  // componentDidMount() {
+  //   this.hasMounted = true;
+
+  //   const { restaurant_id: restaurantId } = JSON.parse(
+  //     localStorage.getItem("user")
+  //   );
+
+  //   console.log(" restaurantId: ", restaurantId);
+  //   if (!restaurantId) return;
+  //   axios.defaults.headers.common.authorization = getToken();
+  //   axios
+  //     // .get(
+  //     //   `${backendServer}/ubereats/orders/neworders/restaurant/${restaurantId}`
+  //     // )
+  //     .get(`${backendServer}/ubereats/orders/neworders/restaurant/2`)
+  //     .then((response) => {
+  //       console.log("Response: ", JSON.stringify(response.data));
+
+  //       if (response.data.status === "NEW_ORDERS") {
+  //         if (this.hasMounted) {
+  //           this.setState({
+  //             newOrders: response.data.orders,
+  //           });
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       if (error.response && error.response.data) {
+  //         this.setState({
+  //           errormessage: "Orders Could not be Fetched",
+  //         });
+  //       }
+  //     });
+  // }
+
   componentDidMount() {
-    this.hasMounted = true;
+    // eslint-disable-next-line react/destructuring-assignment
+    this.props.ownerNewOrders();
+  }
 
-    const { restaurant_id: restaurantId } = JSON.parse(
-      localStorage.getItem("user")
-    );
-
-    console.log(" restaurantId: ", restaurantId);
-    if (!restaurantId) return;
-    axios.defaults.headers.common.authorization = getToken();
-    axios
-      // .get(
-      //   `http://localhost:5000/ubereats/orders/neworders/restaurant/${restaurantId}`
-      // )
-      .get(`http://localhost:5000/ubereats/orders/neworders/restaurant/2`)
-      .then((response) => {
-        console.log("Response: ", JSON.stringify(response.data));
-
-        if (response.data.status === "NEW_ORDERS") {
-          if (this.hasMounted) {
-            this.setState({
-              newOrders: response.data.orders,
-            });
-          }
-        }
-      })
-      .catch((error) => {
-        if (error.response && error.response.data) {
-          this.setState({
-            errormessage: "Orders Could not be Fetched",
-          });
-        }
+  componentDidUpdate(prevprops) {
+    const { newOrders } = this.props;
+    if (newOrders !== prevprops.newOrders) {
+      this.setState({
+        newOrders,
       });
+    }
   }
 
-  componentWillUnmount() {
-    this.hasMounted = false;
-  }
+  // componentWillUnmount() {
+  //   this.hasMounted = false;
+  // }
 
   handleDisplay = (index) => {
     const { newOrders } = this.state;
@@ -271,4 +290,15 @@ class OwnerOrders extends Component {
   }
 }
 
-export default OwnerOrders;
+// export default OwnerOrders;
+
+OwnerOrders.propTypes = {
+  newOrders: PropTypes.object.isRequired,
+  ownerNewOrders: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  newOrders: state.owner.newOrders,
+});
+
+export default connect(mapStateToProps, { ownerNewOrders })(OwnerOrders);
