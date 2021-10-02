@@ -3,12 +3,12 @@ import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { FaPlus, FaGripLines } from "react-icons/fa";
 import axios from "axios";
-
 import { Button, Col, Image, Alert, Row } from "react-bootstrap";
 import OwnerHome from "../../Home/OwnerHome";
 import { getToken } from "../../Service/authService";
 import MenuNav from "./MenuNav";
 import MenuAddEdit from "./MenuAddEdit";
+import backendServer from "../../../backEndConfig";
 import OwnerMenuCard from "./OwnerMenuCard";
 
 class MenuUpdate extends Component {
@@ -105,6 +105,57 @@ class MenuUpdate extends Component {
     });
   };
 
+  handleDelete = (index) => {
+    const isActive = "0";
+    const { allDishes } = this.state;
+    const delDish = allDishes[index];
+    const {
+      dish_id: dishId,
+      restaurant_id: restaurentId,
+      name: dishname,
+      description: dishdescription,
+      dish_category: dishcategory,
+      dish_type: dishtype,
+      ingredients,
+      price,
+      image_file_path: imageFilePath,
+    } = delDish;
+    const dishdata = {
+      dishId,
+      restaurentId,
+      dishname,
+      dishdescription,
+      imageFilePath,
+      dishcategory,
+      dishtype,
+      ingredients,
+      price,
+      isActive,
+    };
+    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common.authorization = getToken();
+    axios
+      .post(`${backendServer}/ubereats/dishes/updatedish`, dishdata)
+      .then((response) => {
+        console.log("Response for dish update ", response.data);
+        if (this.hasMounted) {
+          this.setState({
+            // updateStatus: response.data.status,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log("Error for dish update ", err.response);
+        if (err.response && err.response.data) {
+          if (this.hasMounted) {
+            this.setState({
+              // updateStatus: err.response.data,
+            });
+          }
+        }
+      });
+  };
+
   render() {
     const { showEdit, showAdd, errormessage, allDishes, currentDish } =
       this.state;
@@ -120,7 +171,9 @@ class MenuUpdate extends Component {
           dishName={dish.name}
           dishDescription={dish.description}
           dishPrice={dish.price}
+          dishImage={dish.image_file_path}
           handleEdit={this.handleEdit}
+          handleDelete={this.handleDelete}
         />
       ));
     }
@@ -138,6 +191,10 @@ class MenuUpdate extends Component {
         </div>
       );
     } else if (showAdd) {
+      const { restaurant_id: restaurantId } = JSON.parse(
+        localStorage.getItem("user")
+      );
+      const newDish = { restaurant_id: restaurantId };
       MenuAddEditComp = (
         <div
           show={showAdd.toString()}
@@ -146,6 +203,7 @@ class MenuUpdate extends Component {
             visibilityCb={this.visibilityAddHandler}
             displayDetails={showAdd}
             actionType='Add Item'
+            currentDish={newDish}
           />
         </div>
       );

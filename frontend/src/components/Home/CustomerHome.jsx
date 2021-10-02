@@ -164,7 +164,6 @@ class CustomerHome extends Component {
   };
 
   render() {
-    // console.log("isUserSignedIn", isUserSignedIn());
 
     let redirectVar = null;
     if (!isUserSignedIn()) {

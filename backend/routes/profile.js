@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const md5 = require("md5");
@@ -109,28 +110,43 @@ router.get("/customer/:user_id", (req, res) => {
 });
 
 router.post("/owner", async (req, res) => {
-  console.log(req.body);
+  console.log("Owner details from Request", req.body);
   const { oldpassword, newpassword } = req.body;
-  const oldhashedPassword = md5(oldpassword);
-  const newhashedPassword = md5(newpassword);
+  const oldhashedPassword = oldpassword ? md5(oldpassword) : undefined;
+  const newhashedPassword = newpassword ? md5(newpassword) : undefined;
   const {
-    id,
-    email,
+    // description,
+    //   restaurant_country,
+    //   restaurnat_address_line_one,
+    //   restaurant_city,
+    //   restaurant_state,
+    //   restaurant_zipcode,
+    //   newpassword,
+    //   phone_num,
+    //   ehour,
+    //   eminute,
+    //   hour,
+    //   minute,
+    //   image_file_path,
+
+    restaurant_id,
+    email_id,
     name,
-    image,
-    phoneNumber,
+    image_file_path,
+    phone_num,
     description,
-    addressline1,
-    city,
-    state,
-    weeks,
-    startTime,
-    endTime,
-    nationalbrand,
-    country,
-    zipcode,
+    restaurant_address_line_one,
+    restaurant_city,
+    restaurant_state,
+    restaurant_country,
+    restaurant_zipcode,
+    restaurant_start_time,
+    restaurant_end_time,
+    restaurant_week_start,
+    restaurant_week_end,
+    national_brand,
   } = req.body;
-  const sql = `CALL restaurant_update(${id},'${name}','${email}','${oldhashedPassword}','${description}','${addressline1}','${city}','${state}','${country}','${zipcode}','${image}','${phoneNumber}','${startTime}','${endTime}','${weeks}','${nationalbrand}');`;
+  const sql = `CALL restaurant_update(${restaurant_id},'${name}','${email_id}','${newhashedPassword}','${description}','${restaurant_address_line_one}','${restaurant_city}','${restaurant_state}','${restaurant_country}','${restaurant_zipcode}','${image_file_path}','${phone_num}','${restaurant_start_time}','${restaurant_end_time}','${restaurant_week_start}','${restaurant_week_end}', '${national_brand}');`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -139,25 +155,33 @@ router.post("/owner", async (req, res) => {
       });
       res.send("Database Connection Error");
     }
-    if (result && result.length > 0) {
-      if (result[0][0].status === "SUCCESS") {
-        const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
-        res.header("x-auth-token", token).send({
-          status: "Customer Updated",
-          user: result[0][0],
-          token,
-        });
-        return;
-      }
-      if (result[0][0].status === "FAILED") {
-        res.status(400).send({ status: "Authentication Failed" });
-      }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
     }
+
+    if (
+      result[0].length > 0 &&
+      result[0][0].status === "RESTAURANT_UPDATE_FAILED"
+    ) {
+      res.status(400).send({ status: "NO_RESTAURANT_ID" });
+      return;
+    }
+
+    res.send({
+      status: "Customer Updated",
+      user: result[0][0],
+    });
   });
 });
 
 router.get("/owner/:restaurant_id", (req, res) => {
-  const sql = `CALL restaurant_get('${req.params.restaurant_id}', NULL);`;
+  const sql = `CALL restaurant_get('${req.params.restaurant_id}', '${req.body.email}');`;
   db.query(sql, (err, result) => {
     if (err) {
       res.writeHead(500, {

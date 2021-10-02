@@ -3,6 +3,7 @@ import {
   OWNER_UPDATE,
   OWNER_SIGNUP_FAILURE,
   OWNER_UPDATE_FAILURE,
+  USER_SIGNIN_SUCCESS,
 } from "../Actions/types";
 
 const intitalState = {
@@ -27,6 +28,11 @@ export default (state = intitalState, action) => {
       };
 
     case OWNER_UPDATE_FAILURE:
+      return {
+        ...state,
+        ownerDetails: action.payload,
+      };
+    case USER_SIGNIN_SUCCESS:
       return {
         ...state,
         ownerDetails: action.payload,

@@ -35,11 +35,13 @@ export const updateOwner = (ownerUpdateData) => async (dispatch) => {
   try {
     axios.defaults.withCredentials = true;
     axios.defaults.headers.common.authorization = getToken();
+    console.log("ownerUpdateData", ownerUpdateData);
     const res = await axios.post(
       `${backendServer}/ubereats/profile/owner`,
       ownerUpdateData
     );
     const response = await res;
+    console.log("ownerUpdateresponse", res);
     dispatch({
       type: OWNER_UPDATE,
       payload: response.data,

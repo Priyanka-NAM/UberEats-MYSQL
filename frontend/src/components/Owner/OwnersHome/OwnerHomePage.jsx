@@ -121,7 +121,7 @@ class OwnerHomePage extends Component {
             newImageData: data,
           });
         });
-        // .write("new_test_rest_image.png");
+     
       }
     );
   }
@@ -167,9 +167,6 @@ class OwnerHomePage extends Component {
   }
 }
 
-// OwnerHomePage.propTypes = {
-//   // eslint-disable-next-line react/forbid-prop-types
-//   location: PropTypes.object.isRequired,
-// };
+
 
 export default OwnerHomePage;

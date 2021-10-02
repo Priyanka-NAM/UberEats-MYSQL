@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row ,Alert} from "react-bootstrap";
 import { Redirect } from "react-dom";
 import axios from "axios";
 import OwnerHome from "../../Home/OwnerHome";
@@ -165,16 +165,7 @@ class CancelledOrders extends Component {
           </Col>
         </Row>
         {errormessage && (
-          <p
-            style={{
-              width: "100%",
-              height: "40%",
-              marginTop: "15px",
-              fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
-            }}
-            className='alert alert-danger'>
-            No Cancelled Orders to display
-          </p>
+          <Alert variant='info'>No Cancelled Orders to display</Alert>
         )}
       </Col>
     );

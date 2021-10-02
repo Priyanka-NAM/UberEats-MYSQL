@@ -1,14 +1,9 @@
-import {
-  USER_SIGNIN_SUCCESS,
-  USER_SIGNIN_FAILURE,
-  USER_SIGNOUT,
-} from "../Actions/types";
+import { USER_SIGNIN_SUCCESS, USER_SIGNIN_FAILURE } from "../Actions/types";
 
 const intitalState = {
   user: {},
   address: {},
   isLoggedin: false,
-  // errMsg: "",
 };
 
 const processAddress = (userdata) => {
@@ -48,13 +43,6 @@ export default (state = intitalState, action) => {
         ...state,
         user: null,
         errMsg: "Username or Password is incorrect",
-      };
-    case USER_SIGNOUT:
-      return {
-        ...state,
-        user: null,
-        isLoggedin: false,
-        errMsg: "",
       };
     default:
       return state;

@@ -152,7 +152,6 @@ class Header extends React.Component {
                   <InputGroup
                     size='lg'
                     style={{ width: "70rem", height: "54.4px" }}>
-                    {/* style={{ width: "70rem", height: "3.5rem" }}> */}
                     <Button variant='light' onClick={this.handleSearchBar}>
                       <FaSearch />
                     </Button>

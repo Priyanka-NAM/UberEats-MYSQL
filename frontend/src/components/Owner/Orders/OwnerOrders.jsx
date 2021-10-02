@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { FaPlus } from "react-icons/fa";
 import axios from "axios";
-import { Col, Dropdown, Form, Button, Row } from "react-bootstrap";
+import { Col, Alert, Form, Button, Row } from "react-bootstrap";
 import OrderCard from "./OrderCard";
 import OwnerHome from "../../Home/OwnerHome";
 import OrdersNav from "./OrdersNav";
@@ -142,7 +142,7 @@ class OwnerOrders extends Component {
             </h4>
             <br />
             {orderComps}
-            {errormessage}
+            {errormessage && <Alert variant='info'>{errormessage}</Alert>}
           </Col>
           <Col xs={5} style={{ padding: "3%" }}>
             <div

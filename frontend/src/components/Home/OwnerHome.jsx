@@ -70,7 +70,6 @@ class OwnerHome extends Component {
                     variant='dark'
                     type='submit'
                     style={{
-                      width: "40%",
                       fontSize: "16px",
                       fontFamily: "sans-serif",
                     }}>
@@ -125,7 +124,6 @@ class OwnerHome extends Component {
                   }}>
                   <Link
                     to='/owner/profile'
-                    eventKey='link-1'
                     style={{
                       color: "black",
                       textDecoration: "none",
@@ -144,7 +142,6 @@ class OwnerHome extends Component {
                   }}>
                   <Link
                     to='/owner/menuupdate'
-                    eventKey='link-1'
                     style={{
                       color: "black",
                       textDecoration: "none",
@@ -163,7 +160,6 @@ class OwnerHome extends Component {
                   }}>
                   <Link
                     to='/owner/orders'
-                    eventKey='link-2'
                     style={{
                       color: "black",
                       fontFamily: "sans-serif",

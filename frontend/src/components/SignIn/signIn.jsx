@@ -8,7 +8,6 @@ import PropTypes from "prop-types";
 import { Container, Col, Row, Form, Button } from "react-bootstrap";
 import { userSignin } from "../../Actions/signinAction";
 import "bootstrap/dist/css/bootstrap.css";
-// import SignInUp from "../Styles/SignInUp";
 import UberELogo from "../Home/HomeIcons/logo";
 
 class SignIn extends Component {
@@ -34,10 +33,10 @@ class SignIn extends Component {
   };
 
   render() {
-    const { errMsg } = this.props;
+    const { errMsg, isLoggedin } = this.props;
     let errorMessage = null;
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
+    if (user && isLoggedin) {
       if (user.is_owner === 1) {
         return <Redirect to='/owner/home' />;
       }
@@ -167,6 +166,7 @@ class SignIn extends Component {
 SignIn.propTypes = {
   userSignin: PropTypes.func.isRequired,
   errMsg: PropTypes.string.isRequired,
+  isLoggedin: PropTypes.bool.isRequired,
 };
 const mapStateToProps = (state) => ({
   isLoggedin: state.signin.isLoggedin,

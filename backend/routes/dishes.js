@@ -44,6 +44,8 @@ router.post("/updatedish", (req, res) => {
 });
 
 router.post("/adddish", (req, res) => {
+  console.log("Request of Add Update ", req);
+  console.log("Request Body of Add Update ", req.body);
   const {
     restaurentId,
     dishname,

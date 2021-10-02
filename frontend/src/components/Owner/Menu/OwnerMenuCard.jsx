@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { MdDelete } from "react-icons/md";
 import { Image } from "react-bootstrap";
 import { PropTypes } from "prop-types";
+import backendServer from "../../../backEndConfig";
 
 class OwnerMenuCard extends Component {
   constructor(props) {
@@ -17,11 +18,18 @@ class OwnerMenuCard extends Component {
     handleEdit(orderIndex);
   };
 
+  clickDelete = () => {
+    const { orderIndex, handleDelete } = this.props;
+    handleDelete(orderIndex);
+  };
+
   render() {
-    const { orderIndex, dishName, dishDescription, dishPrice } = this.props;
+    const { orderIndex, dishName, dishDescription, dishPrice, dishImage } =
+      this.props;
+    const src = `${backendServer}/public/${dishImage}`;
+
     console.log("dishPrice ", dishPrice);
     return (
-      // <div  role='presentation'>
       <div
         className='card mb-3'
         style={{ width: "28rem", margin: "1%" }}
@@ -40,12 +48,22 @@ class OwnerMenuCard extends Component {
             </div>
           </div>
           <div className='col-md-4'>
-            <MdDelete />
-            <Image src='https://images.unsplash.com/photo-1580554530778-ca36943938b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' />
+            <MdDelete
+              onClick={this.clickDelete}
+              size='30'
+              style={{
+                position: "absolute",
+                zIndex: "1000",
+                marginLeft: "24%",
+                color: "grey",
+              }}
+            />
+            <Image src={src} />
+
+            {/* <Image src='https://images.unsplash.com/photo-1580554530778-ca36943938b2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1000&q=80' /> */}
           </div>
         </div>
       </div>
-      // </div>
     );
   }
 }
@@ -54,6 +72,8 @@ OwnerMenuCard.propTypes = {
   orderIndex: PropTypes.number.isRequired,
   dishName: PropTypes.string.isRequired,
   dishPrice: PropTypes.string.isRequired,
+  dishImage: PropTypes.string.isRequired,
   handleEdit: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
 };
 export default OwnerMenuCard;

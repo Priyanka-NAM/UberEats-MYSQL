@@ -35,7 +35,7 @@ function SignInUpNAV() {
             </Nav.Item>
             <Nav.Item
               style={{
-                marginLeft: "250%",
+                marginLeft: "350%",
                 marginRight: "0",
                 paddingRight: "10px",
               }}>
@@ -43,11 +43,11 @@ function SignInUpNAV() {
                 Sign In
               </Button>
             </Nav.Item>
-            <Nav.Item>
+            {/* <Nav.Item>
               <Button active='true' variant='dark' type='submit'>
                 Sign Up
               </Button>
-            </Nav.Item>
+            </Nav.Item> */}
           </Nav>
         </Navbar.Brand>
       </Container>

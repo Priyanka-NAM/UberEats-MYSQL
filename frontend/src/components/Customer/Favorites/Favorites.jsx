@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { BiX } from "react-icons/bi";
 import { getToken } from "../../Service/authService";
 import Header from "../../Home/HomeIcons/Header";
+import RestoCard from "../../Home/HomeIcons/RestoCard";
 
 class Favorites extends Component {
   constructor(props) {
@@ -73,7 +74,10 @@ class Favorites extends Component {
           <Row>
             <h1>Favorites</h1>
           </Row>
-
+          {/* <Row>
+            <RestoCard />
+          </Row> */}
+          {/* 
           <Row style={{ paddingRight: "10%" }}>
             <Card
               style={{
@@ -103,17 +107,6 @@ class Favorites extends Component {
               <Col>
                 {1} item for ${0.0} • Canceled on Sep 13 at 11:29 AM •{" "}
                 {/* <Link href='/'>View receipt</Link> */}
-              </Col>
-              <br />
-              <Col
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "500",
-                }}>
-                {1} Paneer Butter Masala
-              </Col>
-            </Col>
-          </Row>
         </Container>
       </div>
     );

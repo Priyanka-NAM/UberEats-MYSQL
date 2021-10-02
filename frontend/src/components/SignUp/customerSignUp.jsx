@@ -35,9 +35,9 @@ class CustomerSignUp extends React.Component {
 
   render() {
     const { user } = this.props;
-    if (isOwnerSignedIn || isUserSignedIn) {
-      return <Redirect to='/home' />;
-    }
+    // if (isOwnerSignedIn || isUserSignedIn) {
+    //   return <Redirect to='/home' />;
+    // }
     console.log("User from props ", user);
     let errorMessage = "";
 

@@ -166,4 +166,68 @@ router.get("/cancelledorders/restaurant/:restaurant_id", (req, res) => {
   });
 });
 
+router.get("/cancelledorders/customer/:restaurant_id", (req, res) => {
+  const sql = `CALL restaurant_orders_get_status(${req.params.restaurant_id},'Cancelled');`;
+  console.log(sql);
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send("Database Connection Error");
+    }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
+    }
+
+    if (result[0].length > 0 && result[0][0].status === "RESTAURANT_ID_NULL") {
+      res.status(400).send({ status: "NO_RESTAURANT_ID" });
+      return;
+    }
+
+    res.send({
+      status: "CANCELLED_ORDERS",
+      orders: orderProcessing(result[0]),
+    });
+  });
+});
+
+router.get("/cancelledorders/customer/:restaurant_id", (req, res) => {
+  const sql = `CALL restaurant_orders_get_status(${req.params.restaurant_id},'Cancelled');`;
+  console.log(sql);
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send("Database Connection Error");
+    }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
+    }
+
+    if (result[0].length > 0 && result[0][0].status === "RESTAURANT_ID_NULL") {
+      res.status(400).send({ status: "NO_RESTAURANT_ID" });
+      return;
+    }
+
+    res.send({
+      status: "CANCELLED_ORDERS",
+      orders: orderProcessing(result[0]),
+    });
+  });
+});
+
 module.exports = router;

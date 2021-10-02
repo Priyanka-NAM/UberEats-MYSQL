@@ -1,5 +1,6 @@
+/* eslint-disable camelcase */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
@@ -18,26 +19,39 @@ class OwnerProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      country: "",
-      state: "",
-      phoneNumber: "",
-      emailId: "",
-      newpassword: "",
-      addressline1: "",
-      city: "",
-      zipcode: "",
-      hour: "",
-      minute: "",
-      ehour: "",
-      eminute: "",
+      // country: "",
+      // state: "",
+      // phoneNumber: "",
+      // emailId: "",
+      // newpassword: "",
+      // addressline1: "",
+      // city: "",
+      // zipcode: "",
+      // hour: "",
+      // minute: "",
+      // ehour: "",
+      // eminute: "",
     };
-    // this.onStartTimeChange = this.onStartTimeChange.bind(this);
-    // this.onEndTimeChange = this.onEndTimeChange.bind(this);
+    this.onStartTimeChange = this.onStartTimeChange.bind(this);
+    this.onEndTimeChange = this.onEndTimeChange.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.setStateFromProps = this.setStateFromProps.bind(this);
   }
+
+  componentDidMount = () => {
+    const { ownerDetails } = this.props;
+    this.setStateFromProps(this.props);
+  };
+
+  componentDidUpdate = (newprops, prevprops) => {
+    if (newprops.ownerDetails !== prevprops.ownerDetails) {
+      const { ownerDetails } = newprops;
+      this.setStateFromProps(ownerDetails);
+    }
+  };
 
   handleChange = (e) => {
     e.preventDefault();
@@ -49,6 +63,7 @@ class OwnerProfile extends Component {
   handleChangesSubmit = (e) => {
     e.preventDefault();
     const details = { ...this.state };
+    console.log("Details before calling update owner action ", details);
     this.props.updateOwner(details);
   };
 
@@ -73,6 +88,7 @@ class OwnerProfile extends Component {
       .then((response) => {
         this.setState({
           src: `${backendServer}/public/${response.data}`,
+          image_file_path: response.data,
         });
       })
       .catch((err) => {
@@ -80,43 +96,75 @@ class OwnerProfile extends Component {
       });
   }
 
-  // onStartTimeChange(options) {
-  //   const { hour, minute } = options;
+  onStartTimeChange = (options) => {
+    console.log("Start Time Change Handler ", options);
+    const { hour, minute } = options;
 
-  //   this.setState({ hour, minute });
-  // }
+    this.setState({ hour, minute });
+  };
 
-  // onEndTimeChange(options) {
-  //   const { ehour, eminute } = options;
-  //   this.setState({ ehour, eminute });
-  // }
+  onEndTimeChange = (options) => {
+    console.log("End Time Change Handler ", options);
+
+    const { ehour, eminute } = options;
+    this.setState({ ehour, eminute });
+  };
+
+  setStateFromProps = (ownerDetails) => {
+    console.log("Owner details in component did mount ", ownerDetails);
+    let hour;
+    let minute;
+    let ehour;
+    let eminute;
+    const { restaurant_start_time, restaurant_end_time } = ownerDetails;
+    if (restaurant_start_time) {
+      const start_split_times = restaurant_start_time.split(":");
+      [hour, minute] = start_split_times;
+    }
+    if (restaurant_end_time) {
+      const end_split_times = restaurant_end_time.split(":");
+      [ehour, eminute] = end_split_times;
+    }
+    this.setState({
+      ...ownerDetails,
+      hour,
+      minute,
+      ehour,
+      eminute,
+    });
+  };
 
   selectCountry(val) {
-    this.setState({ country: val });
+    this.setState({ restaurant_country: val });
   }
 
   selectRegion(val) {
-    this.setState({ state: val });
+    this.setState({ restaurant_state: val });
   }
 
   render() {
+    console.log("Owner Profile State ", this.state);
     const {
-      country,
-      addressline1,
-      city,
-      state,
-      zipcode,
-      emailId,
-      restaurantname,
+      description,
+      restaurant_country,
+      restaurant_address_line_one,
+      restaurant_city,
+      restaurant_state,
+      restaurant_zipcode,
+      email_id,
+      name,
       newpassword,
-      phoneNumber,
-      ehour,
-      eminute,
-      hour,
-      minute,
-      src,
+      phone_num,
+      restaurant_start_time,
+      restaurant_end_time,
+      // ehour,
+      // eminute,
+      // hour,
+      // minute,
+      image_file_path,
     } = this.state;
 
+    const src = `${backendServer}/public/${image_file_path}`;
     const { updateerrMsg } = this.props;
 
     let errorMessage = "";
@@ -126,9 +174,7 @@ class OwnerProfile extends Component {
     }
     const pageContent = (
       <Col align='left'>
-        <Form
-          onSubmit={this.handleChangesSubmit}
-          style={{ fontSize: "18px", fontFamily: "sans-serif" }}>
+        <Form style={{ fontSize: "18px", fontFamily: "sans-serif" }}>
           <Row style={{ padding: "0px", fontFamily: "sans-serif" }}>
             <Col style={{ marginLeft: "30px" }}>
               <h4>Profile Picture</h4>
@@ -177,10 +223,10 @@ class OwnerProfile extends Component {
                 FieldName='Restaurant Name'
                 nameField='name'
                 typeField='text'
-                valueField={restaurantname}
+                valueField={name}
                 maxLength='32'
                 patternField='^[A-Za-z ]+$'
-                requiredField
+                requiredField='true'
                 changeHandler={this.handleChange}
               />
               <br />
@@ -190,7 +236,13 @@ class OwnerProfile extends Component {
                     <Form.Label>Description</Form.Label>
                   </Col>
                   <Col xs={6}>
-                    <Form.Control name='description' as='textarea' rows={3} />
+                    <Form.Control
+                      name='description'
+                      value={description}
+                      as='textarea'
+                      onChange={this.handleChange}
+                      rows={3}
+                    />
                   </Col>
                 </Row>
               </Form>
@@ -201,20 +253,20 @@ class OwnerProfile extends Component {
                 nameField='emailId'
                 typeField='email'
                 maxLength='32'
-                valueField={emailId}
+                valueField={email_id}
                 patternField={null}
-                requiredField
+                requiredField='true'
                 changeHandler={this.handleChange}
               />
               <br />
               <FormTextBox
                 FieldName='Phone Number'
-                nameField='phoneNumber'
+                nameField='phone_num'
                 typeField='text'
-                valueField={phoneNumber}
+                valueField={phone_num}
                 patternField='^[0-9]+$'
                 maxLength='10'
-                requiredField
+                requiredField='true'
                 changeHandler={this.handleChange}
               />
               <br />
@@ -232,22 +284,22 @@ class OwnerProfile extends Component {
               <h5>Address Info</h5>
               <FormTextBox
                 FieldName='Address Line1'
-                nameField='addressline1'
+                nameField='restaurant_address_line_one'
                 typeField='text'
-                valueField={addressline1}
+                valueField={restaurant_address_line_one}
                 patternField={null}
                 maxLength='32'
-                requiredField
+                requiredField='true'
                 changeHandler={this.handleChange}
               />
               <br />
               <FormTextBox
                 FieldName='City'
-                nameField='city'
+                nameField='restaurant_city'
                 typeField='text'
-                valueField={city}
+                valueField={restaurant_city}
                 patternField={null}
-                requiredField
+                requiredField='true'
                 maxLength='32'
                 changeHandler={this.handleChange}
               />
@@ -266,9 +318,9 @@ class OwnerProfile extends Component {
                       }}
                       disableWhenEmpty
                       whitelist={{ US: ["CA"] }}
-                      country={country}
-                      value={state}
-                      name='state'
+                      country={restaurant_country}
+                      value={restaurant_state}
+                      name='restaurant_state'
                       onChange={(val) => this.selectRegion(val)}
                     />
                   </Col>
@@ -282,14 +334,14 @@ class OwnerProfile extends Component {
                   </Col>
                   <Col xs={6}>
                     <CountryDropdown
-                      name='country'
+                      name='restaurant_country'
                       style={{
                         width: "100%",
                         height: "2.6rem",
                         borderColor: "#eeeee",
                       }}
                       whitelist={["US"]}
-                      value={country}
+                      value={restaurant_country}
                       onChange={(val) => this.selectCountry(val)}
                     />
                   </Col>
@@ -298,47 +350,69 @@ class OwnerProfile extends Component {
               <br />
               <FormTextBox
                 FieldName='Zip Code'
-                nameField='zipcode'
+                nameField='restaurant_zipcode'
                 typeField='number'
-                valueField={zipcode}
+                valueField={restaurant_zipcode}
                 maxLength='32'
                 patternField='^[0-9]+$'
-                requiredField
+                requiredField='true'
                 changeHandler={this.handleChange}
               />
               <br />
               <h4>Restaurant Timings</h4>
-              <Form>
+              <FormTextBox
+                FieldName='Restaurant Start Time'
+                nameField='restaurant_start_time'
+                typeField='text'
+                valueField={restaurant_start_time}
+                patternField={null}
+                maxLength='10'
+                requiredField='true'
+                changeHandler={this.handleChange}
+              />
+              {/* <Form>
                 <Row>
                   <Col xs={2}>
                     <Form.Label>Start Time</Form.Label>
                   </Col>
                   <Col xs={6}>
-                    <TimePicker
+                   
+                     <TimePicker
                       theme='classic'
                       name='starttime'
                       onTimeChange={this.onStartTimeChange}
                       time={hour && minute ? `${hour}:${minute}` : null}
-                    />
+                    /> 
                   </Col>
                 </Row>
-              </Form>
+              </Form> */}
               <br />
-              <Form>
+              <FormTextBox
+                FieldName='Restaurant End Time'
+                nameField='restaurant_end_time'
+                typeField='text'
+                valueField={restaurant_end_time}
+                maxLength='10'
+                patternField={null}
+                requiredField='true'
+                changeHandler={this.handleChange}
+              />
+              {/* <Form>
                 <Row>
                   <Col xs={2}>
                     <Form.Label>End Time</Form.Label>
                   </Col>
                   <Col xs={6}>
+                    
                     <TimePicker
                       name='endtime'
                       theme='classic'
                       onTimeChange={this.onEndTimeChange}
                       time={ehour && eminute ? `${ehour}:${eminute}` : null}
-                    />
+                    /> 
                   </Col>
                 </Row>
-              </Form>
+              </Form> */}
               <br />
               <h4>Working Days</h4>
               <Form>
@@ -399,7 +473,7 @@ class OwnerProfile extends Component {
               <Form>
                 <Row>
                   <Col>
-                    <Button variant='dark' type='submit'>
+                    <Button variant='dark' onClick={this.handleChangesSubmit}>
                       Save Changes
                     </Button>
                   </Col>
@@ -417,10 +491,12 @@ class OwnerProfile extends Component {
 OwnerProfile.propTypes = {
   updateOwner: PropTypes.func.isRequired,
   updateerrMsg: PropTypes.string.isRequired,
+  ownerDetails: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   errMsg: state.customer.errMsg,
+  ownerDetails: state.owner.ownerDetails.user,
 });
 
 export default connect(mapStateToProps, { updateOwner })(OwnerProfile);

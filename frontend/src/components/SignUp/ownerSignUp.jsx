@@ -35,9 +35,9 @@ class OwnerSignUp extends Component {
 
   render() {
     const { owner } = this.props;
-    if (isOwnerSignedIn || isUserSignedIn) {
-      return <Redirect to='/home' />;
-    }
+    // if (isOwnerSignedIn || isUserSignedIn) {
+    //   return <Redirect to='/home' />;
+    // }
     let errorMessage = "";
     const currentOwner = JSON.parse(localStorage.getItem("user"));
     if (currentOwner) {

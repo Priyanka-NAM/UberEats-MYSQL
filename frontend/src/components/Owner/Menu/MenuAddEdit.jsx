@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { PropTypes } from "prop-types";
 import axios from "axios";
-import { Button, Form, Col, Image, Alert, Row, Card } from "react-bootstrap";
+import { Button, Form, Col, Alert, Row, Card } from "react-bootstrap";
 import backendServer from "../../../backEndConfig";
 import { getToken } from "../../Service/authService";
 
@@ -118,12 +118,7 @@ class MenuAddEdit extends Component {
       isActive,
     };
     console.log("Before the update dish call ");
-    // const uploadConfig = {
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //     authorization: getToken(),
-    //   },
-    // };
+
     axios.defaults.withCredentials = true;
     axios.defaults.headers.common.authorization = getToken();
     axios
@@ -225,20 +220,6 @@ class MenuAddEdit extends Component {
 
   render() {
     const { displayDetails, actionType, currentDish } = this.props;
-    // let name = "";
-    // let description = "";
-    // let ingredients = "";
-    // let price = "";
-    // let category = "";
-    // let dishType = "";
-    // if (currentDish) {
-    //   name = currentDish.name;
-    //   description = currentDish.description;
-    //   ingredients = currentDish.ingredients;
-    //   //   price = currentDish.price;
-    //   //   category = currentDish.category;
-    //   dishType = currentDish.dish_type;
-    // }
     console.log("state inside render of menu add edit ", this.state);
     const {
       dishname: name,
@@ -251,10 +232,7 @@ class MenuAddEdit extends Component {
       updateStatus,
     } = this.state;
     const src = `${backendServer}/public/${imageFilePath}`;
-    // const {
-    //   updateStatus,
-    //   src
-    // } = this.state;
+
     let alertmessage = null;
     if (updateStatus === "DISH_UPDATE_SUCCESS") {
       alertmessage = <Alert variant='success'>Dish is updated.</Alert>;
@@ -263,8 +241,6 @@ class MenuAddEdit extends Component {
     }
     return (
       <div>
-        {/* show={displayDetails}
-        style={{ display: displayDetails ? "block" : "none" }}> */}
         <h4
           style={{
             fontSize: "28px",
@@ -280,9 +256,7 @@ class MenuAddEdit extends Component {
             marginTop: "25px",
             fontFamily: "sans-serif",
             fontSize: "18px",
-          }}
-          //   onSubmit={this.handleSubmit}
-        >
+          }}>
           <Button
             style={{
               marginLeft: "70%",
@@ -293,7 +267,6 @@ class MenuAddEdit extends Component {
               fontSize: "18px",
             }}
             variant='dark'
-            // type='submit'
             onClick={this.handleSubmit}>
             Save
           </Button>
@@ -328,19 +301,12 @@ class MenuAddEdit extends Component {
                 <Form.Label>Picture</Form.Label>
                 <Card style={{ width: "16rem", height: "12rem" }}>
                   <div style={{ width: "16rem", height: "8rem" }}>
-                    {/* <Avatar
-                        width={390}
-                        height={295}
-                        onCrop={this.onCrop}
-                        onClose={this.onClose}
-                        src={this.state.src}
-                      /> */}
-
                     <img src={src} alt='Preview' />
                   </div>
                   <input
                     type='file'
                     name='image'
+                    required
                     encType='multipart/form-data'
                     className='form-control'
                     style={{ display: "none" }}
@@ -366,38 +332,6 @@ class MenuAddEdit extends Component {
                     </Button>
                   </Card.Footer>
                 </Card>
-                {/* <Form
-                  name='image'
-                  style={{
-                    height: "100%",
-                  }}>
-                  <div
-                    style={{
-                      height: "90%",
-                      width: "100%",
-                      border: "2px dashed black",
-                      backgroundColor: "#eeee",
-                    }}
-                    role='presentation'
-                    onClick={() => this.fileInput.click()}>
-                    <h6>Add Image</h6>
-                    <input
-                      type='file'
-                      style={{
-                        height: "90%",
-                        width: "100%",
-                        opacity: "10",
-                        position: "absolute",
-                        display: "none",
-                      }}
-                      // eslint-disable-next-line no-return-assign
-                      ref={(fileInput) => (this.fileInput = fileInput)}
-                      rows={5}
-                      //   onClick={this.handleUploadImage}
-                      //   src={src}
-                    />
-                  </div>
-                </Form> */}
               </Col>
             </Row>
           </Form.Group>
@@ -405,7 +339,6 @@ class MenuAddEdit extends Component {
           <Row>
             <Col>
               <Form.Label>Catergories</Form.Label>
-
               <Form.Select
                 name='dishcategory'
                 style={{
@@ -442,13 +375,11 @@ class MenuAddEdit extends Component {
               <br />
             </Col>
           </Row>
-          <Form.Group
-            className='mb-3'
-            required
-            controlId='exampleForm.ControlInput1'>
+          <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
             <Form.Label>Main Ingredients</Form.Label>
             <Form.Control
               type='name'
+              required
               name='ingredients'
               value={ingredients}
               placeholder=''
@@ -456,7 +387,6 @@ class MenuAddEdit extends Component {
               style={{ backgroundColor: "#eeee" }}
             />
           </Form.Group>
-          {/* <Form> */}
           <Form.Group as={Row} className='mb-3' controlId='formHorizontalEmail'>
             <Form.Label column sm={8}>
               Price
@@ -473,7 +403,6 @@ class MenuAddEdit extends Component {
               />
             </Col>
           </Form.Group>
-          {/* </Form> */}
           {alertmessage}
         </Form>
       </div>
@@ -484,16 +413,8 @@ class MenuAddEdit extends Component {
 export default MenuAddEdit;
 
 MenuAddEdit.propTypes = {
-  //   IsDeliveredimage: PropTypes.bool.isRequired,
-  //   orderId: PropTypes.number.isRequired,
-  //   name: PropTypes.string.isRequired,
-  //   subTotal: PropTypes.number.isRequired,
-  //   orderTotal: PropTypes.number.isRequired,
-  //   tax: PropTypes.number.isRequired,
   displayDetails: PropTypes.bool.isRequired,
   actionType: PropTypes.string.isRequired,
   visibilityCb: PropTypes.func.isRequired,
   currentDish: PropTypes.object.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  //   dishes: PropTypes.object.isRequired,
 };
