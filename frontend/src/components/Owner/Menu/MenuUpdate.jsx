@@ -112,11 +112,18 @@ class MenuUpdate extends Component {
     this.props.ownerMenuUpdate(dishdata);
   };
 
-  createMenuCardComps = (dishes) =>
-    dishes.map((dish, index) => (
+  createMenuCardComps = (dishes) => {
+    const { allDishes } = this.state;
+    const allDishIndexes = [];
+    for (let idx = 0; idx < dishes.length; idx += 1) {
+      allDishIndexes.push(
+        allDishes.findIndex((dish) => dish.dish_id === dishes[idx].dish_id)
+      );
+    }
+    return dishes.map((dish, index) => (
       <OwnerMenuCard
         key={index}
-        orderIndex={index}
+        orderIndex={allDishIndexes[index]}
         dishName={dish.name}
         dishDescription={dish.description}
         dishPrice={dish.price}
@@ -125,6 +132,7 @@ class MenuUpdate extends Component {
         handleDelete={this.handleDelete}
       />
     ));
+  };
 
   render() {
     const { showEdit, showAdd, errormessage, allDishes, currentDish } =
