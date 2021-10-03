@@ -3,10 +3,13 @@ import {
   CUSTOMER_SIGNUP_FAILURE,
   CUSTOMER_UPDATE,
   CUSTOMER_UPDATE_FAILURE,
+  CUSTOMER_ORDER,
+  CUSTOMER_ORDER_FAILURE,
 } from "../Actions/types";
 
 const intitalState = {
   user: {},
+  orders: {},
 };
 
 export default (state = intitalState, action) => {
@@ -30,6 +33,16 @@ export default (state = intitalState, action) => {
       return {
         ...state,
         user: action.payload,
+      };
+    case CUSTOMER_ORDER:
+      return {
+        ...state,
+        orders: action.payload,
+      };
+    case CUSTOMER_ORDER_FAILURE:
+      return {
+        ...state,
+        orders: action.payload,
       };
     default:
       return state;

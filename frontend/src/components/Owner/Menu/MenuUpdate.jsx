@@ -167,19 +167,6 @@ class MenuUpdate extends Component {
       dessertsComp = this.createMenuCardComps(desserts);
       beveragesComp = this.createMenuCardComps(beverages);
       otherComp = this.createMenuCardComps(other);
-
-      // orderComps = allDishes.map((dish, index) => (
-      //   <OwnerMenuCard
-      //     key={index}
-      //     orderIndex={index}
-      //     dishName={dish.name}
-      //     dishDescription={dish.description}
-      //     dishPrice={dish.price}
-      //     dishImage={dish.image_file_path}
-      //     handleEdit={this.handleEdit}
-      //     handleDelete={this.handleDelete}
-      //   />
-      // ));
     }
     if (showEdit) {
       MenuAddEditComp = (

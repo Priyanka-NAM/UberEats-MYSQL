@@ -18,41 +18,6 @@ class DeliveredOrders extends Component {
     this.state = {};
   }
 
-  // componentDidMount() {
-  //   this.hasMounted = true;
-
-  //   const { restaurant_id: restaurantId } = JSON.parse(
-  //     localStorage.getItem("user")
-  //   );
-
-  //   console.log(" restaurantId: ", restaurantId);
-  //   if (!restaurantId) return;
-  //   axios.defaults.headers.common.authorization = getToken();
-  //   axios
-  //     // .get(
-  //     //   `http://localhost:5000/ubereats/orders/neworders/restaurant/${restaurantId}`
-  //     // )
-  //     .get(`http://localhost:5000/ubereats/orders/completedorders/restaurant/2`)
-  //     .then((response) => {
-  //       console.log("Response: ", JSON.stringify(response.data));
-
-  //       if (response.data.status === "COMPLETED_ORDERS") {
-  //         if (this.hasMounted) {
-  //           this.setState({
-  //             deliveredOrders: response.data.orders,
-  //           });
-  //         }
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       if (error.response && error.response.data) {
-  //         this.setState({
-  //           errormessage: "Orders Could not be Fetched",
-  //         });
-  //       }
-  //     });
-  // }
-
   componentDidMount() {
     this.props.ownerDeliveredOrders();
   }

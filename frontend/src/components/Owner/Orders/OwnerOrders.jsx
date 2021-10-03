@@ -276,8 +276,6 @@ class OwnerOrders extends Component {
   }
 }
 
-// export default OwnerOrders;
-
 OwnerOrders.propTypes = {
   newOrders: PropTypes.object.isRequired,
   ownerNewOrders: PropTypes.func.isRequired,

@@ -59,29 +59,6 @@ class MenuAddEdit extends Component {
     };
 
     this.props.ownerMenuAdd(dishdata);
-    console.log("Before the add dish call ");
-    // axios.defaults.withCredentials = true;
-    // axios.defaults.headers.common.authorization = getToken();
-    // axios
-    //   .post(`${backendServer}/ubereats/dishes/adddish`, dishdata)
-    //   .then((response) => {
-    //     console.log("Response for dish add ", response.data);
-    //     if (this.hasMounted) {
-    //       this.setState({
-    //         updateStatus: response.data.status,
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log("Error for dish add ", err.response);
-    //     if (err.response && err.response.data) {
-    //       if (this.hasMounted) {
-    //         this.setState({
-    //           updateStatus: err.response.data,
-    //         });
-    //       }
-    //     }
-    //   });
     visibilityCb();
   };
 
@@ -415,7 +392,7 @@ MenuAddEdit.propTypes = {
   visibilityCb: PropTypes.func.isRequired,
   currentDish: PropTypes.object.isRequired,
   ownerMenuAdd: PropTypes.func.isRequired,
-  ownerMenuUpdate:PropTypes.func.isRequired,
+  ownerMenuUpdate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({});
