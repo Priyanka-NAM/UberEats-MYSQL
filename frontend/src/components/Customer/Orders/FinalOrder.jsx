@@ -58,7 +58,7 @@ class FinalOrder extends Component {
     const cadriverbenefit = 2.0;
     let ordertotal = 0;
     if (cartItems) {
-      cartRows = cartItems.map((cartitem) => {
+      cartRows = cartItems.map((cartitem, index) => {
         totalCartValue += cartitem.price;
         ordertotal = totalCartValue + deliveryfee + cadriverbenefit;
         return 0;
@@ -103,7 +103,7 @@ class FinalOrder extends Component {
     let ordertotal = 0;
     let taxTotal = 0;
     if (cartItems) {
-      cartRows = cartItems.map((cartitem) => {
+      cartRows = cartItems.map((cartitem, index) => {
         totalCartValue += cartitem.price;
         ordertotal = totalCartValue + deliveryfee + cadriverbenefit;
         return (

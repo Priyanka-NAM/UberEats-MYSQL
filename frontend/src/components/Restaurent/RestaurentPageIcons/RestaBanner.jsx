@@ -39,7 +39,9 @@ function RestaBanner({
           {restaTitle} {restaAddress}
         </h1>
         <div>
-          <h6>{otherDetails}</h6>
+          <h6 style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
+            {otherDetails}
+          </h6>
         </div>
       </div>
       <div className='resta-details'>

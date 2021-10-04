@@ -27,11 +27,11 @@ class RestaurentHome extends Component {
     axios.defaults.headers.common.authorization = getToken();
     axios
       .get(
-        `http://localhost:5000/ubereats/customerrestaurant/restaurantdetails/${restaurant_id}`
+        `${backendServer}/ubereats/customerrestaurant/restaurantdetails/${restaurant_id}`
       )
       .then((response) => {
         if (response.data) {
-          if (response.data.status !== "Request Successful") {
+          if (response.data.status !== "RESTAURANT_DETAILS") {
             this.setState({
               restaurentDetails: [],
             });
@@ -49,8 +49,8 @@ class RestaurentHome extends Component {
         }
       });
     axios
-      // .get(`http://localhost:5000/ubereats/dishes/alldishes/${restaurant_id}`)
-      .get(`http://localhost:5000/ubereats/dishes/alldishes/35`)
+      // .get(`${backendServer}/ubereats/dishes/alldishes/${restaurant_id}`)
+      .get(`${backendServer}/ubereats/dishes/alldishes/35`)
       .then((response) => {
         if (response.data) {
           if (response.data.status !== "ALL_DISHES") {
@@ -78,6 +78,7 @@ class RestaurentHome extends Component {
     const { currentLocation, userLocation } = this.props;
     let restaurentMenu = null;
     let restaurentBanner = null;
+    console.log("src src src", restaurentDetails);
     if (dishesList && restaurentDetails) {
       restaurentMenu = dishesList.map((dish) => (
         <MenuCard
@@ -94,21 +95,21 @@ class RestaurentHome extends Component {
       ));
     }
     if (restaurentDetails) {
-      restaurentBanner = restaurentDetails.map((eachrestaDetails) => {
-        const src = `${backendServer}/public/${eachrestaDetails.image_file_path}`;
-        return (
-          <RestaBanner
-            key={eachrestaDetails.restaurant_id}
-            src={src}
-            restaTitle={eachrestaDetails.name}
-            restaAddress={eachrestaDetails.restaurant_address_line_one}
-            isOwnerHome={false}
-            otherDetails='fsdfnbsjfkdgnjkf'
-            restauDescri={eachrestaDetails.description}
-          />
-        );
-      });
+      const src = `${backendServer}/public/${restaurentDetails.image_file_path}`;
+      restaurentBanner = (
+        <RestaBanner
+          key={restaurentDetails.restaurant_id}
+          src={src}
+          restaTitle={restaurentDetails.name}
+          restaAddress={restaurentDetails.restaurant_city}
+          isOwnerHome={false}
+          otherDetails='$5.00 Delivery Fee •   35
+          - 45 • min •  4.5'
+          restauDescri={restaurentDetails.description}
+        />
+      );
     }
+
     return (
       <>
         <Header
