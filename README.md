@@ -1,2 +1,2 @@
 # UberEats
-  # Prototype of UberEats application
+  ## Prototype of UberEats application
