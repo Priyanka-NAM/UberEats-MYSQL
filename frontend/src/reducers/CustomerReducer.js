@@ -8,13 +8,21 @@ import {
   USER_SIGNIN_SUCCESS,
   CUSTOMER_NEWORDER,
   CUSTOMER_NEWORDER_FAILURE,
+  CUSTOMER_FAVORITES,
+  CUSTOMER_FAVORITES_FAILURE,
+  UPDATE_FAV,
+  UPDATE_FAV_FAILURE,
 } from "../Actions/types";
 
 const intitalState = {
   customerDetails: {},
   orders: {},
   neworder: {},
+  fav: {},
 };
+
+const filterDeletedFavs = (favs, favId) =>
+  favs.filter((fav) => fav.favorite_id !== favId);
 
 export default (state = intitalState, action) => {
   switch (action.type) {
@@ -65,6 +73,25 @@ export default (state = intitalState, action) => {
       return {
         ...state,
         neworder: action.payload,
+      };
+    case CUSTOMER_FAVORITES:
+      return {
+        ...state,
+        fav: action.payload,
+      };
+    case CUSTOMER_FAVORITES_FAILURE:
+      return {
+        ...state,
+        fav: action.payload,
+      };
+    case UPDATE_FAV:
+      return {
+        ...state,
+        fav: filterDeletedFavs(state.fav, action.payload.favId),
+      };
+    case UPDATE_FAV_FAILURE:
+      return {
+        ...state,
       };
     default:
       return state;

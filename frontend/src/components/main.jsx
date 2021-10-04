@@ -1,12 +1,10 @@
 import React, { Fragment, Component } from "react";
 import { Route } from "react-router-dom";
-// import OwnerHome from "./Home/OwnerHome";
 import OwnerSignUp from "./SignUp/OwnerSignUp";
 import CustomerSignUp from "./SignUp/CustomerSignUp";
 import CustomerHome from "./Home/CustomerHome";
 import SignIn from "./SignIn/signIn";
 import RestaurentHome from "./Restaurent/CustomerRestaurentHome";
-// import Rough from "./Restaurent/rough";
 import LandingPage from "./LandingPage/LandingPage";
 import FinalOrder from "./Customer/Orders/FinalOrder";
 import CustomerOrders from "./Customer/Orders/CustomerOrders";
@@ -35,7 +33,6 @@ class Main extends Component {
           <Route path='/customer/signup' component={CustomerSignUp} />
           <Route path='/owner/signup' component={OwnerSignUp} />
           <Route path='/restaurents' component={RestaurentHome} />
-          {/* <Route path='/rough' component={Rough} /> */}
           <Route path='/customer/home' component={CustomerHome} />
           <Route path='/order/checkout' component={FinalOrder} />
           <Route path='/customerorder' component={CustomerOrders} />

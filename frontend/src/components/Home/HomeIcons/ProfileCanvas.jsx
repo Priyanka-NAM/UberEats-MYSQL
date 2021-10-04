@@ -7,7 +7,7 @@ import { OffCanvas, OffCanvasMenu } from "react-offcanvas";
 import { FaUserCircle, FaHeart } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { BiX } from "react-icons/bi";
-import { userSignOut } from "../../../Actions/signinAction";
+import { userSignOut } from "../../../Actions/SignInAction";
 import "../../Styles/Header.css";
 
 class ProfileCanvas extends Component {

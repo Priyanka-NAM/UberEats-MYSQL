@@ -1,71 +1,50 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
-import { Container, Col, Button, Card, Row, Modal } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
-import axios from "axios";
-import { FaRegHeart } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import { BiX } from "react-icons/bi";
-import { getToken } from "../../Service/authService";
+import { connect } from "react-redux";
+// import { FaRegHeart } from "react-icons/fa";
+// import { Link } from "react-router-dom";
+// import { BiX } from "react-icons/bi";
 import Header from "../../Home/HomeIcons/Header";
+import { customerFav } from "../../../Actions/CustomerActions";
+
 import RestoCard from "../../Home/HomeIcons/RestoCard";
 
 class Favorites extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      //   allRestaurents: [],
-    };
+    this.state = {};
   }
 
   componentDidMount() {
-    this.hasMounted = true;
-    axios.defaults.headers.common.authorization = getToken();
-    // axios
-    //   .get(
-    //     "http://localhost:5000/ubereats/customerrestaurant/restaurantsearch/_"
-    //   )
-    //   .then((response) => {
-    //     if (response.data) {
-    //       if (response.data.status === "Sending Filtered Resaturants") {
-    //         if (this.hasMounted) {
-    //           this.setState({
-    //             allRestaurents: [],
-    //           });
-    //         }
-    //       } else if (this.hasMounted) {
-    //         this.setState({
-    //           allRestaurents: response.data.restaurentsinfo.restaurants,
-    //         });
-    //       }
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     if (error.response && error.response.data) {
-    //       console.log("Restaurant Get Error", error.response.data);
-    //     }
-    //   });
+    this.props.customerFav();
   }
 
-  render() {
-    // const { allRestaurents } = this.state;
+  handleRestaPageRedirect = (restaurant) => {
+    console.log("handleRestaPageRedirect: ", restaurant);
+  };
 
-    // let favorites = null;
-    // favoriteRestos = deliveryBasedFilteredSet.filter(
-    //   (restaurant) => restaurant.isFavorite
+  render() {
+    const { fav } = this.props;
+    // const { allRestaurents } = this.state;
+    console.log("fav", fav);
+    let favorites = null;
+    // const favoriteRestos = fav.filter(
+    //   (eachFavResta) => eachFavResta.isFavorite === ""
     // );
-    // if (allRestaurents) {
-    //   favorites = allRestaurents.map((restaurant) => {
-    //     console.log("Inside Favorite Brands, ", allRestaurents.length);
-    //     return (
-    //       <RestoCard
-    //         key={restaurant.restaurant_id}
-    //         RestaRedirect={this.handleRestaPageRedirect}
-    //         restaurant={restaurant}
-    //         isLiked
-    //       />
-    //     );
-    //   });
-    // }
+    if (fav) {
+      favorites = fav.map((favrestaurant, index) => (
+        <RestoCard
+          key={index}
+          RestaRedirect={this.handleRestaPageRedirect}
+          restaurant={favrestaurant}
+          isLiked
+        />
+      ));
+    }
 
     return (
       <div style={{ marginLeft: "1%", overflow: "hidden" }}>
@@ -74,43 +53,20 @@ class Favorites extends Component {
           <Row>
             <h1>Favorites</h1>
           </Row>
-          {/* <Row>
-            <RestoCard />
-          </Row> */}
-          {/* 
-          <Row style={{ paddingRight: "10%" }}>
-            <Card
-              style={{
-                width: "22rem",
-                paddingLeft: "0px",
-              }}>
-              <Card.Img
-                style={{
-                  objectFit: "cover",
-                  width: "auto",
-                  height: "11rem",
-                }}
-                src='https://cn-geo1.uber.com/image-proc/resize/eats/format=webp/width=550/height=440/quality=70/srcb64=aHR0cHM6Ly9kMXJhbHNvZ25qbmczNy5jbG91ZGZyb250Lm5ldC8xNGQ2NTM4Yi00YjI2LTQxNzQtYTc1YS1hMDNjYzA2ZGUzMzUuanBlZw=='
-              />
-            </Card>
-            <Col
-              style={{
-                fontFamily: "UberMoveText, sans-serif",
-              }}>
-              <Col
-                style={{
-                  fontSize: "25px",
-                  fontWeight: "500",
-                }}>
-                Himalayan Kitchen - Mountain View
-              </Col>
-              <Col>
-                {1} item for ${0.0} • Canceled on Sep 13 at 11:29 AM •{" "}
-                {/* <Link href='/'>View receipt</Link> */}
+          <Row>{favorites}</Row>
         </Container>
       </div>
     );
   }
 }
 
-export default Favorites;
+Favorites.propTypes = {
+  customerFav: PropTypes.func.isRequired,
+  fav: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  fav: state.customer.fav.favRestaurants,
+});
+
+export default connect(mapStateToProps, { customerFav })(Favorites);

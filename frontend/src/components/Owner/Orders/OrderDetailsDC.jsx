@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { Col, Row } from "react-bootstrap";
 import { PropTypes } from "prop-types";
-import delivered from "../../Svg/delivered.jpg";
-import cancelled from "../../Svg/cancelled.jpg";
+import delivered from "../../SVG/delivered.jpg";
+import cancelled from "../../SVG/cancelled.jpg";
 
 class OrderDetailsDC extends Component {
   constructor(props) {

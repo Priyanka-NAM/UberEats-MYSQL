@@ -1,12 +1,16 @@
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import "@fortawesome/fontawesome-free/css/fontawesome.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import "../../Styles/SideBar.css";
 import "../../Styles/Card.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Card } from "react-bootstrap";
+import backendServer from "../../../backEndConfig";
+import { updateFav } from "../../../Actions/CustomerActions";
 
 const FavButton = {
   position: "absolute",
@@ -29,6 +33,7 @@ class RestoCard extends Component {
       isFav: props.isLiked,
       liked: favInitClass,
     };
+    console.log("Inside Resto Card ", this.props.restaurant);
   }
 
   handleIncrement = () => {
@@ -52,6 +57,12 @@ class RestoCard extends Component {
         isFav: false,
       });
     }
+    // eslint-disable-next-line no-unneeded-ternary
+    const newisFav = isFav ? false : true;
+    const { restaurant } = this.props;
+    const restaurantId = restaurant.restaurant_id;
+    const updateFavInput = { restaurantId, newisFav };
+    this.props.updateFav(updateFavInput);
   };
 
   handleRestaPage = (e) => {
@@ -63,6 +74,8 @@ class RestoCard extends Component {
     const { restaurant } = this.props;
 
     const { liked } = this.state;
+    const srcModified = `${backendServer}/public/${restaurant.image_file_path}`;
+
     return (
       <>
         <Card
@@ -79,7 +92,7 @@ class RestoCard extends Component {
                 objectFit: "cover",
                 width: "23rem",
               }}
-              src={restaurant.imageurl}
+              src={srcModified}
               alt=''
             />
           </Link>
@@ -97,11 +110,11 @@ class RestoCard extends Component {
             }}>
             <div className='resta-info'>
               <h2 className='restar-name'>
-                {restaurant.title}
-                <span>({restaurant.address})</span>
+                {restaurant.name}
+                <span>({restaurant.restaurant_city})</span>
               </h2>
               <h4 className='resta-descr'>
-                <span style={{ color: "black" }}>$0.49 Delivery Fee • </span>35
+                <span style={{ color: "black" }}>$5.00 Delivery Fee • </span>35
                 - 45 • min
               </h4>
             </div>
@@ -132,6 +145,9 @@ RestoCard.propTypes = {
   restaurant: PropTypes.object.isRequired,
   isLiked: PropTypes.bool.isRequired,
   RestaRedirect: PropTypes.func.isRequired,
+  updateFav: PropTypes.func.isRequired,
 };
 
-export default RestoCard;
+const mapStateToProps = (state) => ({});
+
+export default connect(mapStateToProps, { updateFav })(RestoCard);

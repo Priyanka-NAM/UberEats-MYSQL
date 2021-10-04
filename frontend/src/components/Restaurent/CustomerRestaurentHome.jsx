@@ -6,11 +6,11 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { getToken } from "../Service/authService";
-
 import Header from "../Home/HomeIcons/Header";
 import RestaBanner from "./RestaurentPageIcons/RestaBanner";
 import "../Styles/Home.css";
 import MenuCard from "./RestaurentPageIcons/MenuCard";
+import backendServer from "../../backEndConfig";
 
 class RestaurentHome extends Component {
   constructor(props) {
@@ -85,7 +85,7 @@ class RestaurentHome extends Component {
           src={dish.image_file_path}
           title={dish.name}
           price={dish.price}
-          currentRestaurantName={restaurentDetails[0].title}
+          currentRestaurantName={restaurentDetails.name}
           isOwnerHome={false}
           description={dish.description}
           dishDetails={dish}
@@ -94,18 +94,20 @@ class RestaurentHome extends Component {
       ));
     }
     if (restaurentDetails) {
-      console.log("restadetails", restaurentDetails);
-      restaurentBanner = restaurentDetails.map((eachrestaDetails) => (
-        <RestaBanner
-          key={eachrestaDetails.restaurant_id}
-          src={eachrestaDetails.imageurl}
-          restaTitle={eachrestaDetails.title}
-          restaAddress={eachrestaDetails.address}
-          isOwnerHome={false}
-          otherDetails='fsdfnbsjfkdgnjkf'
-          restauDescri='One of the most popular items on the menu among Uber Eats users is the Chicken Wings and the Quarter Pound Big Bite and the Steak & Cheese Taquito are two of the items most commonly ordered together at this late night go-to. • $ • Convenience • Everyday Essentials • Grocery • Snacks • Home & Personal Care'
-        />
-      ));
+      restaurentBanner = restaurentDetails.map((eachrestaDetails) => {
+        const src = `${backendServer}/public/${eachrestaDetails.image_file_path}`;
+        return (
+          <RestaBanner
+            key={eachrestaDetails.restaurant_id}
+            src={src}
+            restaTitle={eachrestaDetails.name}
+            restaAddress={eachrestaDetails.restaurant_address_line_one}
+            isOwnerHome={false}
+            otherDetails='fsdfnbsjfkdgnjkf'
+            restauDescri={eachrestaDetails.description}
+          />
+        );
+      });
     }
     return (
       <>

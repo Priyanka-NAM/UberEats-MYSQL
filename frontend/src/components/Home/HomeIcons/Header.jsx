@@ -45,7 +45,7 @@ class Header extends React.Component {
   handleDeliveryPickup = (e) => {
     e.preventDefault();
     const { restoSearch } = this.props;
-    if (e.target.name === "delivery") {
+    if (e.target.name === "Delivery") {
       this.setState({
         deliverystyle: mainstyle.DpActiveButton,
         pickupstyle: mainstyle.DPButton,
@@ -119,14 +119,14 @@ class Header extends React.Component {
                   <Button
                     style={deliverystyle}
                     variant='light'
-                    name='delivery'
+                    name='Delivery'
                     onClick={this.handleDeliveryPickup}>
                     Delivery
                   </Button>
                   <Button
                     style={pickupstyle}
                     variant='light'
-                    name='pickup'
+                    name='Pickup'
                     onClick={this.handleDeliveryPickup}>
                     Pickup
                   </Button>

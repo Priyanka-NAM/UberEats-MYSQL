@@ -14,9 +14,7 @@ import {
   Form,
   Alert,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { BiX } from "react-icons/bi";
-import moment from "moment";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { customerOrders } from "../../../Actions/CustomerActions";
@@ -211,14 +209,6 @@ class CustomerOrders extends Component {
                 {/* <Link href='/'>View receipt</Link> */}
               </Col>
               <br />
-              {/* {dishComps} */}
-              {/* <Col
-                style={{
-                  fontSize: "18px",
-                  fontWeight: "500",
-                }}>
-                {1} Paneer Butter Masala
-              </Col> */}
             </Col>
             <Col align='right'>
               <Button
@@ -251,7 +241,7 @@ class CustomerOrders extends Component {
     if (!orderComps || orderComps.length === 0) {
       orderComps = (
         <Alert variant='info' style={{ fontFamily: "sans-serif" }}>
-          No Orders found with this selection{" "}
+          No Orders found with this selection
         </Alert>
       );
     }

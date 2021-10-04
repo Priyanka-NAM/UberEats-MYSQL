@@ -292,15 +292,15 @@ router.get("/restaurantsearch/:search_input", (req, res) => {
 //   });
 // });
 
-router.get("/restaurantdetails/:restaurent_id", (req, res) => {
-  const restaurentDetails = restoList.filter(
-    (restaurant) => restaurant.restaurant_id === req.params.restaurent_id
-  );
-  res.send({
-    status: "Request Successful",
-    restaurentDetails,
-  });
-});
+// router.get("/restaurantdetails/:restaurent_id", (req, res) => {
+//   const restaurentDetails = restoList.filter(
+//     (restaurant) => restaurant.restaurant_id === req.params.restaurent_id
+//   );
+//   res.send({
+//     status: "Request Successful",
+//     restaurentDetails,
+//   });
+// });
 
 router.get("/dishdetails/:restaurent_id", (req, res) => {
   res.send({
@@ -309,39 +309,165 @@ router.get("/dishdetails/:restaurent_id", (req, res) => {
   });
 });
 
-router.get("/restaurantsearch/:search_input", (req, res) => {
-  const sql = `CALL restaurant_get('${req.params.search_input}');`;
+// router.get("/restaurantsearch/:search_input", (req, res) => {
+//   const sql = `CALL restaurant_get('${req.params.search_input}');`;
+//   db.query(sql, (err, result) => {
+//     if (err) {
+//       res.writeHead(500, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end("Error in Data");
+//     }
+//     if (result && result.length > 0 && result[0][0]) {
+//       res.writeHead(200, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(JSON.stringify(result[0]));
+//     }
+//   });
+// });
+
+router.get("/dishdetails/:restaurent_id", (req, res) => {
+  res.send({
+    status: "Request Successful",
+    dishesList,
+  });
+});
+
+router.get("/favourite/:customer_id", (req, res) => {
+  const sql = `CALL get_favorite_restaurants(${req.params.customer_id});`;
+  console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.end("Error in Data");
+      res.send("Database Connection Error");
     }
-    if (result && result.length > 0 && result[0][0]) {
-      res.writeHead(200, {
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.end(JSON.stringify(result[0]));
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
     }
+
+    if (result[0].length > 0 && result[0][0].status === "CUSTOMER_ID_IS_NULL") {
+      res.status(400).send({ status: "CUSTOMER_ID_IS_NULL" });
+      return;
+    }
+    res.send({
+      status: "FAV_RESTAURANTS",
+      favRestaurants: result[0],
+    });
+  });
+});
+
+router.get("/allrestaurants", (req, res) => {
+  const sql = `CALL get_all_restaurants();`;
+  console.log(sql);
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send("Database Connection Error");
+    }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
+    }
+
+    if (result[0].length === 0) {
+      res.status(400).send({ status: "RESTAURANTS_NOT_FOUND" });
+      return;
+    }
+    res.send({
+      status: "ALL_RESTAURANTS",
+      allRestaurants: result[0],
+    });
+  });
+});
+
+router.post("/updatefavourite", (req, res) => {
+  const sql = `CALL post_favorite_restaurants(${req.body.customerId},${
+    req.body.restaurantId
+  },'${req.body.newisFav.toString()}');`;
+  console.log(sql);
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send("Database Connection Error");
+    }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
+    }
+
+    if (result[0].length > 0 && result[0][0].status !== "FAVORITES_CREATED") {
+      res.status(400).send({ status: "FAVORITES_CREATION_FAILED" });
+      return;
+    }
+    res.send({
+      status: "FAVORITES_CREATED",
+    });
   });
 });
 
 router.get("/restaurantdetails/:restaurent_id", (req, res) => {
-  const restaurentDetails = restoList.filter(
-    (restaurant) => restaurant.restaurant_id === req.params.restaurent_id
-  );
-  res.send({
-    status: "Request Successful",
-    restaurentDetails,
+  const sql = `CALL restaurant_get_id(${req.params.restaurent_id});`;
+  console.log(sql);
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send("Database Connection Error");
+    }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
+    }
+    if (result[0].length === 0) {
+      res.status(400).send({ status: "RESTAURANTS_NOT_FOUND" });
+      return;
+    }
+    if (result[0][0].status === "RESTAURANT_ID_IS_NULL") {
+      res.status(400).send({ status: "RESTAURANT_ID_IS_NULL" });
+      return;
+    }
+    res.send({
+      status: "RESTAURANT_DETAILS",
+      restaurentDetails: result[0][0],
+    });
   });
-});
 
-router.get("/dishdetails/:restaurent_id", (req, res) => {
-  res.send({
-    status: "Request Successful",
-    dishesList,
-  });
+  // const restaurentDetails = restoList.filter(
+  //   (restaurant) => restaurant.restaurant_id === req.params.restaurent_id
+  // );
+  // res.send({
+  //   status: "Request Successful",
+  //   restaurentDetails,
+  // });
 });
 
 module.exports = router;

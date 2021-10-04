@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
-import { Link } from "react-router-dom";
-import { Button, Col, Row, Card } from "react-bootstrap";
+import { Col, Row, Card } from "react-bootstrap";
 import { PropTypes } from "prop-types";
-import delivered from "../../Svg/delivered.jpg";
 
 class OrderCard extends Component {
   constructor(props) {

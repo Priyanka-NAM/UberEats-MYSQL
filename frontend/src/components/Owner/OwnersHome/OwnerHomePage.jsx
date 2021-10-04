@@ -1,30 +1,14 @@
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
-import axios from "axios";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Jimp from "jimp";
-import { FaPlus } from "react-icons/fa";
-import {
-  Button,
-  Form,
-  Col,
-  Container,
-  Navbar,
-  Nav,
-  Card,
-  Dropdown,
-  Row,
-} from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import RestaBanner from "../../Restaurent/RestaurentPageIcons/RestaBanner";
-import resizeFile from "../../Svg/ImageResizing";
 import OwnerHome from "../../Home/OwnerHome";
 import MenuCard from "../../Restaurent/RestaurentPageIcons/MenuCard";
 import backendServer from "../../../backEndConfig";
 import { ownerMenu } from "../../../Actions/OwnerActions";
-
-const fs = require("fs");
 
 const restadata = [
   {
