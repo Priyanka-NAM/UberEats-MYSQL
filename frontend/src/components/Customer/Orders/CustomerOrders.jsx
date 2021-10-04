@@ -75,7 +75,6 @@ class CustomerOrders extends Component {
   };
 
   dateparse = (date) => {
-    // "2021-09-26T18:19:28.000Z"
     const dateComponents = date.split("T");
     const datePieces = dateComponents[0].split("-");
     const timePieces = dateComponents[1].split(":");
@@ -85,8 +84,6 @@ class CustomerOrders extends Component {
       datePieces[2],
       timePieces[0],
       timePieces[1]
-      // timePieces[1],
-      // timePieces[2]
     );
   };
 

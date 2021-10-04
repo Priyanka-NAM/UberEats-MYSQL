@@ -49,7 +49,6 @@ export const updateOwner = (ownerUpdateData) => async (dispatch) => {
   try {
     axios.defaults.withCredentials = true;
     axios.defaults.headers.common.authorization = getToken();
-    console.log("ownerUpdateData", ownerUpdateData);
     const res = await axios.post(
       `${backendServer}/ubereats/profile/owner`,
       ownerUpdateData

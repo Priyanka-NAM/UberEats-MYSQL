@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable no-shadow */
 import React, { Component } from "react";
 
@@ -8,6 +9,7 @@ import "../../Styles/SideBar.css";
 import { Modal, Image, Button } from "react-bootstrap";
 import { connect } from "react-redux";
 import { addToCart } from "../../../Actions/CartActions";
+import backendServer from "../../../backEndConfig";
 
 class MenuCard extends Component {
   constructor(props) {
@@ -42,7 +44,8 @@ class MenuCard extends Component {
 
   handleDecrement = () => {
     this.setState((prevState) => ({
-      Orderquantity: prevState.Orderquantity - 1,
+      Orderquantity:
+        prevState.Orderquantity > 1 ? prevState.Orderquantity - 1 : 1,
     }));
   };
 
@@ -66,8 +69,14 @@ class MenuCard extends Component {
 
   handleAddToCart = () => {
     const { Orderquantity } = this.state;
-    const { title, price, addToCart, currentRestaurantName, restaurantName } =
-      this.props;
+    const {
+      title,
+      price,
+      addToCart,
+      currentRestaurantName,
+      dishDetails,
+      restaurantName,
+    } = this.props;
     if (currentRestaurantName !== restaurantName && restaurantName !== "") {
       this.setState({
         showAlert: true,
@@ -77,10 +86,12 @@ class MenuCard extends Component {
     }
     const cartDetails = {
       restaurantName: currentRestaurantName,
+      restaurantId: dishDetails.restaurant_id,
       itemDetails: {
         title: title,
         price: price * Orderquantity,
         quantity: Orderquantity,
+        dishDetails: dishDetails,
       },
     };
     addToCart(cartDetails);
@@ -98,6 +109,10 @@ class MenuCard extends Component {
       currentRestaurantName,
       isOwnerHome,
     } = this.props;
+
+    let ItemPrice = Orderquantity * price;
+    ItemPrice = ItemPrice.toFixed(2);
+    const srcModified = `${backendServer}/public/${src}`;
     return (
       <>
         <div
@@ -121,7 +136,7 @@ class MenuCard extends Component {
               </div>
             </div>
             <div className='col-md-4'>
-              <Image style={{ height: "10rem" }} src={src} />
+              <Image style={{ height: "10rem" }} src={srcModified} />
             </div>
           </div>
         </div>
@@ -147,7 +162,7 @@ class MenuCard extends Component {
           </Modal.Header>
           <Modal.Body>
             <img
-              src={src}
+              src={srcModified}
               alt=''
               style={{
                 objectFit: "cover",
@@ -188,9 +203,7 @@ class MenuCard extends Component {
                 fontFamily: "UberMove sans-serif",
               }}>
               Add {Orderquantity} to order
-              <span style={{ paddingLeft: "15px" }}>
-                ${Orderquantity * price}
-              </span>
+              <span style={{ paddingLeft: "15px" }}>${ItemPrice}</span>
             </Button>
           </Modal.Footer>
         </Modal>
@@ -247,6 +260,7 @@ MenuCard.propTypes = {
   addToCart: PropTypes.func.isRequired,
   restaurantName: PropTypes.string.isRequired,
   isOwnerHome: PropTypes.bool.isRequired,
+  dishDetails: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({

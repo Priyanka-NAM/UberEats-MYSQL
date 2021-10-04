@@ -49,18 +49,18 @@ class RestaurentHome extends Component {
         }
       });
     axios
-      .get(
-        `http://localhost:5000/ubereats/customerrestaurant/dishdetails/${restaurant_id}`
-      )
+      // .get(`http://localhost:5000/ubereats/dishes/alldishes/${restaurant_id}`)
+      .get(`http://localhost:5000/ubereats/dishes/alldishes/35`)
       .then((response) => {
         if (response.data) {
-          if (response.data.status !== "Request Successful") {
+          if (response.data.status !== "ALL_DISHES") {
             this.setState({
               dishesList: [],
             });
           } else {
             this.setState({
-              dishesList: response.data.dishesList,
+              // dishesList: response.data.dishesList,
+              dishesList: response.data.allDishes,
             });
             console.log("Dish Details Request Successful");
           }
@@ -82,12 +82,13 @@ class RestaurentHome extends Component {
       restaurentMenu = dishesList.map((dish) => (
         <MenuCard
           key={dish.dish_id}
-          src={dish.imageurl}
+          src={dish.image_file_path}
           title={dish.name}
           price={dish.price}
           currentRestaurantName={restaurentDetails[0].title}
           isOwnerHome={false}
           description={dish.description}
+          dishDetails={dish}
           quantity='2'
         />
       ));

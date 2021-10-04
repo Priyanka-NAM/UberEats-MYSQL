@@ -2,6 +2,7 @@ import { CART_ADD } from "../Actions/types";
 
 const intitalState = {
   restaurantName: "",
+  restaurnatId: -1,
   items: [],
 };
 export default (state = intitalState, action) => {
@@ -11,6 +12,7 @@ export default (state = intitalState, action) => {
       if (action.payload.restaurantName !== restaurantName) {
         return {
           restaurantName: action.payload.restaurantName,
+          restaurantId: action.payload.restaurantId,
           items: [action.payload.itemDetails],
         };
       }
@@ -18,6 +20,7 @@ export default (state = intitalState, action) => {
       return {
         ...state,
         restaurantName: action.payload.restaurantName,
+        restaurantId: action.payload.restaurantId,
       };
     default:
       return state;

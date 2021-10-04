@@ -26,7 +26,9 @@
     "multer-storage-cloudinary": "^4.0.0",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.12",
-    "password-hash": "^1.2.2"
+    "password-hash": "^1.2.2",
+    "promise": "^8.1.0",
+    "util": "^0.12.4"
   },
   "devDependencies": {
     "eslint": "^7.32.0",

@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable prefer-destructuring */
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
@@ -14,6 +15,7 @@ import mainstyle from "../../Home/HomeIcons/HeaderStyle";
 import "../../Styles/SignInUp.css";
 import ProfileCanvas from "../../Home/HomeIcons/ProfileCanvas";
 import "../../../Actions/CartActions";
+import { customerOrderPlaced } from "../../../Actions/CustomerActions";
 
 class FinalOrder extends Component {
   constructor(props) {
@@ -34,9 +36,43 @@ class FinalOrder extends Component {
   };
 
   handlePlaceOrder = () => {
+    const { cartItems, restaurantId } = this.props;
     this.setState({
       showOrderSucess: true,
     });
+    const statusDetails = {
+      restaurant_id: restaurantId,
+      delivery_status: "Order Received",
+      order_status: "Active",
+      cart_items: cartItems,
+    };
+    const CostObject = this.getCostFromCartItems(cartItems);
+    const orderPostInput = { ...statusDetails, ...CostObject };
+    this.props.customerOrderPlaced(orderPostInput);
+  };
+
+  getCostFromCartItems = (cartItems) => {
+    let cartRows = null;
+    let totalCartValue = 0;
+    const deliveryfee = 5.0;
+    const cadriverbenefit = 2.0;
+    let ordertotal = 0;
+    if (cartItems) {
+      cartRows = cartItems.map((cartitem) => {
+        totalCartValue += cartitem.price;
+        ordertotal = totalCartValue + deliveryfee + cadriverbenefit;
+        return 0;
+      });
+    }
+    const taxTotal = 0.09 * totalCartValue;
+    ordertotal += taxTotal;
+    return {
+      sub_total: totalCartValue,
+      tax: taxTotal,
+      delivery_cost: deliveryfee,
+      gratitude: cadriverbenefit,
+      order_total: ordertotal,
+    };
   };
 
   render() {
@@ -62,14 +98,13 @@ class FinalOrder extends Component {
     console.log("location", location);
     let cartRows = null;
     let totalCartValue = 0;
-    let deliveryfee = 0;
-    let cadriverbenefit = 0;
+    const deliveryfee = 5.0;
+    const cadriverbenefit = 2.0;
     let ordertotal = 0;
+    let taxTotal = 0;
     if (cartItems) {
       cartRows = cartItems.map((cartitem) => {
         totalCartValue += cartitem.price;
-        deliveryfee = 0.1 * totalCartValue;
-        cadriverbenefit = 0.05 * totalCartValue;
         ordertotal = totalCartValue + deliveryfee + cadriverbenefit;
         return (
           <Row
@@ -94,8 +129,13 @@ class FinalOrder extends Component {
           </Row>
         );
       });
+
+      // totalCartValue = totalCartValue.toFixed(2);
+      taxTotal = 0.09 * totalCartValue;
+      ordertotal += taxTotal;
+      ordertotal = ordertotal.toFixed(2);
+      console.log("restaurantName", restaurantName);
     }
-    console.log("restaurantName", restaurantName);
     return (
       <Container fluid='true' style={{ overflow: "hidden" }}>
         <Row
@@ -140,10 +180,10 @@ class FinalOrder extends Component {
                   <Col xs={1} className='locationIcon'>
                     <MdLocationOn size='30px' />
                   </Col>
-                  <Col style={{ textAlign: "left" }}>
+                  <Col style={{ textAlign: "left", fontFamily: "sans-serif" }}>
                     <h5 className='addressdetails'>{addressLine1}</h5>
                     <h6 className='detailsadd'>
-                      {city},{state},{country}
+                      {city},{zipcode},{state},{country}
                     </h6>
                   </Col>
                   <Col style={{ textAlign: "right" }}>
@@ -247,8 +287,8 @@ class FinalOrder extends Component {
                 <li
                   className=' d-flex justify-content-between align-items-center'
                   style={{ paddingBottom: "10px" }}>
-                  Fees
-                  <span>$2.00</span>
+                  Tax
+                  <span>${taxTotal.toFixed(2)}</span>
                 </li>
                 <li
                   className='d-flex justify-content-between align-items-center'
@@ -277,7 +317,7 @@ class FinalOrder extends Component {
                   className=' d-flex justify-content-between align-items-center'
                   style={{ paddingBottom: "10px" }}>
                   Total
-                  <span>${ordertotal.toFixed(2)}</span>
+                  <span>${ordertotal}</span>
                 </li>
               </ul>
             </Row>
@@ -329,14 +369,17 @@ class FinalOrder extends Component {
 
 FinalOrder.propTypes = {
   restaurantName: PropTypes.string.isRequired,
+  restaurantId: PropTypes.number.isRequired,
   cartItems: PropTypes.array.isRequired,
   currentLocation: PropTypes.object.isRequired,
   userLocation: PropTypes.object.isRequired,
+  customerOrderPlaced: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   restaurantName: state.cartDetails.restaurantName,
+  restaurantId: state.cartDetails.restaurantId,
   currentLocation: state.currentLocation,
   userLocation: state.signin.address,
   cartItems: state.cartDetails.items,
 });
-export default connect(mapStateToProps, {})(FinalOrder);
+export default connect(mapStateToProps, { customerOrderPlaced })(FinalOrder);

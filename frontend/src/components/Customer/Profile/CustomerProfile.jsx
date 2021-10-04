@@ -1,3 +1,5 @@
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable camelcase */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
@@ -8,7 +10,15 @@ import PropTypes from "prop-types";
 import axios from "axios";
 import "react-times/css/classic/default.css";
 import { connect } from "react-redux";
-import { Button, Form, Container, Col, Card, Row } from "react-bootstrap";
+import {
+  Button,
+  Form,
+  Container,
+  Col,
+  Card,
+  Row,
+  Alert,
+} from "react-bootstrap";
 import { getToken } from "../../Service/authService";
 import Header from "../../Home/HomeIcons/Header";
 import ProfileRow from "./ProfileRow";
@@ -18,29 +28,29 @@ import backendServer from "../../../backEndConfig";
 class CustomerProfile extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      country: "",
-      state: "",
-      phoneNumber: "",
-      dob: "",
-      nickname: "",
-      name: "",
-      emailId: "",
-      newpassword: "",
-      oldpassword: "",
-      addressline1: "",
-      city: "",
-      zipcode: "",
-      file: null,
-      preview: null,
-      src: "",
-    };
+    this.state = {};
 
     this.handleChange = this.handleChange.bind(this);
-    this.onCrop = this.onCrop.bind(this);
-    this.onClose = this.onClose.bind(this);
+    this.selectCountry = this.selectCountry.bind(this);
+    this.selectRegion = this.selectRegion.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
   }
+
+  componentDidMount = () => {
+    const { customerDetails } = this.props;
+    this.setState({
+      ...customerDetails,
+    });
+  };
+
+  componentDidUpdate = (prevprops) => {
+    if (this.props.customerDetails !== prevprops.customerDetails) {
+      const { customerDetails } = this.props;
+      this.setState({
+        ...customerDetails,
+      });
+    }
+  };
 
   handleChange = (e) => {
     e.preventDefault();
@@ -74,23 +84,14 @@ class CustomerProfile extends Component {
         uploadConfig
       )
       .then((response) => {
-        console.log("Response from server ", response.data);
         this.setState({
           src: `${backendServer}/public/${response.data}`,
-          image_file_path: response.data,
+          profile_pic_file_path: response.data,
         });
       })
       .catch((err) => {
         console.log("Upload file error: ", err.response);
       });
-  }
-
-  onClose() {
-    this.setState({ preview: null });
-  }
-
-  onCrop(preview) {
-    this.setState({ preview });
   }
 
   selectCountry(val) {
@@ -103,27 +104,25 @@ class CustomerProfile extends Component {
 
   render() {
     const {
-      country,
-      state,
-      addressline1,
-      dob,
-      city,
-      zipcode,
-      emailId,
+      email_id,
       name,
-      newpassword,
-      oldpassword,
-      phoneNumber,
-      nickname,
-      image_file_path,
+      nick_name,
+      phone_num,
+      address_line_1,
+      date_of_birth,
+      city,
+      state,
+      password,
+      country,
+      zipcode,
+      profile_pic_file_path,
     } = this.state;
-    const src = `${backendServer}/public/${image_file_path}`;
+    const src = `${backendServer}/public/${profile_pic_file_path}`;
     const { updateerrMsg } = this.props;
 
     let errorMessage = "";
     if (updateerrMsg) {
       errorMessage = updateerrMsg;
-      console.log(errorMessage);
     }
     return (
       <Container fluid='true' style={{ overflow: "hidden", marginLeft: "2%" }}>
@@ -156,6 +155,7 @@ class CustomerProfile extends Component {
                       encType='multipart/form-data'
                       className='form-control'
                       style={{ display: "none" }}
+                      accept='image/*'
                       // eslint-disable-next-line no-return-assign
                       ref={(fileInput) => (this.fileInput = fileInput)}
                     />
@@ -193,42 +193,33 @@ class CustomerProfile extends Component {
                   />
                   <ProfileRow
                     FieldName='Nick Name'
-                    nameField='nickname'
+                    nameField='nick_name'
                     typeField='text'
                     maxLength='32'
-                    valueField={nickname}
+                    valueField={nick_name}
                     patternField='^[A-Za-z0-9 ]+$'
                     requiredField={false}
                     changeHandler={this.handleChange}
                   />
                   <ProfileRow
                     FieldName='Date of Birth'
-                    nameField='dob'
+                    nameField='date_of_birth'
                     typeField='date'
                     maxLength={null}
-                    valueField={dob}
+                    valueField={date_of_birth}
                     patternField={null}
                     requiredField={false}
                     changeHandler={this.handleChange}
                   />
                   <h5>Security Info</h5>
                   <ProfileRow
-                    FieldName='Old Password'
-                    nameField='oldpassword'
+                    FieldName='Password Update'
+                    nameField='password'
                     maxLength='32'
                     typeField='password'
-                    valueField={oldpassword}
+                    valueField={password}
                     patternField='^[A-Za-z0-9 ]+$'
                     requiredField
-                    changeHandler={this.handleChange}
-                  />
-                  <ProfileRow
-                    FieldName='New Password'
-                    nameField='newpassword'
-                    maxLength='32'
-                    typeField='password'
-                    valueField={newpassword}
-                    patternField='^[A-Za-z0-9 ]+$'
                     changeHandler={this.handleChange}
                   />
                 </Col>
@@ -236,19 +227,19 @@ class CustomerProfile extends Component {
                   <h4>Contact Info</h4>
                   <ProfileRow
                     FieldName='Email'
-                    nameField='emailId'
+                    nameField='email_id'
                     typeField='email'
                     maxLength='32'
-                    valueField={emailId}
+                    valueField={email_id}
                     patternField={null}
                     requiredField
                     changeHandler={this.handleChange}
                   />
                   <ProfileRow
                     FieldName='Phone Number'
-                    nameField='phoneNumber'
+                    nameField='phone_num'
                     typeField='text'
-                    valueField={phoneNumber}
+                    valueField={phone_num}
                     patternField='^[0-9]+$'
                     maxLength='10'
                     requiredField
@@ -257,9 +248,9 @@ class CustomerProfile extends Component {
                   <h4>Address Info</h4>
                   <ProfileRow
                     FieldName='Address Line1'
-                    nameField='addressline1'
+                    nameField='address_line_1'
                     typeField='text'
-                    valueField={addressline1}
+                    valueField={address_line_1}
                     patternField={null}
                     maxLength='32'
                     requiredField
@@ -332,16 +323,14 @@ class CustomerProfile extends Component {
                         Save Changes
                       </Button>
                       {errorMessage && (
-                        <p
+                        <Alert
                           style={{
-                            width: "100%",
-                            marginTop: "15px",
                             fontFamily:
                               "UberMoveText-Medium,Helvetica,sans-serif",
                           }}
-                          className='alert alert-danger'>
+                          variant='error'>
                           {errorMessage}
-                        </p>
+                        </Alert>
                       )}
                     </Col>
                   </Row>
@@ -358,12 +347,12 @@ class CustomerProfile extends Component {
 CustomerProfile.propTypes = {
   updateCustomer: PropTypes.func.isRequired,
   updateerrMsg: PropTypes.string.isRequired,
+  customerDetails: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  isRegistered: state.customer.isRegistered,
-  custosignup: state.customer.user,
   errMsg: state.customer.errMsg,
+  customerDetails: state.customer.customerDetails.user,
 });
 
 export default connect(mapStateToProps, { updateCustomer })(CustomerProfile);

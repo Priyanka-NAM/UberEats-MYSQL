@@ -3,6 +3,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable arrow-body-style */
 const express = require("express");
+const util = require("util");
+const Promise = require("promise");
 const db = require("../dbPoolConnection");
 
 const router = express.Router();
@@ -167,36 +169,6 @@ router.get("/cancelledorders/restaurant/:restaurant_id", (req, res) => {
   });
 });
 
-router.get("/cancelledorders/customer/:restaurant_id", (req, res) => {
-  // const sql = `CALL restaurant_orders_get_status(${req.params.restaurant_id},'Cancelled');`;
-  // console.log(sql);
-  // db.query(sql, (err, result) => {
-  //   if (err) {
-  //     res.writeHead(500, {
-  //       "Content-Type": "text/plain",
-  //     });
-  //     res.send("Database Connection Error");
-  //   }
-  //   if (!result || result.length === 0) {
-  //     res.writeHead(500, {
-  //       "Content-Type": "text/plain",
-  //     });
-  //     res.send({
-  //       status: "Result from Db Undefined",
-  //     });
-  //     return;
-  //   }
-  //   if (result[0].length > 0 && result[0][0].status === "RESTAURANT_ID_NULL") {
-  //     res.status(400).send({ status: "NO_RESTAURANT_ID" });
-  //     return;
-  //   }
-  //   res.send({
-  //     status: "CANCELLED_ORDERS",
-  //     orders: orderProcessing(result[0]),
-  //   });
-  // });
-});
-
 router.post("/neworders/update", (req, res) => {
   const { restaurant_id, order_id, delivery_status, order_status } = req.body;
   const sql = `CALL restaurant_update_order(${restaurant_id},${order_id},'${delivery_status}','${order_status}');`;
@@ -230,6 +202,108 @@ router.post("/neworders/update", (req, res) => {
       status: "UPDATED_ORDER",
       orders: orderProcessing(result[0]),
     });
+  });
+});
+
+router.get("/orderstatus/customer/:customer_id", (req, res) => {
+  const sql = `CALL customer_orders_get(${req.params.customer_id});`;
+  console.log(sql);
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send("Database Connection Error");
+    }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
+    }
+    if (result[0].length > 0 && result[0][0].status === "CUSTOMER_ID_NULL") {
+      res.status(400).send({ status: "CUSTOMER_ID_NULL" });
+      return;
+    }
+    res.send({
+      status: "CUSTOMER_ORDERS",
+      orders: orderProcessing(result[0]),
+    });
+  });
+});
+
+router.post("/customer/neworder", (req, res) => {
+  console.log("Inside Customer New Order");
+  const {
+    customerId,
+    restaurant_id,
+    order_total,
+    tax,
+    delivery_cost,
+    gratitude,
+    sub_total,
+    delivery_status,
+    order_status,
+    cart_items,
+  } = req.body;
+  console.log("Customer New Order", req.body);
+  const sql = `CALL customer_create_order(${customerId},${restaurant_id},'${order_status}','${delivery_status}',${sub_total},${tax},${delivery_cost},'${gratitude}',${order_total});`;
+  console.log(sql);
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send("Database Connection Error");
+    }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
+    }
+
+    if (
+      result[0].length > 0 &&
+      result[0][0].status === "ORDER_CREATION_FAILED"
+    ) {
+      res.status(400).send({ status: "ORDER_CREATION_FAILED" });
+      return;
+    }
+
+    const { order_id } = result[0][0];
+    const dbQueryAsync = util.promisify(db.query).bind(db); // const util = require('util')
+    Promise.all(
+      cart_items.map((dish) => {
+        const innerSql = `CALL customer_create_order_items(${dish.dishDetails.dish_id},${dish.quantity},${dish.price}, ${order_id})`;
+        console.log("Order Items SQL", innerSql);
+        return dbQueryAsync(innerSql);
+      })
+    )
+      .then((allData) => {
+        // All data available here in the order of the elements in the array
+        console.log("All date from order item posts ", JSON.stringify(allData));
+        res.send({
+          status: "ORDER_CREATED",
+          // orders: orderProcessing(result[0]),
+        });
+      })
+      .catch((error) => {
+        console.log(
+          "Error while posting order items -> ",
+          JSON.stringify(error)
+        );
+        res.send({
+          status: "ORDER_ITEMS_CREATION_FAILED",
+          // orders: orderProcessing(result[0]),
+        });
+      });
   });
 });
 

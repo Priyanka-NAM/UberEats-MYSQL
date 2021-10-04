@@ -163,6 +163,7 @@ class OwnerHomePage extends Component {
             price={dish.price}
             description={dish.description}
             quantity='2'
+            dishDetails={dish}
             isOwnerHome
           />
         );

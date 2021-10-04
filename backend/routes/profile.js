@@ -6,66 +6,26 @@ const db = require("../dbPoolConnection");
 
 const router = express.Router();
 
-const user = {
-  id: "1",
-  phoneNumber: "",
-  dob: "",
-  nickname: "",
-  email: "abc@gmail.com",
-  oldpassword: "123456",
-  newpassword: "",
-  addressline1: "",
-  city: "",
-  state: "",
-  country: "",
-  zipcode: "95694",
-};
-
-// router.post("/customer", async (req, res) => {
-//   console.log("User Details from JWT ", req.userDetails);
-
-//   console.log("Request from Profile Page ", req.body);
-
-//   // eslint-disable-next-line no-restricted-syntax
-//   for (const [key, value] of Object.entries(req.body)) {
-//     user[key] = value;
-//   }
-//   console.log("Updated from Profile Page ", user);
-//   res.send();
-// });
-
-// router.post("/owner", async (req, res) => {
-//   console.log("User Details from JWT ", req.userDetails);
-
-//   console.log("Request from Profile Page ", req.body);
-
-//   // eslint-disable-next-line no-restricted-syntax
-//   for (const [key, value] of Object.entries(req.body)) {
-//     user[key] = value;
-//   }
-//   res.send({ status: "Update Success" });
-// });
-
 router.post("/customer", async (req, res) => {
-  console.log(req.body);
-  const { oldpassword, newpassword } = req.body;
-  const oldhashedPassword = md5(oldpassword);
-  const newhashedPassword = md5(newpassword);
+  console.log("Customer Profile Request", req.body);
+  const { password, newpassword } = req.body;
+  const oldhashedPassword = password ? md5(password) : undefined;
+  const newhashedPassword = newpassword ? md5(newpassword) : undefined;
   const {
-    id,
-    email,
+    customer_id,
+    email_id,
     name,
-    nickname,
-    phoneNumber,
-    addressline1,
-    dob,
+    nick_name,
+    phone_num,
+    address_line_1,
+    date_of_birth,
     city,
     state,
     country,
     zipcode,
-    profilepic,
+    profile_pic_file_path,
   } = req.body;
-  const sql = `CALL customer_update(${id},'${email}','${name}','${oldhashedPassword}','${dob}','${addressline1}','${city}','${state}','${country}','${zipcode}','${nickname}','${profilepic}',${phoneNumber});`;
+  const sql = `CALL customer_update(${customer_id},'${email_id}','${name}','${oldhashedPassword}','${date_of_birth}','${address_line_1}','${city}','${state}','${country}','${zipcode}','${nick_name}','${profile_pic_file_path}',${phone_num});`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -115,20 +75,6 @@ router.post("/owner", async (req, res) => {
   const oldhashedPassword = oldpassword ? md5(oldpassword) : undefined;
   const newhashedPassword = newpassword ? md5(newpassword) : undefined;
   const {
-    // description,
-    //   restaurant_country,
-    //   restaurnat_address_line_one,
-    //   restaurant_city,
-    //   restaurant_state,
-    //   restaurant_zipcode,
-    //   newpassword,
-    //   phone_num,
-    //   ehour,
-    //   eminute,
-    //   hour,
-    //   minute,
-    //   image_file_path,
-
     restaurant_id,
     email_id,
     name,

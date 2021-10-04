@@ -43,11 +43,13 @@ class Cart extends React.Component {
       totalItems = cartItems.length;
       cartRows = cartItems.map((cartitem) => {
         totalCartValue += cartitem.price;
+        let eachitemprice = cartitem.price;
+        eachitemprice = eachitemprice.toFixed(2);
         return (
           <CartItemRow
             quantity={cartitem.quantity}
             dishtitle={cartitem.title}
-            totaldishprice={cartitem.price}
+            totaldishprice={eachitemprice}
           />
         );
       });
@@ -85,6 +87,7 @@ class Cart extends React.Component {
         </div>
       );
     } else {
+      totalCartValue = totalCartValue.toFixed(2);
       newCart = (
         <Modal
           show={showModal}

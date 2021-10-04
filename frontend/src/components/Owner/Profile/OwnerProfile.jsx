@@ -7,7 +7,7 @@ import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import axios from "axios";
 import "react-times/css/classic/default.css";
 import PropTypes from "prop-types";
-import { Button, Form, Col, Card, Row } from "react-bootstrap";
+import { Button, Form, Col, Card, Row, Alert } from "react-bootstrap";
 import FormTextBox from "./FormTextBox";
 import OwnerHome from "../../Home/OwnerHome";
 import backendServer from "../../../backEndConfig";
@@ -32,9 +32,9 @@ class OwnerProfile extends Component {
     this.setStateFromProps(this.props);
   };
 
-  componentDidUpdate = (newprops, prevprops) => {
-    if (newprops.ownerDetails !== prevprops.ownerDetails) {
-      const { ownerDetails } = newprops;
+  componentDidUpdate = (prevprops) => {
+    if (this.props.ownerDetails !== prevprops.ownerDetails) {
+      const { ownerDetails } = this.props;
       this.setStateFromProps(ownerDetails);
     }
   };
@@ -155,7 +155,6 @@ class OwnerProfile extends Component {
     let errorMessage = "";
     if (updateerrMsg) {
       errorMessage = updateerrMsg;
-      console.log(errorMessage);
     }
     const pageContent = (
       <Col align='left'>
@@ -257,7 +256,7 @@ class OwnerProfile extends Component {
               <br />
               <FormTextBox
                 FieldName='New Password'
-                nameField='newpassword'
+                nameField='password'
                 maxLength='32'
                 typeField='password'
                 valueField={newpassword}
@@ -463,6 +462,15 @@ class OwnerProfile extends Component {
                     </Button>
                   </Col>
                 </Row>
+                {errorMessage && (
+                  <Alert
+                    variant='error'
+                    style={{
+                      fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+                    }}>
+                    {errorMessage}
+                  </Alert>
+                )}
               </Form>
             </Col>
           </Row>
@@ -480,7 +488,7 @@ OwnerProfile.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  errMsg: state.customer.errMsg,
+  errMsg: state.owner.errMsg,
   ownerDetails: state.owner.ownerDetails.user,
 });
 

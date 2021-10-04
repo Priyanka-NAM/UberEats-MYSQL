@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-/* eslint-disable no-case-declarations */
 import {
   OWNER_SIGNUP,
   OWNER_UPDATE,
@@ -52,10 +50,14 @@ export default (state = intitalState, action) => {
         ownerDetails: action.payload,
       };
     case USER_SIGNIN_SUCCESS:
-      return {
-        ...state,
-        ownerDetails: action.payload,
-      };
+      if (action.payload.user.is_owner === 1) {
+        return {
+          ...state,
+          ownerDetails: action.payload,
+        };
+      }
+      return state;
+
     case OWNER_NEW_ORDER:
       return {
         ...state,
@@ -72,7 +74,6 @@ export default (state = intitalState, action) => {
         newOrders: action.payload,
       };
     case OWNER_DELIVERED_ORDER:
-      console.log("deliveredOrders", action.payload);
       return {
         ...state,
         deliveredOrders: action.payload,
