@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/forbid-prop-types */
@@ -23,12 +24,21 @@ class Favorites extends Component {
     this.props.customerFav();
   }
 
+  componentDidUpdate(prevProps) {
+    const { fav } = this.props;
+    if (prevProps.fav !== fav) {
+      this.setState({
+        fav,
+      });
+    }
+  }
+
   handleRestaPageRedirect = (restaurant) => {
     console.log("handleRestaPageRedirect: ", restaurant);
   };
 
   render() {
-    const { fav } = this.props;
+    const { fav } = this.state;
     // const { allRestaurents } = this.state;
     console.log("fav", fav);
     let favorites = null;
@@ -47,7 +57,7 @@ class Favorites extends Component {
     }
 
     return (
-      <div style={{ marginLeft: "1%", overflow: "hidden" }}>
+      <div style={{ marginLeft: "1%" }}>
         <Header />
         <Container style={{ marginLeft: "1%" }} fluid>
           <Row>

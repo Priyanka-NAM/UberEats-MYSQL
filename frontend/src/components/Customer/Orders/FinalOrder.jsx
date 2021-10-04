@@ -59,7 +59,8 @@ class FinalOrder extends Component {
     let ordertotal = 0;
     if (cartItems) {
       cartRows = cartItems.map((cartitem, index) => {
-        totalCartValue += cartitem.price;
+        totalCartValue +=
+          parseFloat(cartitem.price, 10) * parseInt(cartitem.quantity, 10);
         ordertotal = totalCartValue + deliveryfee + cadriverbenefit;
         return 0;
       });
@@ -67,11 +68,11 @@ class FinalOrder extends Component {
     const taxTotal = 0.09 * totalCartValue;
     ordertotal += taxTotal;
     return {
-      sub_total: totalCartValue,
-      tax: taxTotal,
+      sub_total: totalCartValue.toFixed(2),
+      tax: taxTotal.toFixed(2),
       delivery_cost: deliveryfee,
       gratitude: cadriverbenefit,
-      order_total: ordertotal,
+      order_total: ordertotal.toFixed(2),
     };
   };
 
@@ -104,7 +105,8 @@ class FinalOrder extends Component {
     let taxTotal = 0;
     if (cartItems) {
       cartRows = cartItems.map((cartitem, index) => {
-        totalCartValue += cartitem.price;
+        totalCartValue +=
+          parseFloat(cartitem.price, 10) * parseInt(cartitem.quantity, 10);
         ordertotal = totalCartValue + deliveryfee + cadriverbenefit;
         return (
           <Row
@@ -124,16 +126,18 @@ class FinalOrder extends Component {
               <h5 className='addressdetails'>{cartitem.title}</h5>
             </Col>
             <Col style={{ textAlign: "right" }}>
-              <h6 className='priceDetails'>{cartitem.price}</h6>
+              <h6 className='priceDetails'>
+                {parseFloat(cartitem.price, 10).toFixed(2)}
+              </h6>
             </Col>
           </Row>
         );
       });
 
-      // totalCartValue = totalCartValue.toFixed(2);
       taxTotal = 0.09 * totalCartValue;
       ordertotal += taxTotal;
       ordertotal = ordertotal.toFixed(2);
+      totalCartValue = totalCartValue.toFixed(2);
       console.log("restaurantName", restaurantName);
     }
     return (

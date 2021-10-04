@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable object-shorthand */
 /* eslint-disable react/no-did-update-set-state */
@@ -99,68 +100,11 @@ class CustomerOrders extends Component {
     ));
   };
 
-  // handleClick = (dishes) => {
-  //   const { showModal } = this.state;
-  //   return function Modal() {
-  //     const dishComps = dishes.map((dish, index) => {
-  //       <ul
-  //         className='list-group'
-  //         style={{ fontSize: "16px", fontFamily: "UberMove, sans-serif" }}>
-  //         <li
-  //           className=' d-flex justify-content-between align-items-center'
-  //           style={{ padding: "0px 20px 10px 20px" }}>
-  //           <span>
-  //             <span style={{ marginRight: "20px" }}>{dish.quantity}</span>
-  //             {dish.name}
-  //           </span>
-  //           <span>{dish.sub_total}</span>
-  //         </li>
-  //       </ul>;
-  //     });
-
-  //     return (
-  //       <Modal
-  //         show={showModal}
-  //         onHide={this.handleClose}
-  //         backdrop='static'
-  //         keyboard={false}
-  //         style={{ width: "100%", display: "flex", alignItems: "center" }}>
-  //         <BiX
-  //           size='35px'
-  //           style={{ color: "black" }}
-  //           onClick={this.handleClose}
-  //         />
-  //         <Modal.Header>
-  //           <h5
-  //             style={{
-  //               fontSize: "24px",
-  //               fontFamily: "UberMove, sans-serif",
-  //               marginBottom: "0px",
-  //             }}>
-  //             Receipt
-  //           </h5>
-  //         </Modal.Header>
-  //         <Modal.Body>
-  //           <Modal.Title
-  //             style={{
-  //               fontSize: "25px",
-  //               fontFamily: "UberMove, sans-serif",
-  //               marginBottom: "20px",
-  //             }}>
-  //             Total
-  //             <span
-  //               style={{
-  //                 paddingLeft: "80%",
-  //               }}>
-  //               $5
-  //             </span>
-  //             {dishComps}
-  //           </Modal.Title>
-  //         </Modal.Body>
-  //       </Modal>
-  //     );
-  //   };
-  // };
+  assignCurrentOrdertoState = (order) =>
+    this.setState({
+      showModal: true,
+      currentOrder: order,
+    });
 
   createMenuCardComps = (filterdorders) => {
     const { orders } = this.state;
@@ -172,7 +116,6 @@ class CustomerOrders extends Component {
     }
     return filterdorders.map((order, index) => {
       const src = `${backendServer}/public/${order.restaurant_image_file_path}`;
-
       const date = this.dateparse(order.create_time).toString();
       // const dishComps = this.DishItems(order.dishes);
       return (
@@ -213,7 +156,7 @@ class CustomerOrders extends Component {
             <Col align='right'>
               <Button
                 variant='dark'
-                onClick={this.handleShow}
+                onClick={() => this.assignCurrentOrdertoState(order)}
                 style={{
                   width: "40%",
                   height: "30%",
@@ -231,9 +174,143 @@ class CustomerOrders extends Component {
     });
   };
 
+  CreateModal(order) {
+    const {
+      dishes,
+      sub_total,
+      order_total,
+      order_status,
+      delivery_status,
+      tax,
+      delivery_cost,
+      gratitude,
+      address_line_1,
+      city,
+      state,
+      country,
+      zipcode,
+      restaurant_name,
+    } = order;
+    const { showModal } = this.state;
+    const dishComps = dishes.map((dish) => (
+      <ul
+        className='list-group'
+        style={{ fontSize: "16px", fontFamily: "UberMove, sans-serif" }}>
+        <li
+          className=' d-flex justify-content-between align-items-center'
+          style={{ padding: "0px 20px 10px 20px" }}>
+          <span>
+            <span style={{ marginRight: "20px" }}>{dish.quantity}</span>
+            {dish.name}
+          </span>
+          <span>{dish.price}</span>
+        </li>
+      </ul>
+    ));
+
+    return (
+      <Modal
+        show={showModal}
+        onHide={this.handleClose}
+        backdrop='static'
+        keyboard={false}
+        style={{ width: "100%", display: "flex", alignItems: "center" }}>
+        <BiX
+          size='35px'
+          style={{ color: "black" }}
+          onClick={this.handleClose}
+        />
+        <Modal.Header>
+          <h5
+            style={{
+              fontSize: "24px",
+              fontFamily: "UberMove, sans-serif",
+              marginBottom: "0px",
+            }}>
+            Receipt
+          </h5>
+        </Modal.Header>
+        <Modal.Body>
+          <Modal.Title
+            style={{
+              fontSize: "25px",
+              fontFamily: "UberMove, sans-serif",
+              marginBottom: "20px",
+            }}>
+            Total
+            <span
+              style={{
+                paddingLeft: "70%",
+              }}>
+              ${sub_total}
+            </span>
+            <hr />
+          </Modal.Title>
+          {dishComps}
+          <hr />
+
+          <ul
+            className='list-group'
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: "18px",
+              fontWeight: "500",
+            }}>
+            <li
+              className=' d-flex justify-content-between align-items-center'
+              style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+              Subtotal
+              <span>${order_total}</span>
+            </li>
+            <li
+              className=' d-flex justify-content-between align-items-center'
+              style={{ paddingBottom: "10px" }}>
+              Tax
+              <span>${tax}</span>
+            </li>
+            <li
+              className='d-flex justify-content-between align-items-center'
+              style={{ paddingBottom: "10px" }}>
+              Delivery Fee
+              <span>${delivery_cost}</span>
+            </li>
+            <li
+              className='d-flex justify-content-between align-items-center'
+              style={{ paddingBottom: "10px" }}>
+              CA Driver Benefits
+              <span>${gratitude}</span>
+            </li>
+          </ul>
+          <hr />
+          <h3 style={{ fontFamily: "sans-serif", fontSize: "25px" }}>
+            Address Details
+          </h3>
+          <h3 style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
+            {address_line_1},{city},{state},{country},{zipcode}
+          </h3>
+          <hr />
+          <h3 style={{ fontFamily: "sans-serif", fontSize: "25px" }}>
+            Order Status
+          </h3>
+          <h3 style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
+            {order_status}
+          </h3>
+          <hr />
+          <h3 style={{ fontFamily: "sans-serif", fontSize: "25px" }}>
+            Delivery Status
+          </h3>
+          <h3 style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
+            {delivery_status}
+          </h3>
+        </Modal.Body>
+      </Modal>
+    );
+  }
+
   render() {
-    const { showModal, filterdOrders, orders } = this.state;
+    const { showModal, filterdOrders, orders, currentOrder } = this.state;
     let orderComps = null;
+    let modalComps = null;
     if (orders && filterdOrders) {
       orderComps = this.createMenuCardComps(filterdOrders);
     }
@@ -245,8 +322,11 @@ class CustomerOrders extends Component {
         </Alert>
       );
     }
+    if (currentOrder) {
+      modalComps = this.CreateModal(currentOrder);
+    }
     return (
-      <div style={{ marginLeft: "1%", overflow: "hidden" }}>
+      <div style={{ marginLeft: "1%" }}>
         <Header />
         <Container style={{ marginLeft: "1%" }} fluid>
           <Row>
@@ -280,7 +360,8 @@ class CustomerOrders extends Component {
           <br />
           {orderComps}
         </Container>
-        <Modal
+        {modalComps}
+        {/* <Modal
           show={showModal}
           onHide={this.handleClose}
           backdrop='static'
@@ -329,7 +410,7 @@ class CustomerOrders extends Component {
               </li>
             </ul>
           </Modal.Body>
-        </Modal>
+        </Modal> */}
       </div>
     );
   }

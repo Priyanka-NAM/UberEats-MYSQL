@@ -78,7 +78,11 @@ class RestaurentHome extends Component {
     const { currentLocation, userLocation } = this.props;
     let restaurentMenu = null;
     let restaurentBanner = null;
-    console.log("src src src", restaurentDetails);
+    console.log(
+      "Customer Restaurant Home => Restaurant Details ",
+      restaurentDetails
+    );
+    console.log("Customer Restaurant Home => dishes List ", dishesList);
     if (dishesList && restaurentDetails) {
       restaurentMenu = dishesList.map((dish) => (
         <MenuCard

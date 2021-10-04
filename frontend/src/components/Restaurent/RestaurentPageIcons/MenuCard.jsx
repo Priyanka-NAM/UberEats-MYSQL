@@ -51,13 +51,17 @@ class MenuCard extends Component {
 
   handleAlert = () => {
     const { Orderquantity } = this.state;
-    const { title, price, addToCart, currentRestaurantName } = this.props;
+    const { title, price, addToCart, currentRestaurantName, dishDetails } =
+      this.props;
     const cartDetails = {
       restaurantName: currentRestaurantName,
+      restaurantId: dishDetails.restaurant_id,
+
       itemDetails: {
         title: title,
         price: price,
         quantity: Orderquantity,
+        dishDetails: dishDetails,
       },
     };
     addToCart(cartDetails);
@@ -94,6 +98,7 @@ class MenuCard extends Component {
         dishDetails: dishDetails,
       },
     };
+    console.log("Cart Details before calling AddtoCart ", cartDetails);
     addToCart(cartDetails);
     this.handleClose();
   };

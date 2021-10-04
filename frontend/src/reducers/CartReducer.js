@@ -10,6 +10,10 @@ export default (state = intitalState, action) => {
   switch (action.type) {
     case CART_ADD:
       if (action.payload.restaurantName !== restaurantName) {
+        console.log(
+          "Dish Details in Cart Reducer ",
+          action.payload.itemDetails
+        );
         return {
           restaurantName: action.payload.restaurantName,
           restaurantId: action.payload.restaurantId,

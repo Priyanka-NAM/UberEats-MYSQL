@@ -215,23 +215,54 @@ const dishesList = [
     dish_id: "11",
   },
 ];
-router.get("/restaurantsearch/:search_input", (req, res) => {
-  console.log("Search input: ", req.params.search_input);
-  const restaurantList = {
-    restaurants: restoList,
-  };
+// router.get("/restaurantsearch/:search_input", (req, res) => {
+//   console.log("Search input: ", req.params.search_input);
+//   const restaurantList = {
+//     restaurants: restoList,
+//   };
 
-  if (req.params.search_input === "_") {
+//   if (req.params.search_input === "_") {
+//     res.send({
+//       status: "Sending All Restaurants",
+//       restaurentsinfo: restaurantList,
+//     });
+//   } else {
+//     res.send({
+//       status: "Sending Filtered Resaturants",
+//       restaurentsinfo: restaurantList,
+//     });
+//   }
+// });
+
+router.get("/restaurantsearch/:search_input", (req, res) => {
+  const sql = `CALL search_restaurants('${req.params.search_input}');`;
+  console.log(sql);
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send("Database Connection Error");
+    }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
+    }
+
+    if (result[0].length === 0) {
+      res.status(400).send({ status: "RESTAURANTS_NOT_FOUND" });
+      return;
+    }
     res.send({
-      status: "Sending All Restaurants",
-      restaurentsinfo: restaurantList,
+      status: "ALL_RESTAURANTS",
+      allRestaurants: result[0],
     });
-  } else {
-    res.send({
-      status: "Sending Filtered Resaturants",
-      restaurentsinfo: restaurantList,
-    });
-  }
+  });
 });
 
 // router.get("/restaurantsearch/:search_input", (req, res) => {
@@ -407,6 +438,7 @@ router.post("/updatefavourite", (req, res) => {
         "Content-Type": "text/plain",
       });
       res.send("Database Connection Error");
+      return;
     }
     if (!result || result.length === 0) {
       res.writeHead(500, {
@@ -419,11 +451,12 @@ router.post("/updatefavourite", (req, res) => {
     }
 
     if (result[0].length > 0 && result[0][0].status !== "FAVORITES_CREATED") {
-      res.status(400).send({ status: "FAVORITES_CREATION_FAILED" });
+      res.status(400).send({ status: "FAVORITES_CREATION_FAILED", favId: -1 });
       return;
     }
     res.send({
       status: "FAVORITES_CREATED",
+      favId: result[0][0].favId,
     });
   });
 });
