@@ -13,12 +13,15 @@ import Header from "./HomeIcons/Header";
 import RestaurantCarousel from "./HomeIcons/RestaurarntCarousel";
 import RestoCard from "./HomeIcons/RestoCard";
 import { isUserSignedIn } from "../Service/authService";
-import { restaurants } from "../../Actions/RestaurantAction";
+// import { searchRestaurants } from "../../Actions/RestaurantAction";
+import { restaurants, searchRestaurants } from "../../Actions/RestaurantAction";
+
 import SideBar from "./HomeIcons/SideBar";
 import "../Styles/Home.css";
 
 let nationalRestos = [];
 let nearToYouRestos = [];
+let remainingRestos = [];
 
 class CustomerHome extends Component {
   hasMounted = false;
@@ -85,11 +88,20 @@ class CustomerHome extends Component {
   // }
 
   componentDidUpdate(prevProps) {
-    const { allRestaurants } = this.props;
+    const { allRestaurants, changedUserLocation } = this.props;
     if (allRestaurants !== prevProps.allRestaurants) {
       this.setState({
         allRestaurents: allRestaurants,
       });
+    }
+    if (changedUserLocation !== prevProps.changedUserLocation) {
+      const { foodSelectionType, deliveryType } = this.state;
+      this.handleRestaurantFiltering(
+        foodSelectionType,
+        deliveryType,
+        changedUserLocation,
+        true
+      );
     }
   }
 
@@ -97,9 +109,14 @@ class CustomerHome extends Component {
     this.hasMounted = false;
   }
 
-  handleRestaurantFiltering = (foodSelection, deliveryType) => {
-    const { allRestaurents } = this.state;
-    const { changedUserLocation } = this.props;
+  handleRestaurantFiltering = (
+    foodSelection,
+    deliveryType,
+    location,
+    enableSeachFiltering
+  ) => {
+    const { allRestaurents, changedUserLocation } = this.state;
+    // const { changedUserLocation } = this.props;
 
     if (allRestaurents instanceof Array) {
       console.log("Retrieved Restaurant info ", allRestaurents);
@@ -107,6 +124,19 @@ class CustomerHome extends Component {
       let deliveryBasedFilteredSet = null;
       console.log("All Restaurants Length: ", allRestaurents.length);
       console.log("All Restaurants: ", allRestaurents);
+      // Search Based Filtering
+      // let searchBasedFiltering = null;
+      // let prevResultFoodbasedFiltering = allRestaurents;
+      // if (enableSeachFiltering) {
+      //   searchBasedFiltering = allRestaurents.filter(
+      //     (restaurant) => restaurant.is_search_result === 1
+      //   );
+      //   remainingRestos = allRestaurents.filter(
+      //     (restaurant) => restaurant.is_search_result === 0
+      //   );
+      //   prevResultFoodbasedFiltering = searchBasedFiltering;
+      // }
+
       // Food Type Filtering
       if (foodSelection === "allresto") {
         foodBasedFilteredSet = allRestaurents;
@@ -140,7 +170,9 @@ class CustomerHome extends Component {
             restaurant.delivery_type === deliveryType ||
             restaurant.delivery_type === "Both"
         );
-
+        // if (enableSeachFiltering) {
+        //   searchResultRestos = deliveryBasedFilteredSet;
+        // }
         // Location Based Filtering
         // console.log("Filtering Location: ", location);
         console.log(
@@ -152,15 +184,37 @@ class CustomerHome extends Component {
 
         console.log("Delivery Based Filetered Set: ", deliveryBasedFilteredSet);
 
+        console.log("User Location ", location);
+        // Restaurants Near me
+        nearToYouRestos = deliveryBasedFilteredSet.filter(
+          (restaurant) =>
+            // console.log("Near you filtering => location", location);
+            // console.log(
+            //   "Near you filtering => Similarity Score",
+            //   this.StringSimilarityLevenshtein(
+            //     restaurant.restaurant_city,
+            //     location.city
+            //   )
+            // );
+
+            restaurant.is_search_result === 1 &&
+            location &&
+            location.city &&
+            this.StringSimilarityLevenshtein(
+              restaurant.restaurant_city,
+              location.city
+            ) >= 0.7
+        );
         // National Brands
         nationalRestos = deliveryBasedFilteredSet.filter(
           (restaurant) => restaurant.national_brand
         );
-
-        // Restaurants Near me
-        nearToYouRestos = deliveryBasedFilteredSet.filter(
-          (restaurant) => restaurant.national_brand
+        console.log("National Brand Restaurants ", nationalRestos);
+        // Remaining Restaurants
+        remainingRestos = allRestaurents.filter(
+          (restaurant) => nearToYouRestos.indexOf(restaurant) === -1
         );
+        console.log("Remaining Restaurants ", remainingRestos);
       }
     }
   };
@@ -168,29 +222,98 @@ class CustomerHome extends Component {
   handleFoodSelect = (e) => {
     console.log("Food Selection Type: ", e);
     const { deliveryType } = this.state;
-    const { userLocation } = this.props;
+    const { changedUserLocation, userLocation } = this.props;
+    const location =
+      changedUserLocation.addressDescription !== ""
+        ? changedUserLocation
+        : userLocation;
     this.setState({
       foodSelectionType: e,
     });
-    this.handleRestaurantFiltering(e, deliveryType, userLocation);
+    this.handleRestaurantFiltering(e, deliveryType, location, false);
   };
 
   handleRestoSearch = (e) => {
     console.log("Delivery Type : ", e);
     const { foodSelectionType } = this.state;
-    const { userLocation } = this.props;
+    const { changedUserLocation, userLocation } = this.props;
+    const location =
+      changedUserLocation.addressDescription !== ""
+        ? changedUserLocation
+        : userLocation;
     this.setState({
       deliveryType: e,
     });
-    this.handleRestaurantFiltering(foodSelectionType, e, userLocation);
+    this.handleRestaurantFiltering(foodSelectionType, e, location, false);
   };
 
   handleSearchBarInput = (e) => {
     console.log("Search Input from Header: ", e);
+    if (e === "") {
+      this.props.restaurants();
+    } else {
+      this.props.searchRestaurants(e);
+    }
+    const { foodSelectionType, deliveryType } = this.state;
+    const { userLocation, changedUserLocation } = this.props;
+    const location =
+      changedUserLocation.addressDescription !== ""
+        ? changedUserLocation
+        : userLocation;
+    this.setState({
+      // eslint-disable-next-line react/no-unused-state
+      searchInput: e,
+    });
+    this.handleRestaurantFiltering(
+      foodSelectionType,
+      deliveryType,
+      location,
+      true
+    );
   };
 
   handleRestaPageRedirect = (restaurant) => {
     console.log("handleRestaPageRedirect: ", restaurant);
+  };
+
+  StringSimilarityLevenshtein = (s1, s2) => {
+    let longer = s1;
+    let shorter = s2;
+    if (!s1 || !s2) return 0;
+    if (s1.length < s2.length) {
+      longer = s2;
+      shorter = s1;
+    }
+    const longerLength = longer.length;
+    if (longerLength === 0) {
+      return 1.0;
+    }
+    return (
+      (longerLength - this.editDistance(longer, shorter)) /
+      parseFloat(longerLength)
+    );
+  };
+
+  editDistance = (s1, s2) => {
+    const s11 = s1.toLowerCase();
+    const s22 = s2.toLowerCase();
+
+    const costs = [];
+    for (let i = 0; i <= s11.length; i += 1) {
+      let lastValue = i;
+      for (let j = 0; j <= s22.length; j += 1) {
+        if (i === 0) costs[j] = j;
+        else if (j > 0) {
+          let newValue = costs[j - 1];
+          if (s11.charAt(i - 1) !== s22.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
+        }
+      }
+      if (i > 0) costs[s2.length] = lastValue;
+    }
+    return costs[s2.length];
   };
 
   render() {
@@ -199,44 +322,68 @@ class CustomerHome extends Component {
       redirectVar = <Redirect to='/home' />;
     }
     const { allRestaurents, foodSelectionType, deliveryType } = this.state;
-    const { userLocation, userAddressDescription, allRestaurants } = this.props;
+    const {
+      userLocation,
+      changedUserLocation,
+      userAddressDescription,
+      allRestaurants,
+    } = this.props;
+    const location =
+      changedUserLocation.addressDescription !== ""
+        ? changedUserLocation
+        : userLocation;
     console.log("allRestaurants allRestaurants allRestaurants", allRestaurants);
     let nationalbrands = null;
     let popularnear = null;
-
+    let remaining = null;
+    // let searchresults = null;
     if (allRestaurents) {
       this.handleRestaurantFiltering(
         foodSelectionType,
         deliveryType,
-        userLocation
+        location,
+        true
       );
 
       console.log("National Restos ", nationalRestos);
 
       console.log("Resto near you ", nearToYouRestos);
 
-      nationalbrands = nationalRestos.map((restaurant) => {
-        console.log("Inside National Brands, ", restaurant);
-        return (
-          <RestoCard
-            key={restaurant.restaurant_id}
-            RestaRedirect={this.handleRestaPageRedirect}
-            restaurant={restaurant}
-            isLiked={false}
-          />
-        );
-      });
-      popularnear = nearToYouRestos.map((restaurant) => {
-        console.log("Inside Popular Near me, ", restaurant);
-        return (
-          <RestoCard
-            key={restaurant.restaurant_id}
-            RestaRedirect={this.handleRestaPageRedirect}
-            restaurant={restaurant}
-            isLiked={false}
-          />
-        );
-      });
+      nationalbrands = nationalRestos.map((restaurant) => (
+        <RestoCard
+          key={restaurant.restaurant_id}
+          RestaRedirect={this.handleRestaPageRedirect}
+          restaurant={restaurant}
+          isLiked={false}
+        />
+      ));
+      popularnear = nearToYouRestos.map((restaurant) => (
+        <RestoCard
+          key={restaurant.restaurant_id}
+          RestaRedirect={this.handleRestaPageRedirect}
+          restaurant={restaurant}
+          isLiked={false}
+        />
+      ));
+      remaining = remainingRestos.map((restaurant) => (
+        <RestoCard
+          key={restaurant.restaurant_id}
+          RestaRedirect={this.handleRestaPageRedirect}
+          restaurant={restaurant}
+          isLiked={false}
+        />
+      ));
+      // searchresults = searchResultRestos.map((restaurant) => {
+      //   console.log("Inside Search Result Restos ", restaurant);
+      //   return (
+      //     <RestoCard
+      //       key={restaurant.restaurant_id}
+      //       RestaRedirect={this.handleRestaPageRedirect}
+      //       restaurant={restaurant}
+      //       isLiked={false}
+      //     />
+      //   );
+      // });
     }
     return (
       <React.Fragment>
@@ -261,6 +408,8 @@ class CustomerHome extends Component {
               nationalbrands={nationalbrands}
               // favorites={favorites}
               popularnear={popularnear}
+              remaining={remaining}
+              // searchresults={searchresults}
             />
           </Container>
         </div>
@@ -274,6 +423,7 @@ CustomerHome.propTypes = {
   userLocation: PropTypes.object.isRequired,
   changedUserLocation: PropTypes.object.isRequired,
   restaurants: PropTypes.func.isRequired,
+  searchRestaurants: PropTypes.func.isRequired,
   allRestaurants: PropTypes.array.isRequired,
 };
 
@@ -284,4 +434,6 @@ const mapStateToProps = (state) => ({
   allRestaurants: state.restaurants.allRestaurants,
 });
 
-export default connect(mapStateToProps, { restaurants })(CustomerHome);
+export default connect(mapStateToProps, { restaurants, searchRestaurants })(
+  CustomerHome
+);

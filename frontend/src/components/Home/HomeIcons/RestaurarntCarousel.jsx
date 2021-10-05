@@ -13,20 +13,32 @@ class RestaurentCarousel extends React.Component {
   }
 
   render() {
-    const { nationalbrands, popularnear } = this.props;
+    const { nationalbrands, popularnear, remaining } = this.props;
     console.log(nationalbrands);
     return (
       <Container fluid='true'>
+        {/* <Container fluid='true' style={{ objectFit: "cover" }}>
+          <h2>Search Results</h2>
+          <Row xxs='auto' fluid='true'>
+            {searchresults}
+          </Row>
+        </Container> */}
         <Container fluid='true' style={{ objectFit: "cover" }}>
+          <h2>Restaurants Picked For you</h2>
+          <Row xxs='auto' fluid='true'>
+            {popularnear}
+          </Row>
+        </Container>
+        {/* <Container fluid='true' style={{ objectFit: "cover" }}>
           <h2>National Brands</h2>
           <Row xxs='auto' fluid='true'>
             {nationalbrands}
           </Row>
-        </Container>
+        </Container> */}
         <Container fluid='true' style={{ objectFit: "cover" }}>
-          <h2>Popular Near you</h2>
+          <h2>All Other Restaurants</h2>
           <Row xxs='auto' fluid='true'>
-            {popularnear}
+            {remaining}
           </Row>
         </Container>
       </Container>
@@ -36,5 +48,7 @@ class RestaurentCarousel extends React.Component {
 RestaurentCarousel.propTypes = {
   nationalbrands: PropTypes.array.isRequired,
   popularnear: PropTypes.array.isRequired,
+  remaining: PropTypes.array.isRequired,
+  // searchresults: PropTypes.array.isRequired,
 };
 export default RestaurentCarousel;
