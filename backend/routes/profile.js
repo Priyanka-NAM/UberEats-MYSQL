@@ -91,8 +91,13 @@ router.post("/owner", async (req, res) => {
     restaurant_week_start,
     restaurant_week_end,
     national_brand,
+    delivery_type,
   } = req.body;
-  const sql = `CALL restaurant_update(${restaurant_id},'${name}','${email_id}','${newhashedPassword}','${description}','${restaurant_address_line_one}','${restaurant_city}','${restaurant_state}','${restaurant_country}','${restaurant_zipcode}','${image_file_path}','${phone_num}','${restaurant_start_time}','${restaurant_end_time}','${restaurant_week_start}','${restaurant_week_end}', '${national_brand}');`;
+  let del_type = delivery_type;
+  if (!delivery_type) {
+    del_type = "Both";
+  }
+  const sql = `CALL restaurant_update(${restaurant_id},'${name}','${email_id}','${newhashedPassword}','${description}','${restaurant_address_line_one}','${restaurant_city}','${restaurant_state}','${restaurant_country}','${restaurant_zipcode}','${image_file_path}','${phone_num}','${restaurant_start_time}','${restaurant_end_time}','${restaurant_week_start}','${restaurant_week_end}', '${national_brand}', '${del_type}');`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -141,6 +146,39 @@ router.get("/owner/:restaurant_id", (req, res) => {
       });
       res.end(JSON.stringify(result[0]));
     }
+  });
+});
+
+router.get("/owner/details/:restaurant_id", (req, res) => {
+  const sql = `CALL restaurant_get_id(${req.params.restaurant_id});`;
+  console.log(sql);
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send("Database Connection Error");
+    }
+    if (!result || result.length === 0) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.send({
+        status: "Result from Db Undefined",
+      });
+      return;
+    }
+    if (
+      result[0].length > 0 &&
+      result[0][0].status === "RESTAURANT_ID_IS_NULL"
+    ) {
+      res.status(400).send({ status: "OWNER_PROFILE_DETAILS_FAILURE" });
+      return;
+    }
+    res.send({
+      status: "OWNER_PROFILE_DETAILS",
+      user: result[0][0],
+    });
   });
 });
 

@@ -53,6 +53,7 @@ class DeliveredOrders extends Component {
     let orderId = null;
     let name = null;
     let subTotal = null;
+    let CustomerId = null;
     let orderTotal = null;
     let tax = null;
     let orderComps = null;
@@ -85,6 +86,8 @@ class DeliveredOrders extends Component {
       subTotal = currentOrder.sub_total;
       orderTotal = currentOrder.order_total;
       tax = currentOrder.tax;
+      CustomerId = currentOrder.customer_id;
+      // deliveryStatus=currentOrder
 
       dishes = currentOrder.dishes.map((dish, index) => (
         <>
@@ -134,6 +137,7 @@ class DeliveredOrders extends Component {
                 name={name}
                 subTotal={subTotal}
                 orderTotal={orderTotal}
+                CustomerId={CustomerId}
                 tax={tax}
                 displayDetails={showOrder}
                 dishes={dishes}

@@ -1,15 +1,44 @@
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Modal, Button } from "react-bootstrap";
 import { PropTypes } from "prop-types";
+import { connect } from "react-redux";
+import { BiX } from "react-icons/bi";
 import delivered from "../../SVG/delivered.jpg";
 import cancelled from "../../SVG/cancelled.jpg";
+import { getUserDetails } from "../../../Actions/OwnerActions";
 
 class OrderDetailsDC extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { showCategory: false };
   }
+
+  componentDidUpdate(prevprops) {
+    const { CustomerDetails } = this.props;
+    if (CustomerDetails !== prevprops.CustomerDetails) {
+      this.setState({
+        userDetails: CustomerDetails,
+      });
+    }
+  }
+
+  handleUserProfile = (e) => {
+    const { CustomerId } = this.props;
+    this.props.getUserDetails(CustomerId);
+    this.setState({
+      showCategory: true,
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      showCategory: false,
+    });
+  };
 
   render() {
     const {
@@ -23,6 +52,20 @@ class OrderDetailsDC extends Component {
       displayDetails,
     } = this.props;
 
+    const { showCategory, userDetails } = this.state;
+    let customerName = null;
+    let customerNickname = null;
+    let customerAddress = null;
+    let customerEmailId = null;
+    let customerPhoneNum = null;
+    if (userDetails) {
+      customerName = userDetails.name;
+      customerNickname = userDetails.nick_name;
+      customerAddress = `${userDetails.address_line_1},${userDetails.city},${userDetails.state},${userDetails.country},${userDetails.zipcode}`;
+      customerEmailId = userDetails.email_id;
+      customerPhoneNum = userDetails.phone_num;
+    }
+    // console.log("Customer Name of the Order ", customerName);
     return (
       <div
         show={displayDetails}
@@ -31,26 +74,29 @@ class OrderDetailsDC extends Component {
           style={{
             paddingBottom: "0%",
             height: "5rem",
+            paddingLeft: "10px",
           }}>
           <Col>
-            <h4
-              style={{
-                fontSize: "28px",
-                fontFamily: "sans-serif",
-                paddingBottom: "0%",
-                marginBottom: "2%",
-              }}>
-              {name}
-            </h4>
+            <Button variant='link' onClick={this.handleUserProfile}>
+              <h4
+                style={{
+                  fontSize: "28px",
+                  fontFamily: "sans-serif",
+                  paddingBottom: "0%",
+                  marginBottom: "2%",
+                }}>
+                {name}
+              </h4>
+            </Button>
             <h4
               style={{
                 fontSize: "28px",
                 fontFamily: "sans-serif",
                 paddingTop: "0%",
-                marginTop: "0%",
+                marginTop: "2%",
                 paddingBottom: "0%",
               }}>
-              {orderId}
+              Order# {orderId}
             </h4>
           </Col>
           <Col xs={3}>
@@ -105,12 +151,75 @@ class OrderDetailsDC extends Component {
             alt=''
           />
         </Row>
+        <Modal
+          show={showCategory}
+          onHide={this.handleClose}
+          backdrop='static'
+          keyboard={false}
+          style={{ width: "100%", display: "flex", alignItems: "center" }}>
+          <BiX
+            size='35px'
+            style={{ color: "black" }}
+            onClick={this.handleClose}
+          />
+          <Modal.Header>
+            <h5
+              style={{
+                fontSize: "24px",
+                fontFamily: "UberMove, sans-serif",
+                marginBottom: "0px",
+              }}>
+              Customer Profile
+            </h5>
+          </Modal.Header>
+          <Modal.Body>
+            <Row
+              style={{
+                paddingTop: "0%",
+                fontSize: "18px",
+                fontFamily: "sans-serif",
+                letterSpacing: "0.06em",
+                marginLeft: "20px",
+              }}>
+              <ul className='list-group'>
+                <li
+                  className=' d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Name
+                  <span>{customerName}</span>
+                </li>
+                <li
+                  className=' d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Nick Name
+                  <span>{customerNickname}</span>
+                </li>
+                <li
+                  className='d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Email id
+                  <span>{customerEmailId}</span>
+                </li>
+                <li
+                  className='d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Phone No
+                  <span style={{ paddingLeft: "15%" }}>{customerPhoneNum}</span>
+                </li>
+                <li
+                  className='d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Address
+                  <span style={{ paddingLeft: "15%" }}>{customerAddress}</span>
+                </li>
+              </ul>
+            </Row>
+          </Modal.Body>
+        </Modal>
       </div>
     );
   }
 }
-
-export default OrderDetailsDC;
 
 OrderDetailsDC.propTypes = {
   IsDeliveredimage: PropTypes.bool.isRequired,
@@ -120,6 +229,17 @@ OrderDetailsDC.propTypes = {
   orderTotal: PropTypes.number.isRequired,
   tax: PropTypes.number.isRequired,
   displayDetails: PropTypes.bool.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
   dishes: PropTypes.object.isRequired,
+  getUserDetails: PropTypes.func.isRequired,
+  CustomerId: PropTypes.number.isRequired,
+  CustomerDetails: PropTypes.object.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  deliveredOrders: state.owner.deliveredOrders,
+  CustomerDetails: state.owner.CustomerDetails,
+});
+
+export default connect(mapStateToProps, {
+  getUserDetails,
+})(OrderDetailsDC);

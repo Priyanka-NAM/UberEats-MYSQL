@@ -7,6 +7,7 @@ import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Link } from "react-dom";
 import { Col, Alert, Form, Button, Row } from "react-bootstrap";
 import OrderCard from "./OrderCard";
 import OwnerHome from "../../Home/OwnerHome";
@@ -159,15 +160,18 @@ class OwnerOrders extends Component {
                   height: "5rem",
                 }}>
                 <Col>
-                  <h4
-                    style={{
-                      fontSize: "28px",
-                      fontFamily: "sans-serif",
-                      paddingBottom: "0%",
-                      marginBottom: "2%",
-                    }}>
-                    {name}
-                  </h4>
+                  <Button>
+                    {" "}
+                    <h4
+                      style={{
+                        fontSize: "28px",
+                        fontFamily: "sans-serif",
+                        paddingBottom: "0%",
+                        marginBottom: "2%",
+                      }}>
+                      {name}
+                    </h4>
+                  </Button>
                   <h4
                     style={{
                       fontSize: "28px",

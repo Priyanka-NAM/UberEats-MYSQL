@@ -231,7 +231,7 @@ class CustomerProfile extends Component {
                     typeField='email'
                     maxLength='32'
                     valueField={email_id}
-                    patternField={null}
+                    patternField="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$"
                     requiredField
                     changeHandler={this.handleChange}
                   />

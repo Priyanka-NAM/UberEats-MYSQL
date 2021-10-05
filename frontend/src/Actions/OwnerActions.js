@@ -18,6 +18,10 @@ import {
   OWNER_MENU_UPDATE_FAILURE,
   OWNER_MENU_ADD,
   OWNER_MENU_ADD_FAILURE,
+  CUSTOMER_DETAILS,
+  CUSTOMER_DETAILS_FETCH_FAILURE,
+  OWNER_PROFILE_DETAILS,
+  OWNER_PROFILE_DETAILS_FAILURE,
 } from "./types";
 import backendServer from "../backEndConfig";
 import { getToken } from "../components/Service/authService";
@@ -281,5 +285,61 @@ export const ownerMenuAdd = (dishdata) => async (dispatch) => {
         type: OWNER_MENU_UPDATE_FAILURE,
         payload: error.response.data,
       });
+    });
+};
+
+export const getUserDetails = (customerId) => async (dispatch) => {
+  if (!customerId) return;
+  axios.defaults.headers.common.authorization = getToken();
+  axios
+    .get(`${backendServer}/ubereats/owner/customerdetails/${customerId}`)
+    .then((response) => {
+      console.log("Response: ", JSON.stringify(response.data));
+
+      if (response.data.status === "CUSTOMER_DETAILS") {
+        dispatch({
+          type: CUSTOMER_DETAILS,
+          payload: response.data.customerDetails,
+        });
+      }
+    })
+    .catch((error) => {
+      if (error.response && error.response.data) {
+        dispatch({
+          type: CUSTOMER_DETAILS_FETCH_FAILURE,
+          payload: error.response.data,
+        });
+      }
+    });
+};
+
+export const getOwnerProfile = () => async (dispatch) => {
+  const { restaurant_id: restaurantId } = JSON.parse(
+    localStorage.getItem("user")
+  );
+  if (!restaurantId) return;
+  axios.defaults.headers.common.authorization = getToken();
+  axios
+    // .get(
+    //   `http://localhost:5000/ubereats/profile/owner/details/${restaurantId}`
+    // )
+    .get(`http://localhost:5000/ubereats/profile/owner/details/3`)
+    .then((response) => {
+      console.log("Response: ", JSON.stringify(response.data));
+
+      if (response.data.status === "OWNER_PROFILE_DETAILS") {
+        dispatch({
+          type: OWNER_PROFILE_DETAILS,
+          payload: response.data,
+        });
+      }
+    })
+    .catch((error) => {
+      if (error.response && error.response.data) {
+        dispatch({
+          type: OWNER_PROFILE_DETAILS_FAILURE,
+          payload: error.response.data,
+        });
+      }
     });
 };

@@ -12,7 +12,7 @@ import FormTextBox from "./FormTextBox";
 import OwnerHome from "../../Home/OwnerHome";
 import backendServer from "../../../backEndConfig";
 import { getToken } from "../../Service/authService";
-import { updateOwner } from "../../../Actions/OwnerActions";
+import { updateOwner, getOwnerProfile } from "../../../Actions/OwnerActions";
 
 class OwnerProfile extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class OwnerProfile extends Component {
   }
 
   componentDidMount = () => {
-    const { ownerDetails } = this.props;
+    this.props.getOwnerProfile();
     this.setStateFromProps(this.props);
   };
 
@@ -142,18 +142,15 @@ class OwnerProfile extends Component {
       phone_num,
       restaurant_start_time,
       restaurant_end_time,
-      // ehour,
-      // eminute,
-      // hour,
-      // minute,
       image_file_path,
+      delivery_type,
     } = this.state;
 
     const src = `${backendServer}/public/${image_file_path}`;
     const { updateerrMsg } = this.props;
 
     let errorMessage = "";
-    if (updateerrMsg) {
+    if (updateerrMsg !== "OWNER_PROFILE_DETAILS") {
       errorMessage = updateerrMsg;
     }
     const pageContent = (
@@ -161,7 +158,9 @@ class OwnerProfile extends Component {
         <Form style={{ fontSize: "18px", fontFamily: "sans-serif" }}>
           <Row style={{ padding: "0px", fontFamily: "sans-serif" }}>
             <Col style={{ marginLeft: "30px" }}>
-              <h4>Profile Picture</h4>
+              <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
+                Profile Picture
+              </h4>
               <Card style={{ width: "24rem", height: "20rem" }}>
                 <Card.Body>
                   <Card.Img
@@ -202,7 +201,9 @@ class OwnerProfile extends Component {
                 </Card.Footer>
               </Card>
               <br />
-              <h5>Basic Info</h5>
+              <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
+                Basic Info
+              </h4>
               <FormTextBox
                 FieldName='Restaurant Name'
                 nameField='name'
@@ -231,14 +232,16 @@ class OwnerProfile extends Component {
                 </Row>
               </Form>
               <br />
-              <h4>Contact Info</h4>
+              <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
+                Contact Info
+              </h4>
               <FormTextBox
                 FieldName='Email'
-                nameField='emailId'
+                nameField='email_id'
                 typeField='email'
-                maxLength='32'
+                maxLength='50'
                 valueField={email_id}
-                patternField={null}
+                patternField="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$"
                 requiredField='true'
                 changeHandler={this.handleChange}
               />
@@ -256,7 +259,7 @@ class OwnerProfile extends Component {
               <br />
               <FormTextBox
                 FieldName='New Password'
-                nameField='password'
+                nameField='newpassword'
                 maxLength='32'
                 typeField='password'
                 valueField={newpassword}
@@ -265,13 +268,15 @@ class OwnerProfile extends Component {
               />
             </Col>
             <Col>
-              <h5>Address Info</h5>
+              <h5 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
+                Address Info
+              </h5>
               <FormTextBox
                 FieldName='Address Line1'
                 nameField='restaurant_address_line_one'
                 typeField='text'
                 valueField={restaurant_address_line_one}
-                patternField={null}
+                patternField='^[A-Za-z0-9 ]+$'
                 maxLength='32'
                 requiredField='true'
                 changeHandler={this.handleChange}
@@ -282,7 +287,7 @@ class OwnerProfile extends Component {
                 nameField='restaurant_city'
                 typeField='text'
                 valueField={restaurant_city}
-                patternField={null}
+                patternField='^[A-Za-z ]+$'
                 requiredField='true'
                 maxLength='32'
                 changeHandler={this.handleChange}
@@ -343,7 +348,9 @@ class OwnerProfile extends Component {
                 changeHandler={this.handleChange}
               />
               <br />
-              <h4>Restaurant Timings</h4>
+              <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
+                Restaurant Timings
+              </h4>
               <FormTextBox
                 FieldName='Restaurant Start Time'
                 nameField='restaurant_start_time'
@@ -354,22 +361,7 @@ class OwnerProfile extends Component {
                 requiredField='true'
                 changeHandler={this.handleChange}
               />
-              {/* <Form>
-                <Row>
-                  <Col xs={2}>
-                    <Form.Label>Start Time</Form.Label>
-                  </Col>
-                  <Col xs={6}>
-                   
-                     <TimePicker
-                      theme='classic'
-                      name='starttime'
-                      onTimeChange={this.onStartTimeChange}
-                      time={hour && minute ? `${hour}:${minute}` : null}
-                    /> 
-                  </Col>
-                </Row>
-              </Form> */}
+
               <br />
               <FormTextBox
                 FieldName='Restaurant End Time'
@@ -381,24 +373,38 @@ class OwnerProfile extends Component {
                 requiredField='true'
                 changeHandler={this.handleChange}
               />
-              {/* <Form>
+
+              <br />
+
+              <Form>
                 <Row>
                   <Col xs={2}>
-                    <Form.Label>End Time</Form.Label>
+                    <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
+                      Delivery Type
+                    </h4>
                   </Col>
-                  <Col xs={6}>
-                    
-                    <TimePicker
-                      name='endtime'
-                      theme='classic'
-                      onTimeChange={this.onEndTimeChange}
-                      time={ehour && eminute ? `${ehour}:${eminute}` : null}
-                    /> 
+                  <Col
+                    xs={6}
+                    style={{ fontSize: "16px", fontFamily: "sans-serif" }}>
+                    <Form.Select
+                      name='delivery_type'
+                      value={delivery_type}
+                      style={{
+                        fontSize: "20px",
+                        fontFamily: "sans-serif",
+                      }}
+                      onChange={this.handleChange}
+                      required>
+                      <option value='Both'>Both</option>
+                      <option value='Delivery'>Delivery</option>
+                      <option value='Pick up'>Pick Up</option>
+                    </Form.Select>
                   </Col>
                 </Row>
-              </Form> */}
-              <br />
-              <h4>Working Days</h4>
+              </Form>
+              {/* <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
+                Working Days
+              </h4>
               <Form>
                 <Row>
                   <Col xs={2}>
@@ -451,7 +457,7 @@ class OwnerProfile extends Component {
                     />
                   </Col>
                 </Row>
-              </Form>
+              </Form> */}
               <br />
               <br />
               <Form>
@@ -462,11 +468,11 @@ class OwnerProfile extends Component {
                     </Button>
                   </Col>
                 </Row>
-                {errorMessage && (
+                {errorMessage !== "" && (
                   <Alert
                     variant='error'
                     style={{
-                      fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
+                      fontFamily: "sans-serif",
                     }}>
                     {errorMessage}
                   </Alert>
@@ -483,13 +489,16 @@ class OwnerProfile extends Component {
 
 OwnerProfile.propTypes = {
   updateOwner: PropTypes.func.isRequired,
+  getOwnerProfile: PropTypes.func.isRequired,
   updateerrMsg: PropTypes.string.isRequired,
   ownerDetails: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  errMsg: state.owner.errMsg,
   ownerDetails: state.owner.ownerDetails.user,
+  updateerrMsg: state.owner.ownerDetails.status,
 });
 
-export default connect(mapStateToProps, { updateOwner })(OwnerProfile);
+export default connect(mapStateToProps, { updateOwner, getOwnerProfile })(
+  OwnerProfile
+);

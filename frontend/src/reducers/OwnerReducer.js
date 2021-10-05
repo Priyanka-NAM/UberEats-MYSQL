@@ -17,6 +17,10 @@ import {
   OWNER_MENU_UPDATE_FAILURE,
   OWNER_MENU_ADD,
   OWNER_MENU_ADD_FAILURE,
+  CUSTOMER_DETAILS,
+  CUSTOMER_DETAILS_FETCH_FAILURE,
+  OWNER_PROFILE_DETAILS,
+  OWNER_PROFILE_DETAILS_FAILURE,
 } from "../Actions/types";
 
 const intitalState = {
@@ -118,6 +122,24 @@ export default (state = intitalState, action) => {
         allDishes: action.payload,
       };
     case OWNER_MENU_ADD_FAILURE:
+      return {
+        ...state,
+      };
+    case CUSTOMER_DETAILS:
+      return {
+        ...state,
+        CustomerDetails: action.payload,
+      };
+    case CUSTOMER_DETAILS_FETCH_FAILURE:
+      return {
+        ...state,
+      };
+    case OWNER_PROFILE_DETAILS:
+      return {
+        ...state,
+        ownerDetails: action.payload,
+      };
+    case OWNER_PROFILE_DETAILS_FAILURE:
       return {
         ...state,
       };
