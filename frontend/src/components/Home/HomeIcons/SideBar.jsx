@@ -1,16 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import {
-  Container,
-  Button,
-  Col,
-  Row,
-  ButtonGroup,
-  Form,
-} from "react-bootstrap";
-import { RadioGroup, Radio } from "react-radio-group";
+import { Container, Button, Row } from "react-bootstrap";
 import "../../Styles/SideBar.css";
-import { FaSlideshare } from "react-icons/fa";
 
 const SidebarButton = {
   borderRadius: 20,

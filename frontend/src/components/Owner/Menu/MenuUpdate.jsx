@@ -167,8 +167,7 @@ class MenuUpdate extends Component {
       dessertsComp = this.createMenuCardComps(desserts);
       beveragesComp = this.createMenuCardComps(beverages);
       otherComp = this.createMenuCardComps(other);
-
-       }
+    }
     if (showEdit) {
       MenuAddEditComp = (
         <div
@@ -210,6 +209,7 @@ class MenuUpdate extends Component {
               paddingTop: "4%",
               borderRight: "1px solid black",
               height: "84vh",
+              overflow: "scroll",
             }}>
             <h4 style={{ fontSize: "35px", fontFamily: "sans-serif" }}>Menu</h4>
             <Button

@@ -165,7 +165,7 @@ class RestaurentHome extends Component {
             </Row>
           </Container>
           <hr style={{ border: "soild 1px" }} />
-          <Container fluid>
+          <Container fluid style={{ height: "100vh", overflowY: "scroll" }}>
             <Row style={{ padding: "0%", margin: "0%" }}>{restaurentMenu}</Row>
           </Container>
         </>

@@ -1,9 +1,11 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/forbid-prop-types */
 import React from "react";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { connect } from "react-redux";
 import { Button, Container, Form } from "react-bootstrap";
 import { addCustomer } from "../../Actions/CustomerActions";
@@ -18,11 +20,9 @@ class CustomerSignUp extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { email, password, name } = this.state;
+    // const { email, password, name } = this.state;
     const details = {
-      name,
-      email,
-      password,
+      ...this.state,
     };
     this.props.addCustomer(details);
   };
@@ -33,6 +33,14 @@ class CustomerSignUp extends React.Component {
     });
   };
 
+  selectCountry(val) {
+    this.setState({ country: val });
+  }
+
+  selectRegion(val) {
+    this.setState({ state: val });
+  }
+
   render() {
     const { user } = this.props;
     // if (isOwnerSignedIn || isUserSignedIn) {
@@ -42,12 +50,12 @@ class CustomerSignUp extends React.Component {
     let errorMessage = "";
 
     const currentUser = JSON.parse(localStorage.getItem("user"));
-
+    const { country, state, city, address_line_1, zipcode } = this.state;
     if (currentUser) {
-      if (currentUser.is_owner === 0 && user.status === "USER_ADDED") {
+      if (currentUser.is_owner === 0 && user && user.status === "USER_ADDED") {
         return <Redirect to='/customer/home' />;
       }
-    } else if (user.status === "USER_EXISTS") {
+    } else if (user && user.status === "USER_EXISTS") {
       errorMessage = "Opps! Email id already exists";
     }
 
@@ -87,7 +95,7 @@ class CustomerSignUp extends React.Component {
                 }}>
                 Sign Up to Order
               </h2>
-              <Form.Group className='mb-3' controlId='formBasicEmail'>
+              <Form.Group className='mb-3' controlId='formBasicName'>
                 <Form.Control
                   style={{
                     height: "50px",
@@ -125,6 +133,71 @@ class CustomerSignUp extends React.Component {
                   onChange={this.handleChange}
                 />
               </Form.Group>
+              <Form.Group className='mb-3'>
+                <Form.Control
+                  style={{
+                    height: "50px",
+                  }}
+                  type='text'
+                  name='address_line_1'
+                  value={address_line_1}
+                  required
+                  placeholder='Address Line 1'
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+              <Form.Group
+                className='mb-3'
+                style={{ display: "flex", flexDirection: "row" }}>
+                <Form.Control
+                  style={{
+                    height: "50px",
+                  }}
+                  type='text'
+                  name='city'
+                  value={city}
+                  required
+                  placeholder='City'
+                  onChange={this.handleChange}
+                />
+                <RegionDropdown
+                  style={{
+                    width: "100%",
+                  }}
+                  disableWhenEmpty
+                  // whitelist={{ US: ["CA"] }}
+                  country={country}
+                  value={state}
+                  name='state'
+                  onChange={(val) => this.selectRegion(val)}
+                />
+              </Form.Group>
+              <Form.Group
+                className='mb-3'
+                style={{ display: "flex", flexDirection: "row" }}>
+                <CountryDropdown
+                  name='country'
+                  style={{
+                    width: "100%",
+                  }}
+                  // whitelist={["US"]}
+                  value={country}
+                  onChange={(val) => this.selectCountry(val)}
+                />
+
+                <Form.Control
+                  style={{
+                    height: "50px",
+                  }}
+                  type='text'
+                  name='zipcode'
+                  value={zipcode}
+                  required
+                  placeholder='ZipCode'
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+
               <Button
                 style={{
                   width: "100%",
@@ -160,6 +233,6 @@ CustomerSignUp.propTypes = {
   user: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
-  user: state.customer.user,
+  user: state.customer.customerDetails.user,
 });
 export default connect(mapStateToProps, { addCustomer })(CustomerSignUp);

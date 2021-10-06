@@ -1,4 +1,8 @@
-import { USER_SIGNIN_SUCCESS, USER_SIGNIN_FAILURE } from "../Actions/types";
+import {
+  USER_SIGNIN_SUCCESS,
+  USER_SIGNIN_FAILURE,
+  CUSTOMER_SIGNUP,
+} from "../Actions/types";
 
 const intitalState = {
   user: {},
@@ -32,6 +36,13 @@ const processAddress = (userdata) => {
 export default (state = intitalState, action) => {
   switch (action.type) {
     case USER_SIGNIN_SUCCESS:
+      return {
+        ...state,
+        user: action.payload.user,
+        address: processAddress(action.payload.user),
+        isLoggedin: true,
+      };
+    case CUSTOMER_SIGNUP:
       return {
         ...state,
         user: action.payload.user,

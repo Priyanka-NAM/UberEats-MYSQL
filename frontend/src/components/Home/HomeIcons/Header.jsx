@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import {
@@ -151,7 +151,10 @@ class Header extends React.Component {
                 <Nav.Item style={mainstyle.paddingLeft}>
                   <InputGroup
                     size='lg'
-                    style={{ width: "70rem", height: "54.4px" }}>
+                    style={{
+                      width: "70rem",
+                      height: "54.4px",
+                    }}>
                     <Button variant='light' onClick={this.handleSearchBar}>
                       <FaSearch />
                     </Button>

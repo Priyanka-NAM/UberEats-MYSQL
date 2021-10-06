@@ -320,10 +320,8 @@ export const getOwnerProfile = () => async (dispatch) => {
   if (!restaurantId) return;
   axios.defaults.headers.common.authorization = getToken();
   axios
-    // .get(
-    //   `http://localhost:5000/ubereats/profile/owner/details/${restaurantId}`
-    // )
-    .get(`http://localhost:5000/ubereats/profile/owner/details/3`)
+    .get(`http://localhost:5000/ubereats/profile/owner/details/${restaurantId}`)
+    // .get(`http://localhost:5000/ubereats/profile/owner/details/3`)
     .then((response) => {
       console.log("Response: ", JSON.stringify(response.data));
 

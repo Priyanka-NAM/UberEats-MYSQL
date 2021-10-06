@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const config = require("config");
@@ -9,9 +10,18 @@ const saltrounds = 10;
 const router = express.Router();
 
 router.post("/customer", async (req, res) => {
-  const { name, email, password } = req.body;
+  const {
+    name,
+    email,
+    password,
+    country,
+    state,
+    city,
+    address_line_1,
+    zipcode,
+  } = req.body;
   const hashedPassword = md5(password);
-  const sql = `CALL customer_put('${name}','${email}', '${hashedPassword}', null, null, null, null, null, null, null, null, null);`;
+  const sql = `CALL customer_put('${name}','${email}', '${hashedPassword}', null, '${address_line_1}', '${city}', '${state}', '${country}', '${zipcode}', null, null, null);`;
   db.query(sql, (err, result) => {
     if (err) {
       res.writeHead(500, {
@@ -35,14 +45,22 @@ router.post("/customer", async (req, res) => {
   });
 });
 
-const processAddress = (addr) => addr.split(",");
+// const processAddress = (addr) => addr.split(",");
 
 router.post("/owner", async (req, res) => {
   console.log(req.body);
-  const { name, email, password, location: address } = req.body;
+  const {
+    name,
+    email,
+    password,
+    restaurant_address_line_one,
+    restaurant_city,
+    restaurant_state,
+    restaurant_country,
+    restaurant_zipcode,
+  } = req.body;
   const hashedPassword = md5(password);
-  const parsedLocation = processAddress(address);
-  const sql = `CALL restaurant_put(-1, '${name}','${email}', '${hashedPassword}', '', '${parsedLocation[0]}', '${parsedLocation[1]}', '${parsedLocation[2]}', '${parsedLocation[3]}', '${parsedLocation[4]}', null, null, null, null, null, null, null);`;
+  const sql = `CALL restaurant_put(-1, '${name}','${email}', '${hashedPassword}', '', '${restaurant_address_line_one}', '${restaurant_city}', '${restaurant_state}', '${restaurant_country}', '${restaurant_zipcode}', null, null, null, null, null, null, null);`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {

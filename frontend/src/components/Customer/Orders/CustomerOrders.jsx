@@ -328,7 +328,9 @@ class CustomerOrders extends Component {
     return (
       <div style={{ marginLeft: "1%" }}>
         <Header />
-        <Container style={{ marginLeft: "1%" }} fluid>
+        <Container
+          style={{ marginLeft: "1%", height: "150vh", overflow: "auto" }}
+          fluid>
           <Row>
             <Col>
               <h1>Past Orders</h1>
@@ -361,56 +363,6 @@ class CustomerOrders extends Component {
           {orderComps}
         </Container>
         {modalComps}
-        {/* <Modal
-          show={showModal}
-          onHide={this.handleClose}
-          backdrop='static'
-          keyboard={false}
-          style={{ width: "100%", display: "flex", alignItems: "center" }}>
-          <BiX
-            size='35px'
-            style={{ color: "black" }}
-            onClick={this.handleClose}
-          />
-          <Modal.Header>
-            <h5
-              style={{
-                fontSize: "24px",
-                fontFamily: "UberMove, sans-serif",
-                marginBottom: "0px",
-              }}>
-              Receipt
-            </h5>
-          </Modal.Header>
-          <Modal.Body>
-            <Modal.Title
-              style={{
-                fontSize: "25px",
-                fontFamily: "UberMove, sans-serif",
-                marginBottom: "20px",
-              }}>
-              Total
-              <span
-                style={{
-                  paddingLeft: "80%",
-                }}>
-                $5
-              </span>
-            </Modal.Title>
-            <ul
-              className='list-group'
-              style={{ fontSize: "16px", fontFamily: "UberMove, sans-serif" }}>
-              <li
-                className=' d-flex justify-content-between align-items-center'
-                style={{ padding: "0px 20px 10px 20px" }}>
-                <span>
-                  <span style={{ marginRight: "20px" }}>4</span>item
-                </span>
-                <span>$5</span>
-              </li>
-            </ul>
-          </Modal.Body>
-        </Modal> */}
       </div>
     );
   }

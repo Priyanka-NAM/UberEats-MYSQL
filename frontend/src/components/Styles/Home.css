@@ -1,12 +1,7 @@
-.home-body {
+/* .home-body {
   display: flex;
-  height: 40vh;
-}
-
-/* .display-menu {
-  display: "flex";
-  flex-direction: row;
 } */
+
 .home-container {
   display: flex;
   flex-direction: row;

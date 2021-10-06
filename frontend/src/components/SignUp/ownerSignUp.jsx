@@ -1,9 +1,11 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import { Redirect } from "react-router";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { Button, Container, Form, Alert } from "react-bootstrap";
 import { addOwner } from "../../Actions/OwnerActions";
 import SignInUpNAV from "./SignInUpNavBar";
@@ -17,12 +19,9 @@ class OwnerSignUp extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { email, password, name, location } = this.state;
+    // const { email, password, name } = this.state;
     const details = {
-      name,
-      email,
-      password,
-      location,
+      ...this.state,
     };
     this.props.addOwner(details);
   };
@@ -33,11 +32,27 @@ class OwnerSignUp extends Component {
     });
   };
 
+  selectCountry(val) {
+    this.setState({ restaurant_country: val });
+  }
+
+  selectRegion(val) {
+    this.setState({ restaurant_state: val });
+  }
+
   render() {
     const { owner } = this.props;
     // if (isOwnerSignedIn || isUserSignedIn) {
     //   return <Redirect to='/home' />;
     // }
+    const {
+      restaurant_city,
+      restaurant_country,
+      restaurant_state,
+      restaurant_zipcode,
+      restaurant_address_line_one,
+    } = this.state;
+
     let errorMessage = "";
     const currentOwner = JSON.parse(localStorage.getItem("user"));
     if (currentOwner) {
@@ -100,9 +115,61 @@ class OwnerSignUp extends Component {
                     height: "50px",
                   }}
                   type='Location'
-                  name='location'
+                  name='restaurant_address_line_one'
+                  value={restaurant_address_line_one}
                   required
-                  placeholder='Restaurant Location'
+                  placeholder='Restaurant Address Line'
+                  onChange={this.handleChange}
+                />
+              </Form.Group>
+              <Form.Group
+                className='mb-3'
+                style={{ display: "flex", flexDirection: "row" }}>
+                <Form.Control
+                  style={{
+                    height: "50px",
+                  }}
+                  type='text'
+                  name='restaurant_city'
+                  value={restaurant_city}
+                  required
+                  placeholder='City'
+                  onChange={this.handleChange}
+                />
+                <RegionDropdown
+                  style={{
+                    width: "100%",
+                  }}
+                  disableWhenEmpty
+                  // whitelist={{ US: ["CA"] }}
+                  country={restaurant_country}
+                  value={restaurant_state}
+                  name='restaurant_state'
+                  onChange={(val) => this.selectRegion(val)}
+                />
+              </Form.Group>
+              <Form.Group
+                className='mb-3'
+                style={{ display: "flex", flexDirection: "row" }}>
+                <CountryDropdown
+                  name='restaurant_country'
+                  style={{
+                    width: "100%",
+                  }}
+                  // whitelist={["US"]}
+                  value={restaurant_country}
+                  onChange={(val) => this.selectCountry(val)}
+                />
+
+                <Form.Control
+                  style={{
+                    height: "50px",
+                  }}
+                  type='text'
+                  name='restaurant_zipcode'
+                  value={restaurant_zipcode}
+                  required
+                  placeholder='ZipCode'
                   onChange={this.handleChange}
                 />
               </Form.Group>

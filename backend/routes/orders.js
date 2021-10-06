@@ -248,9 +248,10 @@ router.post("/customer/neworder", (req, res) => {
     delivery_status,
     order_status,
     cart_items,
+    order_delivery_type,
   } = req.body;
   console.log("Customer New Order", req.body);
-  const sql = `CALL customer_create_order(${customerId},${restaurant_id},'${order_status}','${delivery_status}',${sub_total},${tax},${delivery_cost},'${gratitude}',${order_total});`;
+  const sql = `CALL customer_create_order(${customerId},${restaurant_id},'${order_status}','${delivery_status}',${sub_total},${tax},${delivery_cost},'${gratitude}',${order_total}, '${order_delivery_type}');`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {

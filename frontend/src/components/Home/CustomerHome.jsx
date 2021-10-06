@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/jsx-fragments */
 /* eslint-disable react/forbid-prop-types */
@@ -388,28 +389,33 @@ class CustomerHome extends Component {
     return (
       <React.Fragment>
         {redirectVar}
-        <div style={{ marginLeft: "1%" }}>
+        <div
+          style={{
+            marginLeft: "1%",
+          }}>
           <Header
             restoSearch={this.handleRestoSearch}
             searchBarCallback={this.handleSearchBarInput}
             defaultUserLocationDescription={
-              // eslint-disable-next-line no-unneeded-ternary
               userAddressDescription
                 ? userAddressDescription
                 : "Default Location"
             }
             hideDeliveryPickup
           />
-          <Container fluid className='home-container'>
+          <Container
+            fluid
+            style={{
+              display: "flex",
+              flexDirection: "row",
+            }}>
             <Col md='3'>
               <SideBar FoodTypeSelection={this.handleFoodSelect} />
             </Col>
             <RestaurantCarousel
               nationalbrands={nationalbrands}
-              // favorites={favorites}
               popularnear={popularnear}
               remaining={remaining}
-              // searchresults={searchresults}
             />
           </Container>
         </div>

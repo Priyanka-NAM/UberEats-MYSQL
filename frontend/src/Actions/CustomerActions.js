@@ -36,7 +36,7 @@ export const addCustomer = (signupdata) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: CUSTOMER_SIGNUP_FAILURE,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };

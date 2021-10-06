@@ -200,8 +200,8 @@ class MenuAddEdit extends Component {
     const {
       dishname: name,
       dishdescription: description,
-      dishcategory: category,
-      dishtype: dishType,
+      dishcategory,
+      dishtype,
       ingredients,
       price,
       imageFilePath,
@@ -320,7 +320,7 @@ class MenuAddEdit extends Component {
                 style={{
                   backgroundColor: "#eeee",
                 }}
-                value={category}
+                value={dishcategory}
                 onChange={this.handleChange}
                 required>
                 <option>Select Category</option>
@@ -341,7 +341,7 @@ class MenuAddEdit extends Component {
                 style={{
                   backgroundColor: "#eeee",
                 }}
-                value={dishType}
+                value={dishtype}
                 required>
                 <option>Select Dietary</option>
                 <option value='Vegetarian'>Veg</option>
