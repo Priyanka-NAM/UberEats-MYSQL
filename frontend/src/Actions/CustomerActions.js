@@ -12,8 +12,6 @@ import {
   CUSTOMER_FAVORITES_FAILURE,
   UPDATE_FAV,
   UPDATE_FAV_FAILURE,
-  // REMOVE_FAV,
-  // REMOVE_FAV_FAILURE,
 } from "./types";
 import backendServer from "../backEndConfig";
 import { getToken } from "../components/Service/authService";
@@ -67,9 +65,6 @@ export const customerOrders = () => async (dispatch) => {
   try {
     axios.defaults.withCredentials = true;
     axios.defaults.headers.common.authorization = getToken();
-    // const res = await axios.get(
-    //   `${backendServer}/ubereats/orders/orderstatus/customer/1`
-    // );
     const res = await axios.get(
       `${backendServer}/ubereats/orders/orderstatus/customer/${customerId}`
     );
@@ -119,10 +114,6 @@ export const customerFav = () => async (dispatch) => {
     const res = await axios.get(
       `${backendServer}/ubereats/customerrestaurant/favourite/${customerId}`
     );
-    // const res = await axios.get(
-    //   `${backendServer}/ubereats/customerrestaurant/favourite/${customerId}`
-    // );
-
     const response = await res;
     console.log("fav response", response.data);
     dispatch({

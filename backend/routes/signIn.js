@@ -12,7 +12,7 @@ const router = express.Router();
 router.post("/", (req, res) => {
   const { password } = req.body;
   const hashedPassword = md5(password);
-  const sql = `CALL authenticate_user('${req.body.email}','${hashedPassword}');`;
+  const sql = `CALL authenticate_user("${req.body.email}","${hashedPassword}");`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {

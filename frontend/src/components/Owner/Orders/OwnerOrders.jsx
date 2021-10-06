@@ -7,14 +7,15 @@ import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Link } from "react-dom";
-import { Col, Alert, Form, Button, Row } from "react-bootstrap";
+import { BiX } from "react-icons/bi";
+import { Col, Modal, Alert, Form, Button, Row } from "react-bootstrap";
 import OrderCard from "./OrderCard";
 import OwnerHome from "../../Home/OwnerHome";
 import OrdersNav from "./OrdersNav";
 import {
   ownerNewOrders,
   ownerNewOrdersUpdate,
+  getUserDetails,
 } from "../../../Actions/OwnerActions";
 
 class OwnerOrders extends Component {
@@ -22,7 +23,7 @@ class OwnerOrders extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { showEdit: false };
+    this.state = { showEdit: false, showCategory: false };
   }
 
   componentDidMount() {
@@ -30,13 +31,26 @@ class OwnerOrders extends Component {
   }
 
   componentDidUpdate(prevprops) {
-    const { newOrders } = this.props;
+    const { newOrders, CustomerDetails } = this.props;
     if (newOrders !== prevprops.newOrders) {
       this.setState({
         newOrders,
       });
     }
+    if (CustomerDetails !== prevprops.CustomerDetails) {
+      this.setState({
+        userDetails: CustomerDetails,
+      });
+    }
   }
+
+  handleUserProfile = (e) => {
+    const { CustomerId } = this.props;
+    this.props.getUserDetails(CustomerId);
+    this.setState({
+      showCategory: true,
+    });
+  };
 
   handleChange = (e) => {
     this.setState({
@@ -49,6 +63,12 @@ class OwnerOrders extends Component {
     this.setState({
       showEdit: true,
       currentOrder: newOrders[index],
+    });
+  };
+
+  handleClose = () => {
+    this.setState({
+      showCategory: false,
     });
   };
 
@@ -75,7 +95,14 @@ class OwnerOrders extends Component {
   };
 
   render() {
-    const { showEdit, errormessage, newOrders, currentOrder } = this.state;
+    const {
+      showEdit,
+      errormessage,
+      newOrders,
+      currentOrder,
+      showCategory,
+      userDetails,
+    } = this.state;
     let orderId = null;
     let name = null;
     let subTotal = null;
@@ -83,6 +110,21 @@ class OwnerOrders extends Component {
     let tax = null;
     let orderComps = null;
     let dishes = null;
+    let customerName = null;
+    let customerNickname = null;
+    let customerAddress = null;
+    let customerEmailId = null;
+    let customerPhoneNum = null;
+    let gratitude = null;
+    let deliveryCost = null;
+    let orderDeliveryType = null;
+    if (userDetails) {
+      customerName = userDetails.name;
+      customerNickname = userDetails.nick_name;
+      customerAddress = `${userDetails.address_line_1},${userDetails.city},${userDetails.state},${userDetails.country},${userDetails.zipcode}`;
+      customerEmailId = userDetails.email_id;
+      customerPhoneNum = userDetails.phone_num;
+    }
     if (!newOrders || newOrders.length === 0) {
       orderComps = (
         <Alert variant='info' style={{ fontFamily: "sans-serif" }}>
@@ -95,7 +137,7 @@ class OwnerOrders extends Component {
           bccolor='#05944F'
           key={index}
           orderIndex={index}
-          name={order.nick_name}
+          name={order.customer_name}
           orderId={order.order_id}
           billamount={order.sub_total}
           totalitems={order.dishes.length}
@@ -106,10 +148,13 @@ class OwnerOrders extends Component {
 
     if (currentOrder) {
       orderId = currentOrder.order_id;
-      name = currentOrder.nick_name;
+      name = currentOrder.customer_name;
       subTotal = currentOrder.sub_total;
       orderTotal = currentOrder.order_total;
       tax = currentOrder.tax;
+      deliveryCost = currentOrder.delivery_cost;
+      gratitude = currentOrder.gratitude;
+      orderDeliveryType = currentOrder.order_delivery_type;
 
       dishes = currentOrder.dishes.map((dish, index) => (
         <>
@@ -160,8 +205,7 @@ class OwnerOrders extends Component {
                   height: "5rem",
                 }}>
                 <Col>
-                  <Button>
-                    {" "}
+                  <Button variant='link' onClick={this.handleUserProfile}>
                     <h4
                       style={{
                         fontSize: "28px",
@@ -191,13 +235,57 @@ class OwnerOrders extends Component {
                       width: "32%",
                       color: "#05944F",
                     }}>
-                    Delivery
+                    {orderDeliveryType}
                   </h4>
                 </Col>
               </Row>
               <hr style={{ border: "1px soild black" }} />
               {dishes}
+
               <Row
+                style={{
+                  marginLeft: "2%",
+                  width: "100%",
+                  paddingTop: "20px",
+                  fontSize: "18px",
+                  fontWeight: "bold",
+                  fontFamily: "sans-serif",
+                  letterSpacing: "0.06em",
+                }}>
+                <ul className='list-group'>
+                  <li
+                    className=' d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    Subtotal
+                    <span>${orderTotal}</span>
+                  </li>
+                  <li
+                    className=' d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    Tax
+                    <span>${tax}</span>
+                  </li>
+                  <li
+                    className='d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    Delivery Fee
+                    <span>${deliveryCost}</span>
+                  </li>
+                  <li
+                    className='d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    CA Driver Benefits
+                    <span>${gratitude}</span>
+                  </li>
+                  <li
+                    className='d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    Total
+                    <span>${subTotal}</span>
+                  </li>
+                </ul>
+              </Row>
+              {/* <Row
                 style={{
                   fontSize: "18px",
                   fontFamily: "sans-serif",
@@ -229,7 +317,7 @@ class OwnerOrders extends Component {
                   Total
                   <span style={{ paddingLeft: "20px" }}>${subTotal}</span>
                 </Col>
-              </Row>
+              </Row> */}
               <Row
                 style={{
                   fontSize: "20px",
@@ -274,6 +362,71 @@ class OwnerOrders extends Component {
             </div>
           </Col>
         </Row>
+        <Modal
+          show={showCategory}
+          onHide={this.handleClose}
+          backdrop='static'
+          keyboard={false}
+          style={{ width: "100%", display: "flex", alignItems: "center" }}>
+          <BiX
+            size='35px'
+            style={{ color: "black" }}
+            onClick={this.handleClose}
+          />
+          <Modal.Header>
+            <h5
+              style={{
+                fontSize: "24px",
+                fontFamily: "UberMove, sans-serif",
+                marginBottom: "0px",
+              }}>
+              Customer Profile
+            </h5>
+          </Modal.Header>
+          <Modal.Body>
+            <Row
+              style={{
+                paddingTop: "0%",
+                fontSize: "18px",
+                fontFamily: "sans-serif",
+                letterSpacing: "0.06em",
+                marginLeft: "20px",
+              }}>
+              <ul className='list-group'>
+                <li
+                  className=' d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Name
+                  <span>{customerName}</span>
+                </li>
+                <li
+                  className=' d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Nick Name
+                  <span>{customerNickname}</span>
+                </li>
+                <li
+                  className='d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Email id
+                  <span>{customerEmailId}</span>
+                </li>
+                <li
+                  className='d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Phone No
+                  <span style={{ paddingLeft: "15%" }}>{customerPhoneNum}</span>
+                </li>
+                <li
+                  className='d-flex justify-content-between align-items-center'
+                  style={{ paddingBottom: "10px", fontWeight: "bold" }}>
+                  Address
+                  <span style={{ paddingLeft: "15%" }}>{customerAddress}</span>
+                </li>
+              </ul>
+            </Row>
+          </Modal.Body>
+        </Modal>
       </Col>
     );
     return <OwnerHome pageContent={pageContent} />;
@@ -284,13 +437,18 @@ OwnerOrders.propTypes = {
   newOrders: PropTypes.object.isRequired,
   ownerNewOrders: PropTypes.func.isRequired,
   ownerNewOrdersUpdate: PropTypes.func.isRequired,
+  getUserDetails: PropTypes.func.isRequired,
+  CustomerId: PropTypes.number.isRequired,
+  CustomerDetails: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   newOrders: state.owner.newOrders,
+  CustomerDetails: state.owner.CustomerDetails,
 });
 
 export default connect(mapStateToProps, {
   ownerNewOrders,
   ownerNewOrdersUpdate,
+  getUserDetails,
 })(OwnerOrders);

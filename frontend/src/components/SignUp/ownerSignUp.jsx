@@ -56,10 +56,14 @@ class OwnerSignUp extends Component {
     let errorMessage = "";
     const currentOwner = JSON.parse(localStorage.getItem("user"));
     if (currentOwner) {
-      if (currentOwner.is_owner === 1 && owner.status === "RESTAURANT_ADDED") {
+      if (
+        currentOwner.is_owner === 1 &&
+        owner &&
+        owner.status === "RESTAURANT_ADDED"
+      ) {
         return <Redirect to='/owner/home' />;
       }
-    } else if (owner.status === "RESTAURANT_ALREADY_EXISTS") {
+    } else if (owner && owner.status === "RESTAURANT_ALREADY_EXISTS") {
       errorMessage = "Opps! Email id already exists";
     }
 

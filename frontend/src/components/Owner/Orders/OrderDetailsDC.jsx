@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
@@ -48,8 +49,11 @@ class OrderDetailsDC extends Component {
       subTotal,
       orderTotal,
       tax,
+      deliveryCost,
       dishes,
+      gratitude,
       displayDetails,
+      orderDeliveryType,
     } = this.props;
 
     const { showCategory, userDetails } = this.state;
@@ -107,43 +111,56 @@ class OrderDetailsDC extends Component {
                 width: "32%",
                 color: "#05944F",
               }}>
-              Delivery
+              {orderDeliveryType}
             </h4>
           </Col>
         </Row>
         <hr style={{ border: "1px soild black" }} />
-
         {dishes}
         <Row
           style={{
+            marginLeft: "2%",
+            width: "100%",
+            paddingTop: "20px",
             fontSize: "18px",
+            fontWeight: "bold",
             fontFamily: "sans-serif",
-            fontWeight: "550",
+            letterSpacing: "0.06em",
           }}>
-          <Col style={{ textAlign: "end" }}>
-            Subtotal<span style={{ paddingLeft: "20px" }}>${orderTotal}</span>
-          </Col>
+          <ul className='list-group'>
+            <li
+              className=' d-flex justify-content-between align-items-center'
+              style={{ paddingBottom: "10px" }}>
+              Subtotal
+              <span>${orderTotal}</span>
+            </li>
+            <li
+              className=' d-flex justify-content-between align-items-center'
+              style={{ paddingBottom: "10px" }}>
+              Tax
+              <span>${tax}</span>
+            </li>
+            <li
+              className='d-flex justify-content-between align-items-center'
+              style={{ paddingBottom: "10px" }}>
+              Delivery Fee
+              <span>${deliveryCost}</span>
+            </li>
+            <li
+              className='d-flex justify-content-between align-items-center'
+              style={{ paddingBottom: "10px" }}>
+              CA Driver Benefits
+              <span>${gratitude}</span>
+            </li>
+            <li
+              className='d-flex justify-content-between align-items-center'
+              style={{ paddingBottom: "10px" }}>
+              Total
+              <span>${subTotal}</span>
+            </li>
+          </ul>
         </Row>
-        <Row
-          style={{
-            fontSize: "18px",
-            fontFamily: "sans-serif",
-            fontWeight: "550",
-          }}>
-          <Col style={{ textAlign: "end" }}>
-            Tax<span style={{ paddingLeft: "20px" }}>${tax}</span>
-          </Col>
-        </Row>
-        <Row
-          style={{
-            fontSize: "20px",
-            fontFamily: "sans-serif",
-            fontWeight: "550",
-          }}>
-          <Col style={{ textAlign: "end" }}>
-            Total<span style={{ paddingLeft: "20px" }}>${subTotal}</span>
-          </Col>
-        </Row>
+
         <Row style={{ paddingTop: "20%", marginLeft: "30%" }}>
           <img
             style={{ width: "40%", height: "40%" }}
@@ -228,11 +245,14 @@ OrderDetailsDC.propTypes = {
   subTotal: PropTypes.number.isRequired,
   orderTotal: PropTypes.number.isRequired,
   tax: PropTypes.number.isRequired,
+  deliveryCost: PropTypes.number.isRequired,
+  gratitude: PropTypes.number.isRequired,
   displayDetails: PropTypes.bool.isRequired,
   dishes: PropTypes.object.isRequired,
   getUserDetails: PropTypes.func.isRequired,
   CustomerId: PropTypes.number.isRequired,
   CustomerDetails: PropTypes.object.isRequired,
+  orderDeliveryType: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state) => ({

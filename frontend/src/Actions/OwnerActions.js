@@ -44,7 +44,7 @@ export const addOwner = (signupdata) => async (dispatch) => {
     console.log(err.response);
     dispatch({
       type: OWNER_SIGNUP_FAILURE,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -66,7 +66,7 @@ export const updateOwner = (ownerUpdateData) => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: OWNER_UPDATE_FAILURE,
-      payload: err.response.data,
+      payload: err.response,
     });
   }
 };
@@ -80,10 +80,10 @@ export const ownerNewOrders = () => async (dispatch) => {
   axios.defaults.withCredentials = true;
   axios.defaults.headers.common.authorization = getToken();
   axios
-    // .get(
-    //   `${backendServer}/ubereats/orders/neworders/restaurant/${restaurantId}`
-    // )
-    .get(`${backendServer}/ubereats/orders/neworders/restaurant/3`)
+    .get(
+      `${backendServer}/ubereats/orders/neworders/restaurant/${restaurantId}`
+    )
+    // .get(`${backendServer}/ubereats/orders/neworders/restaurant/3`)
     .then((response) => {
       console.log("Response: ", JSON.stringify(response.data));
 
@@ -149,10 +149,10 @@ export const ownerDeliveredOrders = () => async (dispatch) => {
   if (!restaurantId) return;
   axios.defaults.headers.common.authorization = getToken();
   axios
-    // .get(
-    //   `http://localhost:5000/ubereats/orders/completedorders/restaurant/${restaurantId}`
-    // )
-    .get(`http://localhost:5000/ubereats/orders/completedorders/restaurant/3`)
+    .get(
+      `http://localhost:5000/ubereats/orders/completedorders/restaurant/${restaurantId}`
+    )
+    // .get(`http://localhost:5000/ubereats/orders/completedorders/restaurant/3`)
     .then((response) => {
       console.log("Response: ", JSON.stringify(response.data));
 
@@ -167,7 +167,7 @@ export const ownerDeliveredOrders = () => async (dispatch) => {
       if (error.response && error.response.data) {
         dispatch({
           type: OWNER_DELIVERED_ORDER_FAILURE,
-          payload: error.response.data,
+          payload: error.response,
         });
       }
     });
@@ -182,10 +182,10 @@ export const ownerCancelledOrders = () => async (dispatch) => {
   if (!restaurantId) return;
   axios.defaults.headers.common.authorization = getToken();
   axios
-    // .get(
-    //   `${backendServer}/ubereats/orders/cancelledorders/restaurant/${restaurantId}`
-    // )
-    .get(`${backendServer}/ubereats/orders/cancelledorders/restaurant/3`)
+    .get(
+      `${backendServer}/ubereats/orders/cancelledorders/restaurant/${restaurantId}`
+    )
+    // .get(`${backendServer}/ubereats/orders/cancelledorders/restaurant/3`)
     .then((response) => {
       console.log("Response: ", JSON.stringify(response.data));
       if (response.data.status === "CANCELLED_ORDERS") {
@@ -199,7 +199,7 @@ export const ownerCancelledOrders = () => async (dispatch) => {
       if (error.response && error.response.data) {
         dispatch({
           type: OWNER_CANCELLED_ORDER_FAILURE,
-          payload: error.response.data,
+          payload: error.response,
         });
       }
     });

@@ -101,6 +101,11 @@ class CancelledOrders extends Component {
     let tax = null;
     let orderComps = null;
     let dishes = null;
+    let gratitude = null;
+    let deliveryCost = null;
+    let CustomerId = null;
+    let orderDeliveryType = null;
+
     if (!cancelledOrders || cancelledOrders.length === 0) {
       orderComps = (
         <Alert variant='info' style={{ fontFamily: "sans-serif" }}>
@@ -113,7 +118,7 @@ class CancelledOrders extends Component {
           bccolor='#eeeeee'
           key={index}
           orderIndex={index}
-          name={order.nick_name}
+          name={order.customer_name}
           orderId={order.order_id}
           billamount={order.sub_total}
           totalitems={order.dishes.length}
@@ -124,10 +129,14 @@ class CancelledOrders extends Component {
 
     if (currentOrder) {
       orderId = currentOrder.order_id;
-      name = currentOrder.nick_name;
+      name = currentOrder.customer_name;
       subTotal = currentOrder.sub_total;
       orderTotal = currentOrder.order_total;
       tax = currentOrder.tax;
+      CustomerId = currentOrder.customer_id;
+      deliveryCost = currentOrder.delivery_cost;
+      gratitude = currentOrder.gratitude;
+      orderDeliveryType = currentOrder.order_delivery_type;
 
       dishes = currentOrder.dishes.map((dish, index) => (
         <>
@@ -175,11 +184,15 @@ class CancelledOrders extends Component {
                 IsDeliveredimage={false}
                 orderId={orderId}
                 name={name}
+                CustomerId={CustomerId}
                 subTotal={subTotal}
                 orderTotal={orderTotal}
                 tax={tax}
                 displayDetails={showOrder}
                 dishes={dishes}
+                deliveryCost={deliveryCost}
+                gratitude={gratitude}
+                orderDeliveryType={orderDeliveryType}
               />
             </div>
           </Col>

@@ -18,7 +18,7 @@ router.post("/updatedish", (req, res) => {
     price,
     isActive,
   } = req.body;
-  const sql = `CALL dishes_update('${dishname}',${dishId},'${dishdescription}','${ingredients}','${price}','${imageFilePath}','${dishcategory}',null,'${dishtype}',${restaurentId},null,null,${isActive});`;
+  const sql = `CALL dishes_update("${dishname}",${dishId},"${dishdescription}","${ingredients}","${price}","${imageFilePath}","${dishcategory}",null,"${dishtype}",${restaurentId},null,null,${isActive});`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -61,7 +61,7 @@ router.post("/adddish", (req, res) => {
     ingredients,
     price,
   } = req.body;
-  const sql = `CALL dishes_put('${dishname}','${dishdescription}','${ingredients}','${price}','${imageFilePath}','${dishcategory}','','${dishtype}',${restaurentId},'','','1');`;
+  const sql = `CALL dishes_put("${dishname}","${dishdescription}","${ingredients}","${price}","${imageFilePath}","${dishcategory}","","${dishtype}",${restaurentId},"","","1");`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {

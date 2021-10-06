@@ -75,7 +75,7 @@ const orderProcessing = (orders) => {
 };
 
 router.get("/completedorders/restaurant/:restaurant_id", (req, res) => {
-  const sql = `CALL restaurant_orders_get_status(${req.params.restaurant_id},'Completed');`;
+  const sql = `CALL restaurant_orders_get_status(${req.params.restaurant_id},"Completed");`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -107,7 +107,7 @@ router.get("/completedorders/restaurant/:restaurant_id", (req, res) => {
   });
 });
 router.get("/neworders/restaurant/:restaurant_id", (req, res) => {
-  const sql = `CALL restaurant_orders_get_status(${req.params.restaurant_id},'Active');`;
+  const sql = `CALL restaurant_orders_get_status(${req.params.restaurant_id},"Active");`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -138,7 +138,7 @@ router.get("/neworders/restaurant/:restaurant_id", (req, res) => {
   });
 });
 router.get("/cancelledorders/restaurant/:restaurant_id", (req, res) => {
-  const sql = `CALL restaurant_orders_get_status(${req.params.restaurant_id},'Cancelled');`;
+  const sql = `CALL restaurant_orders_get_status(${req.params.restaurant_id},"Cancelled");`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -171,7 +171,7 @@ router.get("/cancelledorders/restaurant/:restaurant_id", (req, res) => {
 
 router.post("/neworders/update", (req, res) => {
   const { restaurant_id, order_id, delivery_status, order_status } = req.body;
-  const sql = `CALL restaurant_update_order(${restaurant_id},${order_id},'${delivery_status}','${order_status}');`;
+  const sql = `CALL restaurant_update_order(${restaurant_id},${order_id},"${delivery_status}","${order_status}");`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -251,7 +251,7 @@ router.post("/customer/neworder", (req, res) => {
     order_delivery_type,
   } = req.body;
   console.log("Customer New Order", req.body);
-  const sql = `CALL customer_create_order(${customerId},${restaurant_id},'${order_status}','${delivery_status}',${sub_total},${tax},${delivery_cost},'${gratitude}',${order_total}, '${order_delivery_type}');`;
+  const sql = `CALL customer_create_order(${customerId},${restaurant_id},"${order_status}","${delivery_status}",${sub_total},${tax},${delivery_cost},"${gratitude}",${order_total}, "${order_delivery_type}");`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -279,7 +279,7 @@ router.post("/customer/neworder", (req, res) => {
     }
 
     const { order_id } = result[0][0];
-    const dbQueryAsync = util.promisify(db.query).bind(db); // const util = require('util')
+    const dbQueryAsync = util.promisify(db.query).bind(db); // const util = require("util")
     Promise.all(
       cart_items.map((dish) => {
         const innerSql = `CALL customer_create_order_items(${dish.dishDetails.dish_id},${dish.quantity},${dish.price}, ${order_id})`;

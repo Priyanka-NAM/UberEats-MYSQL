@@ -17,7 +17,11 @@ import {
 } from "react-bootstrap";
 import { BiX } from "react-icons/bi";
 import PropTypes from "prop-types";
+
 import { connect } from "react-redux";
+import moment from "moment";
+import "moment-timezone";
+
 import { customerOrders } from "../../../Actions/CustomerActions";
 import Header from "../../Home/HomeIcons/Header";
 import backendServer from "../../../backEndConfig";
@@ -43,9 +47,7 @@ class CustomerOrders extends Component {
     }
   }
 
-  handleShow = (e) => {
-    console.log("Order Details Click ", e);
-    console.log("Order details click target ", e.target);
+  handleShow = () => {
     this.setState({
       showModal: true,
     });
@@ -73,17 +75,33 @@ class CustomerOrders extends Component {
     });
   };
 
+  // dateparse = (date) => {
+  //   const dateComponents = date.split("T");
+  //   const datePieces = dateComponents[0].split("-");
+  //   const timePieces = dateComponents[1].split(":");
+  //   return new Date(
+  //     datePieces[0],
+  //     datePieces[1] - 1,
+  //     datePieces[2],
+  //     timePieces[0],
+  //     timePieces[1]
+  //   );
+  // };
   dateparse = (date) => {
-    const dateComponents = date.split("T");
-    const datePieces = dateComponents[0].split("-");
-    const timePieces = dateComponents[1].split(":");
-    return new Date(
-      datePieces[0],
-      datePieces[1] - 1,
-      datePieces[2],
-      timePieces[0],
-      timePieces[1]
-    );
+    const pattern = "YYYY-MM-DD HH:mm:ss.SS";
+    // return moment(date, pattern).utc(false);
+
+    // in utc
+    const utcCutoff = moment.utc(date, "YYYYMMDD HH:mm:ss");
+    const displayCutoff = utcCutoff.clone().tz("America/Los_Angeles");
+
+    return displayCutoff;
+
+    // return moment.tz(date, "America/Los_Angeles").format("MM/DD/YYYY h:mm a");
+    // const newdate = new Date(date);
+    // return `${newdate.getFullYear()}  ${
+    //   newdate.getMonth() + 1
+    // }   ${newdate.getDate()} at ${newdate.getTime()}`;
   };
 
   DishItems = (dishes) => {
@@ -117,7 +135,7 @@ class CustomerOrders extends Component {
     return filterdorders.map((order, index) => {
       const src = `${backendServer}/public/${order.restaurant_image_file_path}`;
       const date = this.dateparse(order.create_time).toString();
-      // const dishComps = this.DishItems(order.dishes);
+
       return (
         <>
           <Row style={{ paddingRight: "10%" }} key={index}>
@@ -149,7 +167,6 @@ class CustomerOrders extends Component {
               <Col>
                 {order.dishes.length} items for ${order.sub_total} •{" "}
                 {order.order_status} on {date}•{" "}
-                {/* <Link href='/'>View receipt</Link> */}
               </Col>
               <br />
             </Col>
@@ -190,6 +207,7 @@ class CustomerOrders extends Component {
       country,
       zipcode,
       restaurant_name,
+      order_delivery_type,
     } = order;
     const { showModal } = this.state;
     const dishComps = dishes.map((dish) => (
@@ -282,25 +300,52 @@ class CustomerOrders extends Component {
             </li>
           </ul>
           <hr />
-          <h3 style={{ fontFamily: "sans-serif", fontSize: "25px" }}>
+          <h3
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: "22px",
+              fontWeight: "bold",
+            }}>
             Address Details
           </h3>
           <h3 style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
             {address_line_1},{city},{state},{country},{zipcode}
           </h3>
           <hr />
-          <h3 style={{ fontFamily: "sans-serif", fontSize: "25px" }}>
+          <h3
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: "22px",
+              fontWeight: "bold",
+            }}>
             Order Status
           </h3>
           <h3 style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
             {order_status}
           </h3>
           <hr />
-          <h3 style={{ fontFamily: "sans-serif", fontSize: "25px" }}>
+          <h3
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: "22px",
+              fontWeight: "bold",
+            }}>
             Delivery Status
           </h3>
           <h3 style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
             {delivery_status}
+          </h3>
+          <hr />
+          <h3
+            style={{
+              fontFamily: "sans-serif",
+              fontSize: "22px",
+              fontWeight: "bold",
+            }}>
+            Delivery Mode
+          </h3>
+          <h3 style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
+            {order_delivery_type}
           </h3>
         </Modal.Body>
       </Modal>
@@ -329,7 +374,7 @@ class CustomerOrders extends Component {
       <div style={{ marginLeft: "1%" }}>
         <Header />
         <Container
-          style={{ marginLeft: "1%", height: "150vh", overflow: "auto" }}
+          style={{ marginLeft: "1%", height: "100vh", overflow: "scroll" }}
           fluid>
           <Row>
             <Col>

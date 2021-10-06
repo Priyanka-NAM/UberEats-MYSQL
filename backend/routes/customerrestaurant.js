@@ -235,7 +235,7 @@ const dishesList = [
 // });
 
 router.get("/restaurantsearch/:search_input", (req, res) => {
-  const sql = `CALL search_restaurants('${req.params.search_input}');`;
+  const sql = `CALL search_restaurants("${req.params.search_input}");`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {
@@ -430,7 +430,7 @@ router.get("/allrestaurants", (req, res) => {
 router.post("/updatefavourite", (req, res) => {
   const sql = `CALL post_favorite_restaurants(${req.body.customerId},${
     req.body.restaurantId
-  },'${req.body.newisFav.toString()}');`;
+  },"${req.body.newisFav.toString()}");`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {

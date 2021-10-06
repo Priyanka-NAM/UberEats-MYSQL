@@ -21,7 +21,7 @@ router.post("/customer", async (req, res) => {
     zipcode,
   } = req.body;
   const hashedPassword = md5(password);
-  const sql = `CALL customer_put('${name}','${email}', '${hashedPassword}', null, '${address_line_1}', '${city}', '${state}', '${country}', '${zipcode}', null, null, null);`;
+  const sql = `CALL customer_put("${name}","${email}", "${hashedPassword}", null, "${address_line_1}", "${city}", "${state}", "${country}", "${zipcode}", null, null, null);`;
   db.query(sql, (err, result) => {
     if (err) {
       res.writeHead(500, {
@@ -60,7 +60,7 @@ router.post("/owner", async (req, res) => {
     restaurant_zipcode,
   } = req.body;
   const hashedPassword = md5(password);
-  const sql = `CALL restaurant_put(-1, '${name}','${email}', '${hashedPassword}', '', '${restaurant_address_line_one}', '${restaurant_city}', '${restaurant_state}', '${restaurant_country}', '${restaurant_zipcode}', null, null, null, null, null, null, null);`;
+  const sql = `CALL restaurant_put(-1, "${name}","${email}", "${hashedPassword}", "", "${restaurant_address_line_one}", "${restaurant_city}", "${restaurant_state}", "${restaurant_country}", "${restaurant_zipcode}", null, null, null, null, null, null, null);`;
   console.log(sql);
   db.query(sql, (err, result) => {
     if (err) {

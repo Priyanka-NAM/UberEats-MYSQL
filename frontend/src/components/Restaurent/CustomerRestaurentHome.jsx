@@ -49,8 +49,8 @@ class RestaurentHome extends Component {
         }
       });
     axios
-      // .get(`${backendServer}/ubereats/dishes/alldishes/${restaurant_id}`)
-      .get(`${backendServer}/ubereats/dishes/alldishes/35`)
+      .get(`${backendServer}/ubereats/dishes/alldishes/${restaurant_id}`)
+      // .get(`${backendServer}/ubereats/dishes/alldishes/35`)
       .then((response) => {
         if (response.data) {
           if (response.data.status !== "ALL_DISHES") {

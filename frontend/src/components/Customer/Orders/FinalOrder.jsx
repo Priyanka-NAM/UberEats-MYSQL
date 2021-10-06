@@ -73,8 +73,7 @@ class FinalOrder extends Component {
     let ordertotal = 0;
     if (cartItems) {
       cartRows = cartItems.map((cartitem, index) => {
-        totalCartValue +=
-          parseFloat(cartitem.price, 10) * parseInt(cartitem.quantity, 10);
+        totalCartValue += parseFloat(cartitem.price, 10);
         ordertotal = totalCartValue + deliveryfee + cadriverbenefit;
         return 0;
       });
@@ -131,8 +130,7 @@ class FinalOrder extends Component {
     let taxTotal = 0;
     if (cartItems) {
       cartRows = cartItems.map((cartitem, index) => {
-        totalCartValue +=
-          parseFloat(cartitem.price, 10) * parseInt(cartitem.quantity, 10);
+        totalCartValue += parseFloat(cartitem.price, 10);
         ordertotal = totalCartValue + deliveryfee + cadriverbenefit;
         return (
           <Row
