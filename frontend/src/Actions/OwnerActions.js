@@ -64,6 +64,7 @@ export const updateOwner = (ownerUpdateData) => async (dispatch) => {
       payload: response.data,
     });
   } catch (err) {
+    console.log("Error == >", JSON.stringify(err.response));
     dispatch({
       type: OWNER_UPDATE_FAILURE,
       payload: err.response,

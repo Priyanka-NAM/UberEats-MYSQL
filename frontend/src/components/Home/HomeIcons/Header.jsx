@@ -126,7 +126,7 @@ class Header extends React.Component {
                   <Button
                     style={pickupstyle}
                     variant='light'
-                    name='Pickup'
+                    name='Pick up'
                     onClick={this.handleDeliveryPickup}>
                     Pickup
                   </Button>

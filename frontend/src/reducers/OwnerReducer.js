@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import {
   OWNER_SIGNUP,
   OWNER_UPDATE,
@@ -49,9 +50,13 @@ export default (state = intitalState, action) => {
       };
 
     case OWNER_UPDATE_FAILURE:
+      let errMsg = "Internal Server Error";
+      if (action.payload.data && action.payload.data.sqlMessage) {
+        errMsg = action.payload.data.sqlMessage;
+      }
       return {
         ...state,
-        ownerDetails: action.payload,
+        ownerDetails: { status: errMsg },
       };
     case USER_SIGNIN_SUCCESS:
       if (action.payload.user.is_owner === 1) {

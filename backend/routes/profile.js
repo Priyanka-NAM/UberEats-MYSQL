@@ -79,9 +79,9 @@ router.get("/customer/:user_id", (req, res) => {
 
 router.post("/owner", async (req, res) => {
   console.log("Owner details from Request", req.body);
-  const { oldpassword, newpassword } = req.body;
-  const oldhashedPassword = oldpassword ? md5(oldpassword) : undefined;
-  const newhashedPassword = newpassword ? md5(newpassword) : undefined;
+  const { password } = req.body;
+  console.log("Password passed in request ", password);
+  const newhashedPassword = password ? md5(password) : undefined;
   const {
     restaurant_id,
     email_id,

@@ -10,6 +10,7 @@ const saltrounds = 10;
 const router = express.Router();
 
 router.post("/", (req, res) => {
+  console.log("Request body for authenticate user ", req.body);
   const { password } = req.body;
   const hashedPassword = md5(password);
   const sql = `CALL authenticate_user("${req.body.email}","${hashedPassword}");`;

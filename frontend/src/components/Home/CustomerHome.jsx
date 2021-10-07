@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/jsx-fragments */
@@ -186,6 +187,7 @@ class CustomerHome extends Component {
         console.log("Delivery Based Filetered Set: ", deliveryBasedFilteredSet);
 
         console.log("User Location ", location);
+
         // Restaurants Near me
         nearToYouRestos = deliveryBasedFilteredSet.filter(
           (restaurant) =>
@@ -204,7 +206,7 @@ class CustomerHome extends Component {
             this.StringSimilarityLevenshtein(
               restaurant.restaurant_city,
               location.city
-            ) >= 0.7
+            ) >= 0.6
         );
         // National Brands
         nationalRestos = deliveryBasedFilteredSet.filter(
@@ -278,8 +280,10 @@ class CustomerHome extends Component {
   };
 
   StringSimilarityLevenshtein = (s1, s2) => {
-    let longer = s1;
-    let shorter = s2;
+    s1 = s1.replace(/\s+/g, "");
+    s2 = s2.replace(/\s+/g, "");
+    let longer = s1.toLowerCase();
+    let shorter = s2.toLowerCase();
     if (!s1 || !s2) return 0;
     if (s1.length < s2.length) {
       longer = s2;
@@ -289,6 +293,15 @@ class CustomerHome extends Component {
     if (longerLength === 0) {
       return 1.0;
     }
+    console.log(
+      "Similarity Score for",
+      s1,
+      " and ",
+      s2,
+      ": ==>",
+      (longerLength - this.editDistance(longer, shorter)) /
+        parseFloat(longerLength)
+    );
     return (
       (longerLength - this.editDistance(longer, shorter)) /
       parseFloat(longerLength)

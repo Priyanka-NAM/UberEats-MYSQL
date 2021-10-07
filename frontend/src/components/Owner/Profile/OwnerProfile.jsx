@@ -138,7 +138,7 @@ class OwnerProfile extends Component {
       restaurant_zipcode,
       email_id,
       name,
-      newpassword,
+      password,
       phone_num,
       restaurant_start_time,
       restaurant_end_time,
@@ -259,10 +259,10 @@ class OwnerProfile extends Component {
               <br />
               <FormTextBox
                 FieldName='New Password'
-                nameField='newpassword'
+                nameField='password'
                 maxLength='32'
                 typeField='password'
-                valueField={newpassword}
+                valueField={password}
                 patternField='^[A-Za-z0-9 ]+$'
                 changeHandler={this.handleChange}
               />
@@ -351,31 +351,49 @@ class OwnerProfile extends Component {
               <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
                 Restaurant Timings
               </h4>
-              <FormTextBox
-                FieldName='Restaurant Start Time'
-                nameField='restaurant_start_time'
-                typeField='text'
-                valueField={restaurant_start_time}
-                patternField='([01]?[0-9]|2[0-3]):[0-5][0-9]'
-                maxLength='10'
-                requiredField='true'
-                changeHandler={this.handleChange}
-              />
+
+              <Form>
+                <Row>
+                  <Col xs={2}>
+                    <Form.Label>Restaurant Start Time</Form.Label>
+                  </Col>
+                  <Col xs={6}>
+                    <Form.Control
+                      type='time'
+                      name='restaurant_start_time'
+                      onChange={this.handleChange}
+                      value={restaurant_start_time}
+                      maxLength='10'
+                      required
+                      pattern='([01]?[0-9]|2[0-3]):[0-5][0-9]'
+                      placeholder='HH:MM'
+                    />
+                  </Col>
+                </Row>
+              </Form>
 
               <br />
-              <FormTextBox
-                FieldName='Restaurant End Time'
-                nameField='restaurant_end_time'
-                typeField='text'
-                valueField={restaurant_end_time}
-                maxLength='10'
-                patternField='([01]?[0-9]|2[0-3]):[0-5][0-9]'
-                requiredField='true'
-                changeHandler={this.handleChange}
-              />
 
+              <Form>
+                <Row>
+                  <Col xs={2}>
+                    <Form.Label>Restaurant End Time</Form.Label>
+                  </Col>
+                  <Col xs={6}>
+                    <Form.Control
+                      type='time'
+                      name='restaurant_end_time'
+                      onChange={this.handleChange}
+                      value={restaurant_end_time}
+                      maxLength='10'
+                      required
+                      pattern='([01]?[0-9]|2[0-3]):[0-5][0-9]'
+                      placeholder='HH:MM'
+                    />
+                  </Col>
+                </Row>
+              </Form>
               <br />
-
               <Form>
                 <Row>
                   <Col xs={2}>
@@ -468,7 +486,7 @@ class OwnerProfile extends Component {
                     </Button>
                   </Col>
                 </Row>
-                {errorMessage !== "" && (
+                {errorMessage && (
                   <Alert
                     variant='error'
                     style={{
