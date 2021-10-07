@@ -18,8 +18,8 @@ class OwnerProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.onStartTimeChange = this.onStartTimeChange.bind(this);
-    this.onEndTimeChange = this.onEndTimeChange.bind(this);
+    // this.onStartTimeChange = this.onStartTimeChange.bind(this);
+    // this.onEndTimeChange = this.onEndTimeChange.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
@@ -81,41 +81,41 @@ class OwnerProfile extends Component {
       });
   }
 
-  onStartTimeChange = (options) => {
-    console.log("Start Time Change Handler ", options);
-    const { hour, minute } = options;
+  // onStartTimeChange = (options) => {
+  //   console.log("Start Time Change Handler ", options);
+  //   const { hour, minute } = options;
 
-    this.setState({ hour, minute });
-  };
+  //   this.setState({ hour, minute });
+  // };
 
-  onEndTimeChange = (options) => {
-    console.log("End Time Change Handler ", options);
+  // onEndTimeChange = (options) => {
+  //   console.log("End Time Change Handler ", options);
 
-    const { ehour, eminute } = options;
-    this.setState({ ehour, eminute });
-  };
+  //   const { ehour, eminute } = options;
+  //   this.setState({ ehour, eminute });
+  // };
 
   setStateFromProps = (ownerDetails) => {
     console.log("Owner details in component did mount ", ownerDetails);
-    let hour;
-    let minute;
-    let ehour;
-    let eminute;
-    const { restaurant_start_time, restaurant_end_time } = ownerDetails;
-    if (restaurant_start_time) {
-      const start_split_times = restaurant_start_time.split(":");
-      [hour, minute] = start_split_times;
-    }
-    if (restaurant_end_time) {
-      const end_split_times = restaurant_end_time.split(":");
-      [ehour, eminute] = end_split_times;
-    }
+    // let hour;
+    // let minute;
+    // let ehour;
+    // let eminute;
+    // const { restaurant_start_time, restaurant_end_time } = ownerDetails;
+    // if (restaurant_start_time) {
+    //   const start_split_times = restaurant_start_time.split(":");
+    //   [hour, minute] = start_split_times;
+    // }
+    // if (restaurant_end_time) {
+    //   const end_split_times = restaurant_end_time.split(":");
+    //   [ehour, eminute] = end_split_times;
+    // }
     this.setState({
       ...ownerDetails,
-      hour,
-      minute,
-      ehour,
-      eminute,
+      // hour,
+      // minute,
+      // ehour,
+      // eminute,
     });
   };
 

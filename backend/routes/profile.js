@@ -28,25 +28,29 @@ router.post("/customer", async (req, res) => {
   const sql = `CALL customer_update(${customer_id},"${email_id}","${name}","${oldhashedPassword}","${date_of_birth}","${address_line_1}","${city}","${state}","${country}","${zipcode}","${nick_name}","${profile_pic_file_path}",${phone_num});`;
   console.log(sql);
   db.query(sql, (err, result) => {
-    if (err) {
+    try {
+      if (err) {
+        throw err;
+      }
+      if (result && result.length > 0) {
+        if (result[0][0].status === "SUCCESS") {
+          const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
+          res.header("x-auth-token", token).send({
+            status: "Customer Updated",
+            user: result[0][0],
+            token,
+          });
+          return;
+        }
+        if (result[0][0].status === "FAILED") {
+          res.status(400).send({ status: "Authentication Failed" });
+        }
+      }
+    } catch (error) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.send("Database Connection Error");
-    }
-    if (result && result.length > 0) {
-      if (result[0][0].status === "SUCCESS") {
-        const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
-        res.header("x-auth-token", token).send({
-          status: "Customer Updated",
-          user: result[0][0],
-          token,
-        });
-        return;
-      }
-      if (result[0][0].status === "FAILED") {
-        res.status(400).send({ status: "Authentication Failed" });
-      }
+      res.end(JSON.stringify(error));
     }
   });
 });
@@ -54,17 +58,21 @@ router.post("/customer", async (req, res) => {
 router.get("/customer/:user_id", (req, res) => {
   const sql = `CALL customer_get("${req.params.user_id}", NULL);`;
   db.query(sql, (err, result) => {
-    if (err) {
+    try {
+      if (err) {
+        throw err;
+      }
+      if (result && result.length > 0 && result[0][0]) {
+        res.writeHead(200, {
+          "Content-Type": "text/plain",
+        });
+        res.end(JSON.stringify(result[0]));
+      }
+    } catch (error) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.end("Error in Data");
-    }
-    if (result && result.length > 0 && result[0][0]) {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(result[0]));
+      res.end(JSON.stringify(error));
     }
   });
 });
@@ -100,51 +108,59 @@ router.post("/owner", async (req, res) => {
   const sql = `CALL restaurant_update(${restaurant_id},"${name}","${email_id}","${newhashedPassword}","${description}","${restaurant_address_line_one}","${restaurant_city}","${restaurant_state}","${restaurant_country}","${restaurant_zipcode}","${image_file_path}","${phone_num}","${restaurant_start_time}","${restaurant_end_time}","${restaurant_week_start}","${restaurant_week_end}", "${national_brand}", "${del_type}");`;
   console.log(sql);
   db.query(sql, (err, result) => {
-    if (err) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.send("Database Connection Error");
-    }
-    if (!result || result.length === 0) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
+    try {
+      if (err) {
+        throw err;
+      }
+      if (!result || result.length === 0) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.send({
+          status: "Result from Db Undefined",
+        });
+        return;
+      }
+
+      if (
+        result[0].length > 0 &&
+        result[0][0].status === "RESTAURANT_UPDATE_FAILED"
+      ) {
+        res.status(400).send({ status: "NO_RESTAURANT_ID" });
+        return;
+      }
+
       res.send({
-        status: "Result from Db Undefined",
+        status: "Customer Updated",
+        user: result[0][0],
       });
-      return;
+    } catch (error) {
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end(JSON.stringify(error));
     }
-
-    if (
-      result[0].length > 0 &&
-      result[0][0].status === "RESTAURANT_UPDATE_FAILED"
-    ) {
-      res.status(400).send({ status: "NO_RESTAURANT_ID" });
-      return;
-    }
-
-    res.send({
-      status: "Customer Updated",
-      user: result[0][0],
-    });
   });
 });
 
 router.get("/owner/:restaurant_id", (req, res) => {
   const sql = `CALL restaurant_get("${req.params.restaurant_id}", "${req.body.email}");`;
   db.query(sql, (err, result) => {
-    if (err) {
+    try {
+      if (err) {
+        throw err;
+      }
+      if (result && result.length > 0 && result[0][0]) {
+        res.writeHead(200, {
+          "Content-Type": "text/plain",
+        });
+        res.end(JSON.stringify(result[0]));
+      }
+    } catch (error) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.end("Error in Data");
-    }
-    if (result && result.length > 0 && result[0][0]) {
-      res.writeHead(200, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(result[0]));
+      res.end(JSON.stringify(error));
     }
   });
 });
@@ -153,32 +169,44 @@ router.get("/owner/details/:restaurant_id", (req, res) => {
   const sql = `CALL restaurant_get_id(${req.params.restaurant_id});`;
   console.log(sql);
   db.query(sql, (err, result) => {
-    if (err) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.send("Database Connection Error");
-    }
-    if (!result || result.length === 0) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
+    try {
+      if (err) {
+        console.log(
+          "Err ==========================>>>>>>>>>>>>>>>>>>> ",
+          JSON.stringify(err)
+        );
+        throw err;
+      }
+      if (!result || result.length === 0) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.send({
+          status: "Result from Db Undefined",
+        });
+        return;
+      }
+      if (
+        result[0].length > 0 &&
+        result[0][0].status === "RESTAURANT_ID_IS_NULL"
+      ) {
+        res.status(400).send({ status: "OWNER_PROFILE_DETAILS_FAILURE" });
+        return;
+      }
       res.send({
-        status: "Result from Db Undefined",
+        status: "OWNER_PROFILE_DETAILS",
+        user: result[0][0],
       });
-      return;
+    } catch (error) {
+      console.log(
+        "Err <<<<<<<<<<<<<<<<<<<<<<<<<<<<========================",
+        JSON.stringify(error)
+      );
+      res.writeHead(500, {
+        "Content-Type": "text/plain",
+      });
+      res.end(JSON.stringify(error));
     }
-    if (
-      result[0].length > 0 &&
-      result[0][0].status === "RESTAURANT_ID_IS_NULL"
-    ) {
-      res.status(400).send({ status: "OWNER_PROFILE_DETAILS_FAILURE" });
-      return;
-    }
-    res.send({
-      status: "OWNER_PROFILE_DETAILS",
-      user: result[0][0],
-    });
   });
 });
 

@@ -23,29 +23,31 @@ router.post("/customer", async (req, res) => {
   const hashedPassword = md5(password);
   const sql = `CALL customer_put("${name}","${email}", "${hashedPassword}", null, "${address_line_1}", "${city}", "${state}", "${country}", "${zipcode}", null, null, null);`;
   db.query(sql, (err, result) => {
-    if (err) {
+    try {
+      if (err) {
+        throw err;
+      }
+      if (result && result.length > 0) {
+        if (result[0][0].status === "USER_ADDED") {
+          const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
+          jwt.verify(token, "jwtPrivateKey");
+          res.header("x-auth-token", token).send({
+            status: "USER_ADDED",
+            user: result[0][0],
+            token,
+          });
+        } else if (result[0][0].status === "USER_EXISTS") {
+          res.status(400).send({ status: "USER_EXISTS" });
+        }
+      }
+    } catch (error) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.send("Database Connection Error");
-    }
-    if (result && result.length > 0) {
-      if (result[0][0].status === "USER_ADDED") {
-        const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
-        jwt.verify(token, "jwtPrivateKey");
-        res.header("x-auth-token", token).send({
-          status: "USER_ADDED",
-          user: result[0][0],
-          token,
-        });
-      } else if (result[0][0].status === "USER_EXISTS") {
-        res.status(400).send({ status: "USER_EXISTS" });
-      }
+      res.end(JSON.stringify(error));
     }
   });
 });
-
-// const processAddress = (addr) => addr.split(",");
 
 router.post("/owner", async (req, res) => {
   console.log(req.body);
@@ -63,24 +65,28 @@ router.post("/owner", async (req, res) => {
   const sql = `CALL restaurant_put(-1, "${name}","${email}", "${hashedPassword}", "", "${restaurant_address_line_one}", "${restaurant_city}", "${restaurant_state}", "${restaurant_country}", "${restaurant_zipcode}", null, null, null, null, null, null, null);`;
   console.log(sql);
   db.query(sql, (err, result) => {
-    if (err) {
+    try {
+      if (err) {
+        throw err;
+      }
+      if (result && result.length > 0) {
+        if (result[0][0].status === "RESTAURANT_ADDED") {
+          const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
+          jwt.verify(token, "jwtPrivateKey");
+          res.header("x-auth-token", token).send({
+            status: "RESTAURANT_ADDED",
+            user: result[0][0],
+            token,
+          });
+        } else if (result[0][0].status === "RESTAURANT_ALREADY_EXISTS") {
+          res.status(400).send({ status: "RESTAURANT_ALREADY_EXISTS" });
+        }
+      }
+    } catch (error) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
       });
-      res.send("Database Connection Error");
-    }
-    if (result && result.length > 0) {
-      if (result[0][0].status === "RESTAURANT_ADDED") {
-        const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
-        jwt.verify(token, "jwtPrivateKey");
-        res.header("x-auth-token", token).send({
-          status: "RESTAURANT_ADDED",
-          user: result[0][0],
-          token,
-        });
-      } else if (result[0][0].status === "RESTAURANT_ALREADY_EXISTS") {
-        res.status(400).send({ status: "RESTAURANT_ALREADY_EXISTS" });
-      }
+      res.end(JSON.stringify(error));
     }
   });
 });
