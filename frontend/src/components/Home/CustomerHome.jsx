@@ -5,6 +5,8 @@
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key */
+/* eslint-disable react/prop-types */
+
 import React, { Component } from "react";
 import { Container, Col } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -46,48 +48,6 @@ class CustomerHome extends Component {
       });
     }
   }
-  // componentDidMount() {
-  //   this.hasMounted = true;
-
-  //   axios.defaults.headers.common.authorization = getToken();
-  //   axios
-  //     .get(
-  //       "http://localhost:5000/ubereats/customerrestaurant/restaurantsearch/_"
-  //     )
-  //     .then((response) => {
-  //       // const cuisines = [];
-  //       console.log("Get Response: ", JSON.stringify(response));
-  //       if (response.data) {
-  //         console.log("Get Response: ", JSON.stringify(response));
-  //         if (response.data.status === "Sending Filtered Resaturants") {
-  //           console.log(
-  //             "Status Filtered Restaurants and setting no state: ",
-  //             response.data.restaurentsinfo.restaurants
-  //           );
-  //           if (this.hasMounted) {
-  //             this.setState({
-  //               allRestaurents: [],
-  //             });
-  //           }
-  //         } else {
-  //           console.log(
-  //             "Status All Restaurants and Setting State: ",
-  //             response.data.restaurentsinfo.restaurants
-  //           );
-  //           if (this.hasMounted) {
-  //             this.setState({
-  //               allRestaurents: response.data.restaurentsinfo.restaurants,
-  //             });
-  //           }
-  //         }
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       if (error.response && error.response.data) {
-  //         console.log("Restaurant Get Error", error.response.data);
-  //       }
-  //     });
-  // }
 
   componentDidUpdate(prevProps) {
     const { allRestaurants, changedUserLocation } = this.props;
@@ -126,18 +86,6 @@ class CustomerHome extends Component {
       let deliveryBasedFilteredSet = null;
       console.log("All Restaurants Length: ", allRestaurents.length);
       console.log("All Restaurants: ", allRestaurents);
-      // Search Based Filtering
-      // let searchBasedFiltering = null;
-      // let prevResultFoodbasedFiltering = allRestaurents;
-      // if (enableSeachFiltering) {
-      //   searchBasedFiltering = allRestaurents.filter(
-      //     (restaurant) => restaurant.is_search_result === 1
-      //   );
-      //   remainingRestos = allRestaurents.filter(
-      //     (restaurant) => restaurant.is_search_result === 0
-      //   );
-      //   prevResultFoodbasedFiltering = searchBasedFiltering;
-      // }
 
       // Food Type Filtering
       if (foodSelection === "allresto") {
@@ -191,15 +139,6 @@ class CustomerHome extends Component {
         // Restaurants Near me
         nearToYouRestos = deliveryBasedFilteredSet.filter(
           (restaurant) =>
-            // console.log("Near you filtering => location", location);
-            // console.log(
-            //   "Near you filtering => Similarity Score",
-            //   this.StringSimilarityLevenshtein(
-            //     restaurant.restaurant_city,
-            //     location.city
-            //   )
-            // );
-
             restaurant.is_search_result === 1 &&
             location &&
             location.city &&
@@ -387,17 +326,6 @@ class CustomerHome extends Component {
           isLiked={false}
         />
       ));
-      // searchresults = searchResultRestos.map((restaurant) => {
-      //   console.log("Inside Search Result Restos ", restaurant);
-      //   return (
-      //     <RestoCard
-      //       key={restaurant.restaurant_id}
-      //       RestaRedirect={this.handleRestaPageRedirect}
-      //       restaurant={restaurant}
-      //       isLiked={false}
-      //     />
-      //   );
-      // });
     }
     return (
       <React.Fragment>
@@ -438,12 +366,12 @@ class CustomerHome extends Component {
 }
 
 CustomerHome.propTypes = {
-  userAddressDescription: PropTypes.string.isRequired,
-  userLocation: PropTypes.object.isRequired,
-  changedUserLocation: PropTypes.object.isRequired,
+  // userAddressDescription: PropTypes.string.isRequired,
+  // userLocation: PropTypes.object.isRequired,
+  // changedUserLocation: PropTypes.object.isRequired,
   restaurants: PropTypes.func.isRequired,
   searchRestaurants: PropTypes.func.isRequired,
-  allRestaurants: PropTypes.array.isRequired,
+  // allRestaurants: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({

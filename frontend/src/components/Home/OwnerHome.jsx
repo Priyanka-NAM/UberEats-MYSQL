@@ -1,4 +1,5 @@
 /* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import {
   MdHome,

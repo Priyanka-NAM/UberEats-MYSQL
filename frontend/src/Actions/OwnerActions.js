@@ -58,13 +58,11 @@ export const updateOwner = (ownerUpdateData) => async (dispatch) => {
       ownerUpdateData
     );
     const response = await res;
-    console.log("ownerUpdateresponse", res);
     dispatch({
       type: OWNER_UPDATE,
       payload: response.data,
     });
   } catch (err) {
-    console.log("Error == >", JSON.stringify(err.response));
     dispatch({
       type: OWNER_UPDATE_FAILURE,
       payload: err.response,
@@ -84,7 +82,6 @@ export const ownerNewOrders = () => async (dispatch) => {
     .get(
       `${backendServer}/ubereats/orders/neworders/restaurant/${restaurantId}`
     )
-    // .get(`${backendServer}/ubereats/orders/neworders/restaurant/3`)
     .then((response) => {
       console.log("Response: ", JSON.stringify(response.data));
 
@@ -116,16 +113,11 @@ export const ownerNewOrdersUpdate =
     axios.defaults.withCredentials = true;
     axios.defaults.headers.common.authorization = getToken();
     axios
-      // .post(
-      //   `${backendServer}/ubereats/orders/neworders/update`
-      // )
       .post(
         `${backendServer}/ubereats/orders/neworders/update`,
         updateOrderDetails
       )
       .then((response) => {
-        console.log("Response: ", JSON.stringify(response.data));
-
         if (response.data.status === "UPDATED_ORDER") {
           dispatch({
             type: OWNER_ORDER_UPDATE,
@@ -151,9 +143,8 @@ export const ownerDeliveredOrders = () => async (dispatch) => {
   axios.defaults.headers.common.authorization = getToken();
   axios
     .get(
-      `http://localhost:5000/ubereats/orders/completedorders/restaurant/${restaurantId}`
+      `${backendServer}/ubereats/orders/completedorders/restaurant/${restaurantId}`
     )
-    // .get(`http://localhost:5000/ubereats/orders/completedorders/restaurant/3`)
     .then((response) => {
       console.log("Response: ", JSON.stringify(response.data));
 
@@ -186,7 +177,6 @@ export const ownerCancelledOrders = () => async (dispatch) => {
     .get(
       `${backendServer}/ubereats/orders/cancelledorders/restaurant/${restaurantId}`
     )
-    // .get(`${backendServer}/ubereats/orders/cancelledorders/restaurant/3`)
     .then((response) => {
       console.log("Response: ", JSON.stringify(response.data));
       if (response.data.status === "CANCELLED_ORDERS") {
@@ -215,7 +205,6 @@ export const ownerMenu = () => async (dispatch) => {
   axios.defaults.headers.common.authorization = getToken();
   axios
     .get(`${backendServer}/ubereats/dishes/alldishes/${restaurantId}`)
-    // .get(`http://localhost:5000/ubereats/dishes/alldishes/2`)
     .then((response) => {
       console.log("Response: ", JSON.stringify(response.data));
 
@@ -321,8 +310,7 @@ export const getOwnerProfile = () => async (dispatch) => {
   if (!restaurantId) return;
   axios.defaults.headers.common.authorization = getToken();
   axios
-    .get(`http://localhost:5000/ubereats/profile/owner/details/${restaurantId}`)
-    // .get(`http://localhost:5000/ubereats/profile/owner/details/3`)
+    .get(`${backendServer}/ubereats/profile/owner/details/${restaurantId}`)
     .then((response) => {
       console.log("Response: ", JSON.stringify(response.data));
 

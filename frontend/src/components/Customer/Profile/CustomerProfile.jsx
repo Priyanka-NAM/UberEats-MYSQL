@@ -1,11 +1,11 @@
+/* eslint-disable no-return-assign */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
-import Avatar from "react-avatar";
-import Gravatar from "react-gravatar";
 import PropTypes from "prop-types";
 import axios from "axios";
 import "react-times/css/classic/default.css";
@@ -21,14 +21,26 @@ import {
 } from "react-bootstrap";
 import { getToken } from "../../Service/authService";
 import Header from "../../Home/HomeIcons/Header";
-import ProfileRow from "./ProfileRow";
 import { updateCustomer } from "../../../Actions/CustomerActions";
 import backendServer from "../../../backEndConfig";
 
 class CustomerProfile extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      showAlert: false,
+      // email_id: "",
+      // name: "",
+      // nick_name: "",
+      // phone_num: "",
+      // address_line_1: "",
+      // date_of_birth: "",
+      // city: "",
+      // state: "",
+      // password: "",
+      // country: "",
+      // zipcode: "",
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.selectCountry = this.selectCountry.bind(this);
@@ -48,6 +60,7 @@ class CustomerProfile extends Component {
       const { customerDetails } = this.props;
       this.setState({
         ...customerDetails,
+        showAlert: true,
       });
     }
   };
@@ -94,6 +107,10 @@ class CustomerProfile extends Component {
       });
   }
 
+  closeAlert = () => {
+    this.setState({ showAlert: false });
+  };
+
   selectCountry(val) {
     this.setState({ country: val });
   }
@@ -116,14 +133,21 @@ class CustomerProfile extends Component {
       country,
       zipcode,
       profile_pic_file_path,
+      showAlert,
     } = this.state;
     const src = `${backendServer}/public/${profile_pic_file_path}`;
-    const { updateerrMsg } = this.props;
+    const { UpdateStatus } = this.props;
 
     let errorMessage = "";
-    if (updateerrMsg) {
-      errorMessage = updateerrMsg;
+    let message = "";
+    if (UpdateStatus === "Authentication Successful") {
+      message = "";
+    } else if (UpdateStatus === "CUSTOMER_UPDATED") {
+      message = "Customer Details updated";
+    } else {
+      errorMessage = "Could not update Customer Details";
     }
+
     return (
       <Container fluid='true' style={{ overflow: "hidden", marginLeft: "2%" }}>
         <Row>
@@ -139,14 +163,6 @@ class CustomerProfile extends Component {
                   <h4>Profile Update</h4>
                   <Card style={{ width: "16rem", height: "12rem" }}>
                     <div style={{ width: "16rem", height: "8rem" }}>
-                      {/* <Avatar
-                        width={390}
-                        height={295}
-                        onCrop={this.onCrop}
-                        onClose={this.onClose}
-                        src={this.state.src}
-                      /> */}
-
                       <img src={src} alt='Preview' />
                     </div>
                     <input
@@ -156,7 +172,6 @@ class CustomerProfile extends Component {
                       className='form-control'
                       style={{ display: "none" }}
                       accept='image/*'
-                      // eslint-disable-next-line no-return-assign
                       ref={(fileInput) => (this.fileInput = fileInput)}
                     />
                     <Card.Footer align='center'>
@@ -181,91 +196,151 @@ class CustomerProfile extends Component {
                   <br />
                   <br />
                   <h5>Basic Info</h5>
-                  <ProfileRow
-                    FieldName='Name'
-                    nameField='name'
-                    typeField='text'
-                    valueField={name}
-                    maxLength='32'
-                    patternField='^[A-Za-z ]+$'
-                    requiredField
-                    changeHandler={this.handleChange}
-                  />
-                  <ProfileRow
-                    FieldName='Nick Name'
-                    nameField='nick_name'
-                    typeField='text'
-                    maxLength='32'
-                    valueField={nick_name}
-                    patternField='^[A-Za-z0-9 ]+$'
-                    requiredField={false}
-                    changeHandler={this.handleChange}
-                  />
-                  <ProfileRow
-                    FieldName='Date of Birth'
-                    nameField='date_of_birth'
-                    typeField='date'
-                    maxLength={null}
-                    valueField={date_of_birth}
-                    patternField={null}
-                    requiredField={false}
-                    changeHandler={this.handleChange}
-                  />
+
+                  <Row>
+                    <Col xs={2}>
+                      <Form.Label>Name</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type='text'
+                        name='name'
+                        onChange={this.handleChange}
+                        value={name}
+                        maxLength='30'
+                        required
+                        pattern='^[A-Za-z0-9 ]+$'
+                      />
+                    </Col>
+                  </Row>
+                  <br />
+
+                  <Row>
+                    <Col xs={2}>
+                      <Form.Label>Nick Name</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type='text'
+                        name='nick_name'
+                        onChange={this.handleChange}
+                        value={nick_name}
+                        maxLength='8'
+                        pattern='^[A-Za-z0-9 ]+$'
+                      />
+                    </Col>
+                  </Row>
+                  <br />
+
+                  <Row>
+                    <Col xs={2}>
+                      <Form.Label>Date of Birth</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type='date'
+                        name='date_of_birth'
+                        onChange={this.handleChange}
+                        value={date_of_birth}
+                        required
+                      />
+                    </Col>
+                  </Row>
+                  <br />
                   <h5>Security Info</h5>
-                  <ProfileRow
-                    FieldName='Password Update'
-                    nameField='password'
-                    maxLength='32'
-                    typeField='password'
-                    valueField={password}
-                    patternField='^[A-Za-z0-9 ]+$'
-                    requiredField
-                    changeHandler={this.handleChange}
-                  />
+
+                  <Row>
+                    <Col xs={2}>
+                      <Form.Label>Password</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type='password'
+                        name='password'
+                        onChange={this.handleChange}
+                        maxLength='8'
+                        required
+                        pattern='^[A-Za-z0-9 ]+$'
+                      />
+                    </Col>
+                  </Row>
+                  <br />
                 </Col>
                 <Col>
                   <h4>Contact Info</h4>
-                  <ProfileRow
-                    FieldName='Email'
-                    nameField='email_id'
-                    typeField='email'
-                    maxLength='32'
-                    valueField={email_id}
-                    patternField="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$"
-                    requiredField
-                    changeHandler={this.handleChange}
-                  />
-                  <ProfileRow
-                    FieldName='Phone Number'
-                    nameField='phone_num'
-                    typeField='text'
-                    valueField={phone_num}
-                    patternField='^[0-9]+$'
-                    maxLength='10'
-                    requiredField
-                    changeHandler={this.handleChange}
-                  />
+
+                  <Row>
+                    <Col xs={2}>
+                      <Form.Label>Email</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type='email'
+                        name='email_id'
+                        onChange={this.handleChange}
+                        value={email_id}
+                        maxLength='32'
+                        required
+                        pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$"
+                      />
+                    </Col>
+                  </Row>
+                  <br />
+                  <Row>
+                    <Col xs={2}>
+                      <Form.Label>Phone Number</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type='text'
+                        name='phone_num'
+                        onChange={this.handleChange}
+                        value={phone_num}
+                        minLength='10'
+                        maxLength='10'
+                        required
+                        pattern='^[0-9]+$'
+                      />
+                    </Col>
+                  </Row>
+                  <br />
+
                   <h4>Address Info</h4>
-                  <ProfileRow
-                    FieldName='Address Line1'
-                    nameField='address_line_1'
-                    typeField='text'
-                    valueField={address_line_1}
-                    patternField={null}
-                    maxLength='32'
-                    requiredField
-                    changeHandler={this.handleChange}
-                  />
-                  <ProfileRow
-                    FieldName='City'
-                    nameField='city'
-                    typeField='text'
-                    valueField={city}
-                    patternField={null}
-                    requiredField
-                    maxLength='32'
-                    changeHandler={this.handleChange}
-                  />
+
+                  <Row>
+                    <Col xs={2}>
+                      <Form.Label>Address Line1</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type='text'
+                        name='address_line_1'
+                        onChange={this.handleChange}
+                        value={address_line_1}
+                        maxLength='32'
+                        required
+                      />
+                    </Col>
+                  </Row>
+                  <br />
+                  <Row>
+                    <Col xs={2}>
+                      <Form.Label>City</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type='text'
+                        name='city'
+                        onChange={this.handleChange}
+                        value={city}
+                        minLength='3'
+                        maxLength='30'
+                        required
+                      />
+                    </Col>
+                  </Row>
+                  <br />
+
                   <Row>
                     <Col xs={2}>
                       <Form.Label>State</Form.Label>
@@ -306,16 +381,25 @@ class CustomerProfile extends Component {
                     </Col>
                   </Row>
                   <br />
-                  <ProfileRow
-                    FieldName='Zip Code'
-                    nameField='zipcode'
-                    typeField='number'
-                    valueField={zipcode}
-                    maxLength='32'
-                    patternField='^[0-9]+$'
-                    requiredField
-                    changeHandler={this.handleChange}
-                  />
+
+                  <Row>
+                    <Col xs={2}>
+                      <Form.Label>Zip Code</Form.Label>
+                    </Col>
+                    <Col xs={6}>
+                      <Form.Control
+                        type='number'
+                        name='zipcode'
+                        onChange={this.handleChange}
+                        value={zipcode}
+                        minLength='5'
+                        maxLength='5'
+                        required
+                        pattern='^[0-9]+$'
+                      />
+                    </Col>
+                  </Row>
+
                   <br />
                   <Row>
                     <Col xs={2}>
@@ -325,15 +409,29 @@ class CustomerProfile extends Component {
                       {errorMessage && (
                         <Alert
                           style={{
-                            fontFamily:
-                              "UberMoveText-Medium,Helvetica,sans-serif",
+                            fontFamily: "sans-serif",
+                            width: "15rem",
                           }}
                           variant='error'>
                           {errorMessage}
                         </Alert>
                       )}
+                      <br />
                     </Col>
                   </Row>
+                  <br />
+                  {showAlert && message && (
+                    <Alert
+                      style={{
+                        fontFamily: "sans-serif",
+                        width: "20rem",
+                      }}
+                      variant='success'
+                      dismissible
+                      onClose={this.closeAlert}>
+                      {message}
+                    </Alert>
+                  )}
                 </Col>
               </Row>
             </Col>
@@ -346,13 +444,12 @@ class CustomerProfile extends Component {
 
 CustomerProfile.propTypes = {
   updateCustomer: PropTypes.func.isRequired,
-  updateerrMsg: PropTypes.string.isRequired,
   customerDetails: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  errMsg: state.customer.errMsg,
   customerDetails: state.customer.customerDetails.user,
+  UpdateStatus: state.customer.customerDetails.status,
 });
 
 export default connect(mapStateToProps, { updateCustomer })(CustomerProfile);

@@ -1,6 +1,9 @@
+/* eslint-disable react/no-did-update-set-state */
+/* eslint-disable no-return-assign */
 /* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
@@ -17,9 +20,7 @@ import { updateOwner, getOwnerProfile } from "../../../Actions/OwnerActions";
 class OwnerProfile extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
-    // this.onStartTimeChange = this.onStartTimeChange.bind(this);
-    // this.onEndTimeChange = this.onEndTimeChange.bind(this);
+    this.state = { showAlert: false };
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
@@ -36,6 +37,9 @@ class OwnerProfile extends Component {
     if (this.props.ownerDetails !== prevprops.ownerDetails) {
       const { ownerDetails } = this.props;
       this.setStateFromProps(ownerDetails);
+      this.setState({
+        showAlert: true,
+      });
     }
   };
 
@@ -81,41 +85,13 @@ class OwnerProfile extends Component {
       });
   }
 
-  // onStartTimeChange = (options) => {
-  //   console.log("Start Time Change Handler ", options);
-  //   const { hour, minute } = options;
-
-  //   this.setState({ hour, minute });
-  // };
-
-  // onEndTimeChange = (options) => {
-  //   console.log("End Time Change Handler ", options);
-
-  //   const { ehour, eminute } = options;
-  //   this.setState({ ehour, eminute });
-  // };
+  closeAlert = () => {
+    this.setState({ showAlert: false });
+  };
 
   setStateFromProps = (ownerDetails) => {
-    console.log("Owner details in component did mount ", ownerDetails);
-    // let hour;
-    // let minute;
-    // let ehour;
-    // let eminute;
-    // const { restaurant_start_time, restaurant_end_time } = ownerDetails;
-    // if (restaurant_start_time) {
-    //   const start_split_times = restaurant_start_time.split(":");
-    //   [hour, minute] = start_split_times;
-    // }
-    // if (restaurant_end_time) {
-    //   const end_split_times = restaurant_end_time.split(":");
-    //   [ehour, eminute] = end_split_times;
-    // }
     this.setState({
       ...ownerDetails,
-      // hour,
-      // minute,
-      // ehour,
-      // eminute,
     });
   };
 
@@ -144,18 +120,27 @@ class OwnerProfile extends Component {
       restaurant_end_time,
       image_file_path,
       delivery_type,
+      showAlert,
     } = this.state;
 
     const src = `${backendServer}/public/${image_file_path}`;
-    const { updateerrMsg } = this.props;
+    const { UpdatedStatus } = this.props;
 
     let errorMessage = "";
-    if (updateerrMsg !== "OWNER_PROFILE_DETAILS") {
-      errorMessage = updateerrMsg;
+    let message = "";
+    if (UpdatedStatus === "OWNER_PROFILE_DETAILS") {
+      message = "";
+    } else if (UpdatedStatus === "RESTAURANT_UPDATED") {
+      message = "Restaurant Details updated";
+    } else {
+      errorMessage = "Could not update Restaurant Details";
     }
+
     const pageContent = (
       <Col align='left'>
-        <Form style={{ fontSize: "18px", fontFamily: "sans-serif" }}>
+        <Form
+          style={{ fontSize: "18px", fontFamily: "sans-serif" }}
+          onSubmit={this.handleChangesSubmit}>
           <Row style={{ padding: "0px", fontFamily: "sans-serif" }}>
             <Col style={{ marginLeft: "30px" }}>
               <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
@@ -177,7 +162,6 @@ class OwnerProfile extends Component {
                     encType='multipart/form-data'
                     className='form-control'
                     style={{ display: "none" }}
-                    // eslint-disable-next-line no-return-assign
                     ref={(fileInput) => (this.fileInput = fileInput)}
                   />
                 </Card.Body>
@@ -204,222 +188,272 @@ class OwnerProfile extends Component {
               <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
                 Basic Info
               </h4>
-              <FormTextBox
-                FieldName='Restaurant Name'
-                nameField='name'
-                typeField='text'
-                valueField={name}
-                maxLength='32'
-                patternField='^[A-Za-z ]+$'
-                requiredField='true'
-                changeHandler={this.handleChange}
-              />
+
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Restaurant Name</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    type='text'
+                    name='name'
+                    onChange={this.handleChange}
+                    value={name}
+                    maxLength='30'
+                    required
+                    pattern='^[A-Za-z0-9 ]+$'
+                  />
+                </Col>
+              </Row>
+
               <br />
-              <Form>
-                <Row>
-                  <Col xs={2}>
-                    <Form.Label>Description</Form.Label>
-                  </Col>
-                  <Col xs={6}>
-                    <Form.Control
-                      name='description'
-                      value={description}
-                      as='textarea'
-                      onChange={this.handleChange}
-                      rows={3}
-                    />
-                  </Col>
-                </Row>
-              </Form>
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Description</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    name='description'
+                    value={description}
+                    as='textarea'
+                    onChange={this.handleChange}
+                    rows={3}
+                  />
+                </Col>
+              </Row>
               <br />
               <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
                 Contact Info
               </h4>
-              <FormTextBox
-                FieldName='Email'
-                nameField='email_id'
-                typeField='email'
-                maxLength='50'
-                valueField={email_id}
-                patternField="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$"
-                requiredField='true'
-                changeHandler={this.handleChange}
-              />
+
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Email</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    type='text'
+                    name='email_id'
+                    value={email_id}
+                    onChange={this.handleChange}
+                    maxLength='30'
+                    minLength='5'
+                    required
+                    pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$"
+                  />
+                </Col>
+              </Row>
+
               <br />
-              <FormTextBox
-                FieldName='Phone Number'
-                nameField='phone_num'
-                typeField='text'
-                valueField={phone_num}
-                patternField='^[0-9]+$'
-                maxLength='10'
-                requiredField='true'
-                changeHandler={this.handleChange}
-              />
+
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Phone Number</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    type='text'
+                    name='phone_num'
+                    value={phone_num}
+                    onChange={this.handleChange}
+                    minLength='10'
+                    maxLength='10'
+                    required
+                    pattern='^[0-9]+$'
+                  />
+                </Col>
+              </Row>
+
               <br />
-              <FormTextBox
-                FieldName='New Password'
-                nameField='password'
-                maxLength='32'
-                typeField='password'
-                valueField={password}
-                patternField='^[A-Za-z0-9 ]+$'
-                changeHandler={this.handleChange}
-              />
+
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Password</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    type='password'
+                    name='password'
+                    onChange={this.handleChange}
+                    maxLength='30'
+                    required
+                    pattern='^[A-Za-z0-9 ]+$'
+                  />
+                </Col>
+              </Row>
             </Col>
             <Col>
               <h5 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
                 Address Info
               </h5>
-              <FormTextBox
-                FieldName='Address Line1'
-                nameField='restaurant_address_line_one'
-                typeField='text'
-                valueField={restaurant_address_line_one}
-                patternField='^[A-Za-z0-9 ]+$'
-                maxLength='32'
-                requiredField='true'
-                changeHandler={this.handleChange}
-              />
+
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Address Line1</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    type='text'
+                    name='restaurant_address_line_one'
+                    value={restaurant_address_line_one}
+                    onChange={this.handleChange}
+                    maxLength='30'
+                    required
+                    pattern='^[A-Za-z0-9 ]+$'
+                  />
+                </Col>
+              </Row>
+
               <br />
-              <FormTextBox
-                FieldName='City'
-                nameField='restaurant_city'
-                typeField='text'
-                valueField={restaurant_city}
-                patternField='^[A-Za-z ]+$'
-                requiredField='true'
-                maxLength='32'
-                changeHandler={this.handleChange}
-              />
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>City</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    type='text'
+                    name='restaurant_city'
+                    value={restaurant_city}
+                    onChange={this.handleChange}
+                    maxLength='30'
+                    required
+                    pattern='^[A-Za-z0-9 ]+$'
+                  />
+                </Col>
+              </Row>
+
               <br />
-              <Form>
-                <Row>
-                  <Col xs={2}>
-                    <Form.Label>State</Form.Label>
-                  </Col>
-                  <Col xs={6}>
-                    <RegionDropdown
-                      style={{
-                        width: "100%",
-                        height: "2.6rem",
-                        borderColor: "#eeeee",
-                      }}
-                      disableWhenEmpty
-                      whitelist={{ US: ["CA"] }}
-                      country={restaurant_country}
-                      value={restaurant_state}
-                      name='restaurant_state'
-                      onChange={(val) => this.selectRegion(val)}
-                    />
-                  </Col>
-                </Row>
-              </Form>
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>State</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <RegionDropdown
+                    style={{
+                      width: "100%",
+                      height: "2.6rem",
+                      borderColor: "#eeeee",
+                    }}
+                    disableWhenEmpty
+                    whitelist={{ US: ["CA"] }}
+                    country={restaurant_country}
+                    value={restaurant_state}
+                    name='restaurant_state'
+                    onChange={(val) => this.selectRegion(val)}
+                  />
+                </Col>
+              </Row>
               <br />
-              <Form>
-                <Row>
-                  <Col xs={2}>
-                    <Form.Label>Country</Form.Label>
-                  </Col>
-                  <Col xs={6}>
-                    <CountryDropdown
-                      name='restaurant_country'
-                      style={{
-                        width: "100%",
-                        height: "2.6rem",
-                        borderColor: "#eeeee",
-                      }}
-                      whitelist={["US"]}
-                      value={restaurant_country}
-                      onChange={(val) => this.selectCountry(val)}
-                    />
-                  </Col>
-                </Row>
-              </Form>
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Country</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <CountryDropdown
+                    name='restaurant_country'
+                    style={{
+                      width: "100%",
+                      height: "2.6rem",
+                      borderColor: "#eeeee",
+                    }}
+                    whitelist={["US"]}
+                    value={restaurant_country}
+                    onChange={(val) => this.selectCountry(val)}
+                  />
+                </Col>
+              </Row>
               <br />
-              <FormTextBox
-                FieldName='Zip Code'
-                nameField='restaurant_zipcode'
-                typeField='number'
-                valueField={restaurant_zipcode}
-                maxLength='32'
-                patternField='^[0-9]+$'
-                requiredField='true'
-                changeHandler={this.handleChange}
-              />
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Zip Code</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    type='text'
+                    name='restaurant_zipcode'
+                    value={restaurant_zipcode}
+                    onChange={this.handleChange}
+                    maxLength='30'
+                    required
+                    pattern='^[A-Za-z0-9 ]+$'
+                  />
+                </Col>
+              </Row>
+
               <br />
               <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
                 Restaurant Timings
               </h4>
 
-              <Form>
-                <Row>
-                  <Col xs={2}>
-                    <Form.Label>Restaurant Start Time</Form.Label>
-                  </Col>
-                  <Col xs={6}>
-                    <Form.Control
-                      type='time'
-                      name='restaurant_start_time'
-                      onChange={this.handleChange}
-                      value={restaurant_start_time}
-                      maxLength='10'
-                      required
-                      pattern='([01]?[0-9]|2[0-3]):[0-5][0-9]'
-                      placeholder='HH:MM'
-                    />
-                  </Col>
-                </Row>
-              </Form>
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Restaurant Start Time</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    type='time'
+                    name='restaurant_start_time'
+                    onChange={this.handleChange}
+                    value={restaurant_start_time}
+                    maxLength='10'
+                    required
+                    pattern='([01]?[0-9]|2[0-3]):[0-5][0-9]'
+                    placeholder='HH:MM'
+                  />
+                </Col>
+              </Row>
 
               <br />
 
-              <Form>
-                <Row>
-                  <Col xs={2}>
-                    <Form.Label>Restaurant End Time</Form.Label>
-                  </Col>
-                  <Col xs={6}>
-                    <Form.Control
-                      type='time'
-                      name='restaurant_end_time'
-                      onChange={this.handleChange}
-                      value={restaurant_end_time}
-                      maxLength='10'
-                      required
-                      pattern='([01]?[0-9]|2[0-3]):[0-5][0-9]'
-                      placeholder='HH:MM'
-                    />
-                  </Col>
-                </Row>
-              </Form>
+              <Row>
+                <Col xs={2}>
+                  <Form.Label>Restaurant End Time</Form.Label>
+                </Col>
+                <Col xs={6}>
+                  <Form.Control
+                    type='time'
+                    name='restaurant_end_time'
+                    onChange={this.handleChange}
+                    value={restaurant_end_time}
+                    maxLength='10'
+                    required
+                    pattern='([01]?[0-9]|2[0-3]):[0-5][0-9]'
+                    placeholder='HH:MM'
+                  />
+                </Col>
+              </Row>
               <br />
-              <Form>
-                <Row>
-                  <Col xs={2}>
-                    <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
-                      Delivery Type
-                    </h4>
-                  </Col>
-                  <Col
-                    xs={6}
-                    style={{ fontSize: "16px", fontFamily: "sans-serif" }}>
-                    <Form.Select
-                      name='delivery_type'
-                      value={delivery_type}
-                      style={{
-                        fontSize: "20px",
-                        fontFamily: "sans-serif",
-                      }}
-                      onChange={this.handleChange}
-                      required>
-                      <option value='Both'>Both</option>
-                      <option value='Delivery'>Delivery</option>
-                      <option value='Pick up'>Pick Up</option>
-                    </Form.Select>
-                  </Col>
-                </Row>
-              </Form>
+              <Row>
+                <Col xs={2}>
+                  <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
+                    Delivery Type
+                  </h4>
+                </Col>
+                <Col
+                  xs={6}
+                  style={{ fontSize: "16px", fontFamily: "sans-serif" }}>
+                  <Form.Select
+                    type='dropdown'
+                    name='delivery_type'
+                    value={delivery_type}
+                    style={{
+                      fontSize: "20px",
+                      fontFamily: "sans-serif",
+                    }}
+                    onChange={this.handleChange}
+                    required>
+                    <option name='Both' value='Both'>
+                      Both
+                    </option>
+                    <option name='Delivery' value='Delivery'>
+                      Delivery
+                    </option>
+                    <option name='Pick up' value='Pick up'>
+                      Pick Up
+                    </option>
+                  </Form.Select>
+                </Col>
+              </Row>
               {/* <h4 style={{ fontSize: "25px", fontFamily: "sans-serif" }}>
                 Working Days
               </h4>
@@ -478,24 +512,35 @@ class OwnerProfile extends Component {
               </Form> */}
               <br />
               <br />
-              <Form>
-                <Row>
-                  <Col>
-                    <Button variant='dark' onClick={this.handleChangesSubmit}>
-                      Save Changes
-                    </Button>
-                  </Col>
-                </Row>
-                {errorMessage && (
-                  <Alert
-                    variant='error'
-                    style={{
-                      fontFamily: "sans-serif",
-                    }}>
-                    {errorMessage}
-                  </Alert>
-                )}
-              </Form>
+              <Row>
+                <Col>
+                  <Button variant='dark' type='submit'>
+                    Save Changes
+                  </Button>
+                </Col>
+              </Row>
+              <br />
+              {showAlert && message && (
+                <Alert
+                  style={{
+                    fontFamily: "sans-serif",
+                    width: "20rem",
+                  }}
+                  variant='success'
+                  dismissible
+                  onClose={this.closeAlert}>
+                  {message}
+                </Alert>
+              )}
+              {errorMessage && (
+                <Alert
+                  variant='error'
+                  style={{
+                    fontFamily: "sans-serif",
+                  }}>
+                  {errorMessage}
+                </Alert>
+              )}
             </Col>
           </Row>
         </Form>
@@ -508,13 +553,12 @@ class OwnerProfile extends Component {
 OwnerProfile.propTypes = {
   updateOwner: PropTypes.func.isRequired,
   getOwnerProfile: PropTypes.func.isRequired,
-  updateerrMsg: PropTypes.string.isRequired,
   ownerDetails: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
   ownerDetails: state.owner.ownerDetails.user,
-  updateerrMsg: state.owner.ownerDetails.status,
+  UpdatedStatus: state.owner.ownerDetails.status,
 });
 
 export default connect(mapStateToProps, { updateOwner, getOwnerProfile })(

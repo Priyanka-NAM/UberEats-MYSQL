@@ -1,5 +1,7 @@
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable camelcase */
+/* eslint-disable react/prop-types */
+
 import React, { Component } from "react";
 import { Container, Row } from "react-bootstrap";
 import axios from "axios";
@@ -117,8 +119,8 @@ class RestaurentHome extends Component {
     return (
       <>
         <Header
-          restoSearch={null}
-          searchBarCallback={null}
+          restoSearch=''
+          searchBarCallback=''
           hideDeliveryPickup={false}
           defaultUserLocationDescription={
             currentLocation.addressDescription
@@ -177,7 +179,7 @@ class RestaurentHome extends Component {
 RestaurentHome.propTypes = {
   location: PropTypes.object.isRequired,
   currentLocation: PropTypes.object.isRequired,
-  userLocation: PropTypes.object.isRequired,
+  // userLocation: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   currentLocation: state.currentLocation,

@@ -28,24 +28,57 @@ router.post("/customer", async (req, res) => {
   const sql = `CALL customer_update(${customer_id},"${email_id}","${name}","${oldhashedPassword}","${date_of_birth}","${address_line_1}","${city}","${state}","${country}","${zipcode}","${nick_name}","${profile_pic_file_path}",${phone_num});`;
   console.log(sql);
   db.query(sql, (err, result) => {
+    // try {
+    //   if (err) {
+    //     throw err;
+    //   }
+    //   if (result && result.length > 0) {
+    //     if (result[0][0].status === "CUSTOMER_UPDATED") {
+    //       const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
+    //       res.header("x-auth-token", token).send({
+    //         status: "Customer Updated",
+    //         user: result[0][0],
+    //         token,
+    //       });
+    //       return;
+    //     }
+    //     if (result[0][0].status === "FAILED") {
+    //       res.status(400).send({ status: "Authentication Failed" });
+    //     }
+    //   }
+    // } catch (error) {
+    //   res.writeHead(500, {
+    //     "Content-Type": "text/plain",
+    //   });
+    //   res.end(JSON.stringify(error));
+    // }
+
     try {
       if (err) {
         throw err;
       }
-      if (result && result.length > 0) {
-        if (result[0][0].status === "SUCCESS") {
-          const token = jwt.sign({ _id: result[0][0] }, "jwtPrivateKey");
-          res.header("x-auth-token", token).send({
-            status: "Customer Updated",
-            user: result[0][0],
-            token,
-          });
-          return;
-        }
-        if (result[0][0].status === "FAILED") {
-          res.status(400).send({ status: "Authentication Failed" });
-        }
+      if (!result || result.length === 0) {
+        res.writeHead(500, {
+          "Content-Type": "text/plain",
+        });
+        res.send({
+          status: "Result from Db Undefined",
+        });
+        return;
       }
+
+      if (
+        result[0].length > 0 &&
+        result[0][0].status === "CUSTOMER_UPDATE_FAILED"
+      ) {
+        res.status(400).send({ status: "NO_CUSTOMER_ID" });
+        return;
+      }
+
+      res.send({
+        status: "CUSTOMER_UPDATED",
+        user: result[0][0],
+      });
     } catch (error) {
       res.writeHead(500, {
         "Content-Type": "text/plain",
@@ -151,7 +184,7 @@ router.post("/owner", async (req, res) => {
       }
 
       res.send({
-        status: "Customer Updated",
+        status: "RESTAURANT_UPDATED",
         user: result[0][0],
       });
     } catch (error) {

@@ -19,7 +19,7 @@ require("dotenv").config();
 // DB_PORT=3306
 
 const dbPoolConnection = mysql.createPool({
-  connectionLimit: 500,
+  connectionLimit: 200,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   port: process.env.DB_PORT,

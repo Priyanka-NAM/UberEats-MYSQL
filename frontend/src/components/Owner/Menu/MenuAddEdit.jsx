@@ -232,7 +232,8 @@ class MenuAddEdit extends Component {
             marginTop: "25px",
             fontFamily: "sans-serif",
             fontSize: "18px",
-          }}>
+          }}
+          onSubmit={this.handleSubmit}>
           <Button
             style={{
               marginLeft: "70%",
@@ -243,13 +244,13 @@ class MenuAddEdit extends Component {
               fontSize: "18px",
             }}
             variant='dark'
-            onClick={this.handleSubmit}>
+            type='submit'>
             Save
           </Button>
           <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
             <Form.Label>Dish Name</Form.Label>
             <Form.Control
-              type='name'
+              type='text'
               name='dishname'
               required
               placeholder=''
@@ -282,7 +283,7 @@ class MenuAddEdit extends Component {
                   <input
                     type='file'
                     name='image'
-                    required
+                    required='true'
                     encType='multipart/form-data'
                     className='form-control'
                     style={{ display: "none" }}
@@ -323,7 +324,7 @@ class MenuAddEdit extends Component {
                 value={dishcategory}
                 onChange={this.handleChange}
                 required>
-                <option>Select Category</option>
+                <option value=''>Select Category</option>
                 <option value='Appetizer'>Appetizer</option>
                 <option value='Salads'>Salads</option>
                 <option value='Main Course'>Main Course</option>
@@ -343,7 +344,7 @@ class MenuAddEdit extends Component {
                 }}
                 value={dishtype}
                 required>
-                <option>Select Dietary</option>
+                <option value=''>Select Dietary</option>
                 <option value='Vegetarian'>Veg</option>
                 <option value='Non Vegetarian'>NonVeg</option>
                 <option value='Vegan'>Vegan</option>
@@ -354,8 +355,8 @@ class MenuAddEdit extends Component {
           <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
             <Form.Label>Main Ingredients</Form.Label>
             <Form.Control
-              type='name'
-              required
+              type='text'
+              required='true'
               name='ingredients'
               value={ingredients}
               placeholder=''
@@ -373,7 +374,7 @@ class MenuAddEdit extends Component {
                 name='price'
                 value={price}
                 onChange={this.handleChange}
-                required
+                required='true'
                 placeholder='$'
                 style={{ backgroundColor: "#eeee" }}
               />
