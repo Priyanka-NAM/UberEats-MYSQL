@@ -5,6 +5,9 @@
 const express = require("express");
 const util = require("util");
 const Promise = require("promise");
+const mysql = require("mysql");
+const configure = require("config");
+require("dotenv").config();
 const db = require("../dbPoolConnection");
 
 const router = express.Router();
@@ -237,6 +240,7 @@ router.get("/orderstatus/customer/:customer_id", (req, res) => {
       if (err) {
         throw err;
       }
+
       if (!result || result.length === 0) {
         res.writeHead(500, {
           "Content-Type": "text/plain",
@@ -262,6 +266,49 @@ router.get("/orderstatus/customer/:customer_id", (req, res) => {
     }
   });
 });
+
+// const singleConnection = mysql.createConnection({
+//   host: process.env.DB_HOST,
+//   user: process.env.DB_USER,
+//   port: process.env.DB_PORT,
+//   password: process.env.DB_PASS,
+//   database: "uber_eats_test",
+// });
+
+// router.get("/orderstatus/customer/:customer_id", (req, res) => {
+//   const sql = `CALL customer_orders_get(${req.params.customer_id});`;
+//   console.log(sql);
+//   singleConnection.query(sql, (err, result) => {
+//     try {
+//       if (err) {
+//         throw err;
+//       }
+
+//       if (!result || result.length === 0) {
+//         res.writeHead(500, {
+//           "Content-Type": "text/plain",
+//         });
+//         res.send({
+//           status: "Result from Db Undefined",
+//         });
+//         return;
+//       }
+//       if (result[0].length > 0 && result[0][0].status === "CUSTOMER_ID_NULL") {
+//         res.status(400).send({ status: "CUSTOMER_ID_NULL" });
+//         return;
+//       }
+//       res.send({
+//         status: "CUSTOMER_ORDERS",
+//         orders: orderProcessing(result[0]),
+//       });
+//     } catch (error) {
+//       res.writeHead(500, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(JSON.stringify(error));
+//     }
+//   });
+// });
 
 router.post("/customer/neworder", (req, res) => {
   console.log("Inside Customer New Order");

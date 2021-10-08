@@ -1,6 +1,7 @@
 /* eslint-disable react/no-did-update-set-state */
-/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
+
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { Col, Row, Alert } from "react-bootstrap";
@@ -163,10 +164,10 @@ class DeliveredOrders extends Component {
   }
 }
 
-DeliveredOrders.propTypes = {
-  deliveredOrders: PropTypes.object.isRequired,
-  ownerDeliveredOrders: PropTypes.func.isRequired,
-};
+// DeliveredOrders.propTypes = {
+//   deliveredOrders: PropTypes.object.isRequired,
+//   ownerDeliveredOrders: PropTypes.func.isRequired,
+// };
 
 const mapStateToProps = (state) => ({
   deliveredOrders: state.owner.deliveredOrders,

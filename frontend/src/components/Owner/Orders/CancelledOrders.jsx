@@ -1,7 +1,8 @@
 /* eslint-disable react/no-did-update-set-state */
-/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/no-array-index-key */
+/* eslint-disable react/prop-types */
+
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { Col, Row, Alert } from "react-bootstrap";
@@ -21,48 +22,10 @@ class CancelledOrders extends Component {
     this.state = { showOrder: false };
   }
 
-  // componentDidMount() {
-  //   this.hasMounted = true;
-
-  //   const { restaurant_id: restaurantId } = JSON.parse(
-  //     localStorage.getItem("user")
-  //   );
-
-  //   console.log(" restaurantId: ", restaurantId);
-  //   if (!restaurantId) return;
-  //   axios.defaults.headers.common.authorization = getToken();
-  //   axios
-  //     // .get(
-  //     //   `${backendServer}/ubereats/orders/neworders/restaurant/${restaurantId}`
-  //     // )
-  //     .get(`${backendServer}/ubereats/orders/cancelledorders/restaurant/2`)
-  //     .then((response) => {
-  //       console.log("Response: ", JSON.stringify(response.data));
-
-  //       if (response.data.status === "CANCELLED_ORDERS") {
-  //         if (this.hasMounted) {
-  //           this.setState({
-  //             cancelledOrders: response.data.orders,
-  //           });
-  //         }
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       if (error.response && error.response.data) {
-  //         this.setState({
-  //           errormessage: "Orders Could not be Fetched",
-  //         });
-  //       }
-  //     });
-  // }
-
   componentDidMount() {
     this.props.ownerCancelledOrders();
   }
 
-  // componentWillUnmount() {
-  //   this.hasMounted = false;
-  // }
   componentDidUpdate = (prevprops) => {
     const { cancelledOrders } = this.props;
     if (cancelledOrders !== prevprops.cancelledOrders) {
@@ -206,10 +169,10 @@ class CancelledOrders extends Component {
   }
 }
 
-CancelledOrders.propTypes = {
-  cancelledOrders: PropTypes.object.isRequired,
-  ownerCancelledOrders: PropTypes.func.isRequired,
-};
+// CancelledOrders.propTypes = {
+//   cancelledOrders: PropTypes.object.isRequired,
+//   ownerCancelledOrders: PropTypes.func.isRequired,
+// };
 
 const mapStateToProps = (state) => ({
   cancelledOrders: state.owner.cancelledOrders,

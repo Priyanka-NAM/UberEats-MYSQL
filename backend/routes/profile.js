@@ -55,27 +55,47 @@ router.post("/customer", async (req, res) => {
   });
 });
 
-router.get("/customer/:user_id", (req, res) => {
-  const sql = `CALL customer_get("${req.params.user_id}", NULL);`;
-  db.query(sql, (err, result) => {
-    try {
-      if (err) {
-        throw err;
-      }
-      if (result && result.length > 0 && result[0][0]) {
-        res.writeHead(200, {
-          "Content-Type": "text/plain",
-        });
-        res.end(JSON.stringify(result[0]));
-      }
-    } catch (error) {
-      res.writeHead(500, {
-        "Content-Type": "text/plain",
-      });
-      res.end(JSON.stringify(error));
-    }
-  });
-});
+// router.get("/customer/:user_id", (req, res) => {
+//   const sql = `CALL customer_get("${req.params.user_id}", NULL);`;
+//   db.query(sql, (err, result) => {
+//     try {
+//       if (err) {
+//         throw err;
+//       }
+//       if (!result || result.length === 0) {
+//         res.writeHead(500, {
+//           "Content-Type": "text/plain",
+//         });
+//         res.send({
+//           status: "Result from Db Undefined",
+//         });
+//         return;
+//       }
+//       if (result[0].length < 0) {
+//         throw err;
+//       }
+//       res.send({
+//         status: "OWNER_PROFILE_DETAILS",
+//         user: result[0][0],
+//       });
+
+//       if (result && result.length > 0 && result[0][0]) {
+//         res.writeHead(200, {
+//           "Content-Type": "text/plain",
+//         });
+//         console.log("Inside If ", result[0][0]);
+//         res.end(JSON.stringify(result[0]));
+//       } else {
+//         throw err;
+//       }
+//     } catch (error) {
+//       res.writeHead(500, {
+//         "Content-Type": "text/plain",
+//       });
+//       res.end(JSON.stringify(error));
+//     }
+//   });
+// });
 
 router.post("/owner", async (req, res) => {
   console.log("Owner details from Request", req.body);
