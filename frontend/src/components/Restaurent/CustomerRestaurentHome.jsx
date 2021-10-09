@@ -119,8 +119,6 @@ class RestaurentHome extends Component {
     return (
       <>
         <Header
-          restoSearch=''
-          searchBarCallback=''
           hideDeliveryPickup={false}
           defaultUserLocationDescription={
             currentLocation.addressDescription

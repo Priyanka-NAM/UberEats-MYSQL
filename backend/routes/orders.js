@@ -17,7 +17,7 @@ const dishDetails = (order) => {
     dish_id: order.dish_id,
     quantity: order.quantity,
     price: order.price,
-    name: order.name,
+    dish_name: order.dish_name,
     description: order.description,
     ingredients: order.ingredients,
     image_file_path: order.image_file_path,
@@ -36,7 +36,7 @@ const OrderCustomerRestaurantDetails = (order) => {
     "dish_id",
     "quantity",
     "price",
-    "name",
+    "dish_name",
     "description",
     "ingredients",
     "image_file_path",
@@ -324,9 +324,14 @@ router.post("/customer/neworder", (req, res) => {
     order_status,
     cart_items,
     order_delivery_type,
+    order_address_line_1,
+    order_city,
+    order_state,
+    order_country,
+    order_zipcode,
   } = req.body;
   console.log("Customer New Order", req.body);
-  const sql = `CALL customer_create_order(${customerId},${restaurant_id},"${order_status}","${delivery_status}",${sub_total},${tax},${delivery_cost},"${gratitude}",${order_total}, "${order_delivery_type}");`;
+  const sql = `CALL customer_create_order(${customerId},${restaurant_id},"${order_status}","${delivery_status}",${sub_total},${tax},${delivery_cost},"${gratitude}",${order_total}, "${order_delivery_type}",'${order_address_line_1}','${order_city}','${order_state}','${order_country}','${order_zipcode}');`;
   console.log(sql);
   db.query(sql, (err, result) => {
     try {

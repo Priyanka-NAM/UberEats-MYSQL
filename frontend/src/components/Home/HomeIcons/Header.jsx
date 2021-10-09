@@ -192,11 +192,15 @@ class Header extends React.Component {
     );
   }
 }
+
 Header.propTypes = {
-  restoSearch: PropTypes.func.isRequired,
-  searchBarCallback: PropTypes.func.isRequired,
-  // eslint-disable-next-line react/forbid-prop-types
-  // location: PropTypes.object.isRequired,
+  restoSearch: this.handleSearchBarKeyPress.this(bind),
+  searchBarCallback: () => {},
+};
+
+Header.propTypes = {
+  restoSearch: PropTypes.func,
+  searchBarCallback: PropTypes.func,
   defaultUserLocationDescription: PropTypes.string.isRequired,
 };
 
