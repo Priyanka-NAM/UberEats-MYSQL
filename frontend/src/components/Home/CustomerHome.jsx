@@ -120,11 +120,7 @@ class CustomerHome extends Component {
             restaurant.delivery_type === deliveryType ||
             restaurant.delivery_type === "Both"
         );
-        // if (enableSeachFiltering) {
-        //   searchResultRestos = deliveryBasedFilteredSet;
-        // }
-        // Location Based Filtering
-        // console.log("Filtering Location: ", location);
+
         console.log(
           "Delivery Based Filtering Restaurants Length: ",
           deliveryBasedFilteredSet.length
@@ -151,12 +147,10 @@ class CustomerHome extends Component {
         nationalRestos = deliveryBasedFilteredSet.filter(
           (restaurant) => restaurant.national_brand
         );
-        console.log("National Brand Restaurants ", nationalRestos);
         // Remaining Restaurants
         remainingRestos = allRestaurents.filter(
           (restaurant) => nearToYouRestos.indexOf(restaurant) === -1
         );
-        console.log("Remaining Restaurants ", remainingRestos);
       }
     }
   };
@@ -289,7 +283,6 @@ class CustomerHome extends Component {
     let nationalbrands = null;
     let popularnear = null;
     let remaining = null;
-    // let searchresults = null;
     if (allRestaurents) {
       this.handleRestaurantFiltering(
         foodSelectionType,
@@ -297,10 +290,6 @@ class CustomerHome extends Component {
         location,
         true
       );
-
-      console.log("National Restos ", nationalRestos);
-
-      console.log("Resto near you ", nearToYouRestos);
 
       nationalbrands = nationalRestos.map((restaurant) => (
         <RestoCard
@@ -366,12 +355,8 @@ class CustomerHome extends Component {
 }
 
 CustomerHome.propTypes = {
-  // userAddressDescription: PropTypes.string.isRequired,
-  // userLocation: PropTypes.object.isRequired,
-  // changedUserLocation: PropTypes.object.isRequired,
   restaurants: PropTypes.func.isRequired,
   searchRestaurants: PropTypes.func.isRequired,
-  // allRestaurants: PropTypes.array.isRequired,
 };
 
 const mapStateToProps = (state) => ({

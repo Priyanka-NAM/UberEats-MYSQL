@@ -20,7 +20,6 @@ class CustomerSignUp extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // const { email, password, name } = this.state;
     const details = {
       ...this.state,
     };
@@ -42,21 +41,32 @@ class CustomerSignUp extends React.Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, UpdateStatus } = this.props;
     // if (isOwnerSignedIn || isUserSignedIn) {
     //   return <Redirect to='/home' />;
     // }
-    console.log("User from props ", user);
-    let errorMessage = "";
 
-    const currentUser = JSON.parse(localStorage.getItem("user"));
+    // const currentUser = JSON.parse(localStorage.getItem("user"));
     const { country, state, city, address_line_1, zipcode } = this.state;
-    if (currentUser) {
-      if (currentUser.is_owner === 0 && user && user.status === "USER_ADDED") {
-        return <Redirect to='/customer/home' />;
-      }
-    } else if (user && user.status === "USER_EXISTS") {
+    // if (currentUser) {
+    //   if (currentUser.is_owner === 0 && user && user.status === "USER_ADDED") {
+    //     return <Redirect to='/customer/home' />;
+    //   }
+    // } else if (user && user.status === "USER_EXISTS") {
+    //   errorMessage = "Opps! Email id already exists";
+    // }
+    let errorMessage = "";
+    if (!UpdateStatus) {
+      errorMessage = "";
+    } else if (
+      UpdateStatus === "Authentication Successful" ||
+      UpdateStatus === "USER_ADDED"
+    ) {
+      return <Redirect to='/customer/home' />;
+    } else if (UpdateStatus === "USER_EXISTS") {
       errorMessage = "Opps! Email id already exists";
+    } else {
+      errorMessage = "Oops! Could not add Customer ";
     }
 
     return (
@@ -234,5 +244,6 @@ CustomerSignUp.propTypes = {
 };
 const mapStateToProps = (state) => ({
   user: state.customer.customerDetails.user,
+  UpdateStatus: state.customer.customerDetails.status,
 });
 export default connect(mapStateToProps, { addCustomer })(CustomerSignUp);

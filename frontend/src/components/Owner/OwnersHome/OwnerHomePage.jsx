@@ -1,10 +1,11 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/forbid-prop-types */
 import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Col, Container, Row } from "react-bootstrap";
-import RestaBanner from "../../Restaurent/RestaurentPageIcons/RestaBanner";
+import OwnerRestaBanner from "../../Restaurent/RestaurentPageIcons/OwnerRestaBanner";
 import OwnerHome from "../../Home/OwnerHome";
 import MenuCard from "../../Restaurent/RestaurentPageIcons/MenuCard";
 import backendServer from "../../../backEndConfig";
@@ -13,9 +14,7 @@ import { ownerMenu } from "../../../Actions/OwnerActions";
 class OwnerHomePage extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      newImageData: "",
-    };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -29,7 +28,6 @@ class OwnerHomePage extends Component {
       allDishes !== prevprops.allDishes ||
       ownerDetails !== prevprops.ownerDetails
     ) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         allDishes,
         ownerDetails,
@@ -39,7 +37,6 @@ class OwnerHomePage extends Component {
 
   render() {
     let restaurentMenu = null;
-    const { newImageData } = this.state;
     const { allDishes, ownerDetails } = this.state;
     if (allDishes) {
       restaurentMenu = allDishes.map((dish) => (
@@ -72,12 +69,12 @@ class OwnerHomePage extends Component {
       <Col style={{ padding: "0%", margin: "0%" }}>
         <Container fluid>
           <Row style={{ paddingTop: "2%" }}>
-            <RestaBanner
+            <OwnerRestaBanner
               key='1'
               src={src}
               restaTitle={restaTitle}
               restaAddress={restaAddress}
-              isOwnerHome
+              // isOwnerHome
               otherDetails={otherDetails}
               restauDescri={description}
             />

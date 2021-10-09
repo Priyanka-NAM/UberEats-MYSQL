@@ -27,8 +27,8 @@ import UberELogo from "../../Home/HomeIcons/logo";
 import mainstyle from "../../Home/HomeIcons/HeaderStyle";
 import "../../Styles/SignInUp.css";
 import ProfileCanvas from "../../Home/HomeIcons/ProfileCanvas";
-import "../../../Actions/CartActions";
 import { customerOrderPlaced } from "../../../Actions/CustomerActions";
+import { emptyCart } from "../../../Actions/CartActions";
 
 class FinalOrder extends Component {
   constructor(props) {
@@ -76,7 +76,8 @@ class FinalOrder extends Component {
     });
   };
 
-  handlePlaceOrder = () => {
+  handlePlaceOrder = (e) => {
+    e.preventDefault();
     const { cartItems, restaurantId, currentLocation, userLocation } =
       this.props;
     const { deliveryevent, ChangedDeliveryLocation } = this.state;
@@ -119,12 +120,20 @@ class FinalOrder extends Component {
       order_zipcode: zipcode,
     };
     this.props.customerOrderPlaced(orderPostInput);
+    this.props.emptyCart();
   };
 
   getCostFromCartItems = (cartItems) => {
+    const { deliveryevent } = this.state;
     let cartRows = null;
     let totalCartValue = 0;
-    const deliveryfee = 5.0;
+    let deliveryfee = 5.0;
+    if (deliveryevent) {
+      deliveryfee = 5.0;
+    } else {
+      deliveryfee = 0.0;
+    }
+
     const cadriverbenefit = 2.0;
     let ordertotal = 0;
     if (cartItems) {
@@ -165,11 +174,15 @@ class FinalOrder extends Component {
       showChange,
       ChangedDeliveryLocation,
     } = this.state;
-    const { restaurantName, cartItems, currentLocation, userLocation } =
-      this.props;
+    const {
+      restaurantName,
+      cartItems,
+      currentLocation,
+      userLocation,
+      restaurantDeliveryMode,
+    } = this.props;
     console.log("currentLocation", currentLocation);
     console.log("userLocation", userLocation);
-    // eslint-disable-next-line no-unneeded-ternary
     const location = currentLocation ? currentLocation : userLocation;
     let addressLine1 = userLocation.addressLine1;
     let state = userLocation.state;
@@ -191,11 +204,14 @@ class FinalOrder extends Component {
       country = locationdetails[3];
       zipcode = locationdetails[4];
     }
-
-    console.log("location", location);
     let cartRows = null;
     let totalCartValue = 0;
-    const deliveryfee = 5.0;
+    let deliveryfee = 5.0;
+    if (deliveryevent) {
+      deliveryfee = 5.0;
+    } else {
+      deliveryfee = 0.0;
+    }
     const cadriverbenefit = 2.0;
     let ordertotal = 0;
     let taxTotal = 0;
@@ -237,225 +253,234 @@ class FinalOrder extends Component {
     }
     return (
       <Container fluid='true' style={{ overflow: "hidden" }}>
-        <Row
-          style={{
-            display: "flex",
-            marginLeft: "2%",
-            height: "100vh",
-          }}>
-          <Col style={{ flex: "1.5", backgroundColor: "white" }} fluid='true'>
-            <Nav style={{ marginTop: "2%" }}>
-              <Nav.Item>
-                <FaBars
-                  style={{ height: "50px" }}
-                  xs='6'
-                  size='24px'
-                  color='black'
-                  onClick={this.handleShow}
-                />
-              </Nav.Item>
-              <Nav.Item style={mainstyle.paddingLeft}>
-                <Link to={{ pathname: "/customer/home", state: "" }}>
-                  <img
-                    style={{ paddingLeft: "15px", height: "50px" }}
-                    src={UberELogo.UberEBLogo.src}
-                    alt={UberELogo.UberEBLogo.alt}
+        <Form onSubmit={this.handlePlaceOrder}>
+          <Row
+            style={{
+              display: "flex",
+              marginLeft: "2%",
+              height: "100vh",
+            }}>
+            <Col style={{ flex: "1.5", backgroundColor: "white" }} fluid='true'>
+              <Nav style={{ marginTop: "2%" }}>
+                <Nav.Item>
+                  <FaBars
+                    style={{ height: "50px" }}
+                    xs='6'
+                    size='24px'
+                    color='black'
+                    onClick={this.handleShow}
                   />
-                </Link>
-              </Nav.Item>
-            </Nav>
-            <div style={{ width: "85%" }}>
-              <Row style={{ marginTop: "4%" }}>
-                <h1 className='restaName'>{restaurantName}</h1>
-              </Row>
-              <hr style={{ border: "1px", width: "70%" }} />
-              <Row style={{ marginTop: "2%" }}>
-                <h4 className='subtitle'>Delivery Mode</h4>
-                <Row style={{ paddingBottom: "20px" }}>
-                  <Col xs={1} style={{ paddingRight: "0%" }}>
-                    <input
-                      type='radio'
-                      name='deliverymode'
-                      value='delivery'
-                      style={{
-                        height: "22px",
-                        width: "22px",
-                        verticalAlign: "middle",
-                        backgroundColor: "black",
-                      }}
-                      onClick={this.handleDeliveryMode}
-                      defaultChecked
+                </Nav.Item>
+                <Nav.Item style={mainstyle.paddingLeft}>
+                  <Link to={{ pathname: "/customer/home", state: "" }}>
+                    <img
+                      style={{ paddingLeft: "15px", height: "50px" }}
+                      src={UberELogo.UberEBLogo.src}
+                      alt={UberELogo.UberEBLogo.alt}
                     />
-                  </Col>
-                  <Col>
-                    <Form.Check.Label className='addressdetails' required>
-                      Delivery
-                    </Form.Check.Label>
-                  </Col>
-                </Row>
-                <Row style={{ paddingBottom: "15px" }}>
-                  <Col xs={1}>
-                    <input
-                      type='radio'
-                      name='deliverymode'
-                      value='pickup'
-                      style={{
-                        height: "22px",
-                        width: "22px",
-                        verticalAlign: "middle",
-                      }}
-                      onClick={this.handleDeliveryMode}
-                      required
-                    />
-                  </Col>
-                  <Col>
-                    <Form.Check.Label className='addressdetails'>
-                      Pickup
-                    </Form.Check.Label>
-                  </Col>
-                </Row>
-              </Row>
-
-              {deliveryevent && (
-                <>
-                  <hr style={{ border: "1px", width: "70%" }} />
-                  <Row style={{ marginTop: "2%" }}>
-                    <h4 className='subtitle'>Delivery Address</h4>
-                  </Row>
-                  {/* <Link */}
-
-                  <Row style={{ textAlign: "left", width: "70%" }}>
-                    <Col xs={1} className='locationIcon'>
-                      <MdLocationOn size='30px' />
-                    </Col>
-                    <Col
-                      style={{ textAlign: "left", fontFamily: "sans-serif" }}>
-                      <h5 className='addressdetails'>{addressLine1}</h5>
-                      <h6 className='detailsadd'>
-                        {city},{zipcode},{state},{country}
-                      </h6>
-                    </Col>
-                    <Col style={{ textAlign: "right" }}>
-                      <Button
-                        variant='light'
-                        style={{
-                          borderRadius: "20px",
-                          backgroundColor: "#eeeeee",
-                        }}
-                        onClick={this.handleOpen}>
-                        Edit
-                      </Button>
-                    </Col>
-                  </Row>
-                  {/* </Link> */}
-                </>
-              )}
-              <hr style={{ border: "1px", width: "70%" }} />
-              <Row style={{ marginTop: "2%" }}>
-                <h4 className='subtitle'>Payment</h4>
-                <Row style={{ paddingBottom: "20px" }}>
-                  <Col xs={1} style={{ paddingRight: "0%" }}>
-                    <input
-                      type='radio'
-                      name='radio'
-                      value='value'
-                      style={{
-                        height: "22px",
-                        width: "22px",
-                        verticalAlign: "middle",
-                        backgroundColor: "black",
-                      }}
-                      defaultChecked
-                    />
-                  </Col>
-                  <Col>
-                    <Form.Check.Label className='addressdetails' required>
-                      Cash on Delivery
-                    </Form.Check.Label>
-                  </Col>
+                  </Link>
+                </Nav.Item>
+              </Nav>
+              <div style={{ width: "85%" }}>
+                <Row style={{ marginTop: "4%" }}>
+                  <h1 className='restaName'>{restaurantName}</h1>
                 </Row>
                 <hr style={{ border: "1px", width: "70%" }} />
+
+                <Row style={{ marginTop: "2%" }}>
+                  <h4 className='subtitle'>Delivery Mode</h4>
+                  {(restaurantDeliveryMode === "Both" ||
+                    restaurantDeliveryMode === "Delivery") && (
+                    <Row style={{ paddingBottom: "20px" }}>
+                      <Col xs={1} style={{ paddingRight: "0%" }}>
+                        <input
+                          type='radio'
+                          name='deliverymode'
+                          value='delivery'
+                          style={{
+                            height: "22px",
+                            width: "22px",
+                            verticalAlign: "middle",
+                            backgroundColor: "black",
+                          }}
+                          onClick={this.handleDeliveryMode}
+                          required
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Check.Label className='addressdetails' required>
+                          Delivery
+                        </Form.Check.Label>
+                      </Col>
+                    </Row>
+                  )}
+
+                  {(restaurantDeliveryMode === "Both" ||
+                    restaurantDeliveryMode === "Pick up") && (
+                    <Row style={{ paddingBottom: "15px" }}>
+                      <Col xs={1}>
+                        <input
+                          type='radio'
+                          name='deliverymode'
+                          value='pickup'
+                          style={{
+                            height: "22px",
+                            width: "22px",
+                            verticalAlign: "middle",
+                          }}
+                          onClick={this.handleDeliveryMode}
+                          required
+                        />
+                      </Col>
+                      <Col>
+                        <Form.Check.Label className='addressdetails'>
+                          Pickup
+                        </Form.Check.Label>
+                      </Col>
+                    </Row>
+                  )}
+                </Row>
+
+                {deliveryevent &&
+                  (restaurantDeliveryMode === "Both" ||
+                    restaurantDeliveryMode === "Delivery") && (
+                    <>
+                      <hr style={{ border: "1px", width: "70%" }} />
+                      <Row style={{ marginTop: "2%" }}>
+                        <h4 className='subtitle'>Delivery Address</h4>
+                      </Row>
+                      <Row style={{ textAlign: "left", width: "70%" }}>
+                        <Col xs={1} className='locationIcon'>
+                          <MdLocationOn size='30px' />
+                        </Col>
+                        <Col
+                          style={{
+                            textAlign: "left",
+                            fontFamily: "sans-serif",
+                          }}>
+                          <h5 className='addressdetails'>{addressLine1}</h5>
+                          <h6 className='detailsadd'>
+                            {city},{zipcode},{state},{country}
+                          </h6>
+                        </Col>
+                        <Col style={{ textAlign: "right" }}>
+                          <Button
+                            variant='light'
+                            style={{
+                              borderRadius: "20px",
+                              backgroundColor: "#eeeeee",
+                            }}
+                            onClick={this.handleOpen}>
+                            Edit
+                          </Button>
+                        </Col>
+                      </Row>
+                    </>
+                  )}
+                <hr style={{ border: "1px", width: "70%" }} />
+                <Row style={{ marginTop: "2%" }}>
+                  <h4 className='subtitle'>Payment</h4>
+                  <Row style={{ paddingBottom: "20px" }}>
+                    <Col xs={1} style={{ paddingRight: "0%" }}>
+                      <input
+                        type='radio'
+                        name='radio'
+                        value='value'
+                        style={{
+                          height: "22px",
+                          width: "22px",
+                          verticalAlign: "middle",
+                          backgroundColor: "black",
+                        }}
+                        defaultChecked
+                      />
+                    </Col>
+                    <Col>
+                      <Form.Check.Label className='addressdetails' required>
+                        Cash on Delivery
+                      </Form.Check.Label>
+                    </Col>
+                  </Row>
+                  <hr style={{ border: "1px", width: "70%" }} />
+                </Row>
+                <Row style={{ marginTop: "2%" }}>
+                  <h4 className='subtitle'>Your items</h4>
+                </Row>
+                {cartRows}
+              </div>
+            </Col>
+            <Col
+              style={{ backgroundColor: "#F6F6F6" }}
+              align='center'
+              fluid='true'>
+              <Row style={{ paddingTop: "40px", width: "80%" }}>
+                <Button className='placeorderbtn' variant='light' type='submit'>
+                  Place Order
+                </Button>
               </Row>
-              <Row style={{ marginTop: "2%" }}>
-                <h4 className='subtitle'>Your items</h4>
+              <Row style={{ width: "80%" }}>
+                <p>
+                  If you’re not around when the delivery person arrives, they’ll
+                  leave your order at the door. By placing your order, you agree
+                  to take full responsibility for it once it’s delivered.
+                </p>
               </Row>
-              {cartRows}
-            </div>
-          </Col>
-          <Col
-            style={{ backgroundColor: "#F6F6F6" }}
-            align='center'
-            fluid='true'>
-            <Row style={{ paddingTop: "40px", width: "80%" }}>
-              <Button
-                className='placeorderbtn'
-                variant='light'
-                onClick={this.handlePlaceOrder}>
-                Place Order
-              </Button>
-            </Row>
-            <Row style={{ width: "80%" }}>
-              <p>
-                If you’re not around when the delivery person arrives, they’ll
-                leave your order at the door. By placing your order, you agree
-                to take full responsibility for it once it’s delivered.
-              </p>
-            </Row>
-            <hr style={{ border: "1px black" }} />
-            <Row
-              style={{
-                width: "80%",
-                paddingTop: "40px",
-                fontSize: "18px",
-                fontFamily: "sans-serif",
-                letterSpacing: "0.06em",
-              }}>
-              <ul className='list-group'>
-                <li
-                  className=' d-flex justify-content-between align-items-center'
-                  style={{ paddingBottom: "10px" }}>
-                  Subtotal
-                  <span>${totalCartValue}</span>
-                </li>
-                <li
-                  className=' d-flex justify-content-between align-items-center'
-                  style={{ paddingBottom: "10px" }}>
-                  Tax
-                  <span>${taxTotal.toFixed(2)}</span>
-                </li>
-                <li
-                  className='d-flex justify-content-between align-items-center'
-                  style={{ paddingBottom: "10px" }}>
-                  Delivery Fee
-                  <span>${deliveryfee}</span>
-                </li>
-                <li
-                  className='d-flex justify-content-between align-items-center'
-                  style={{ paddingBottom: "10px" }}>
-                  CA Driver Benefits
-                  <span>${cadriverbenefit}</span>
-                </li>
-              </ul>
-            </Row>
-            <hr style={{ border: "1px black" }} />
-            <Row
-              style={{
-                width: "80%",
-                paddingTop: "20px",
-                fontSize: "24px",
-                fontFamily: "sans-serif",
-              }}>
-              <ul className='list-group'>
-                <li
-                  className=' d-flex justify-content-between align-items-center'
-                  style={{ paddingBottom: "10px" }}>
-                  Total
-                  <span>${ordertotal}</span>
-                </li>
-              </ul>
-            </Row>
-          </Col>
-        </Row>
+              <hr style={{ border: "1px black" }} />
+              <Row
+                style={{
+                  width: "80%",
+                  paddingTop: "40px",
+                  fontSize: "18px",
+                  fontFamily: "sans-serif",
+                  letterSpacing: "0.06em",
+                }}>
+                <ul className='list-group'>
+                  <li
+                    className=' d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    Subtotal
+                    <span>${totalCartValue}</span>
+                  </li>
+                  <li
+                    className=' d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    Tax
+                    <span>${taxTotal.toFixed(2)}</span>
+                  </li>
+                  <li
+                    className='d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    Delivery Fee
+                    <span>${deliveryfee}</span>
+                  </li>
+                  <li
+                    className='d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    CA Driver Benefits
+                    <span>${cadriverbenefit}</span>
+                  </li>
+                </ul>
+              </Row>
+              <hr style={{ border: "1px black" }} />
+              <Row
+                style={{
+                  width: "80%",
+                  paddingTop: "20px",
+                  fontSize: "24px",
+                  fontFamily: "sans-serif",
+                }}>
+                <ul className='list-group'>
+                  <li
+                    className=' d-flex justify-content-between align-items-center'
+                    style={{ paddingBottom: "10px" }}>
+                    Total
+                    <span>${ordertotal}</span>
+                  </li>
+                </ul>
+              </Row>
+            </Col>
+          </Row>
+        </Form>
         <ProfileCanvas handleClose={this.handleClose} showModal={showModal} />
         <Modal
           show={showChange}
@@ -509,22 +534,21 @@ class FinalOrder extends Component {
         </Modal>
         <Modal
           show={showOrderSucess}
-          onHide={this.handleSecClose}
           backdrop='static'
           keyboard={false}
           style={{ width: "100%", display: "flex", alignItems: "center" }}>
           <Modal.Header>
-            <BiX
+            {/* <BiX
               size='35px'
               style={{ color: "black" }}
-              onClick={this.handleSecClose}
-            />
+              // onClick={this.handleSecClose}
+            /> */}
           </Modal.Header>
           <Modal.Body>
             <Modal.Title
               style={{
                 fontSize: "36px",
-                fontFamily: "UberMove, sans-serif",
+                fontFamily: "sans-serif",
                 marginBottom: "20px",
               }}>
               Order is placed Successfully
@@ -557,12 +581,17 @@ FinalOrder.propTypes = {
   currentLocation: PropTypes.object.isRequired,
   userLocation: PropTypes.object.isRequired,
   customerOrderPlaced: PropTypes.func.isRequired,
+  emptyCart: PropTypes.func.isRequired,
+  restaurantDeliveryMode: PropTypes.string.isRequired,
 };
 const mapStateToProps = (state) => ({
   restaurantName: state.cartDetails.restaurantName,
   restaurantId: state.cartDetails.restaurantId,
+  restaurantDeliveryMode: state.cartDetails.DeliveryMode,
   currentLocation: state.currentLocation,
   userLocation: state.signin.address,
   cartItems: state.cartDetails.items,
 });
-export default connect(mapStateToProps, { customerOrderPlaced })(FinalOrder);
+export default connect(mapStateToProps, { customerOrderPlaced, emptyCart })(
+  FinalOrder
+);

@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/prop-types */
 import React, { Component } from "react";
@@ -23,7 +24,6 @@ class OwnerHome extends Component {
   }
 
   handleSignOut = () => {
-    // eslint-disable-next-line react/destructuring-assignment
     this.props.userSignOut();
     console.log("inside handlesignout");
   };
@@ -82,7 +82,7 @@ class OwnerHome extends Component {
           </Container>
         </Navbar>
 
-        <Container fluid='true'>
+        <Container fluid='true' style={{ height: "100vh", overflow: "scroll" }}>
           <Row>
             <Col
               sm={1}
@@ -173,7 +173,9 @@ class OwnerHome extends Component {
                 </Nav.Item>
               </Nav>
             </Col>
+            {/* <div style={{ height: "100vh", overflow: "scroll" }}> */}
             {pageContent}
+            {/* </div> */}
           </Row>
         </Container>
       </>

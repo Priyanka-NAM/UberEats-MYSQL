@@ -4,7 +4,6 @@ import React from "react";
 import { Container, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import "../../Styles/RestaCarousel.css";
 
 class RestaurentCarousel extends React.Component {
   constructor(props) {
@@ -13,7 +12,7 @@ class RestaurentCarousel extends React.Component {
   }
 
   render() {
-    const { nationalbrands, popularnear, remaining } = this.props;
+    const { popularnear, remaining } = this.props;
     return (
       <div style={{ height: "100vh", overflowY: "scroll" }}>
         <Container fluid='true'>
@@ -33,9 +32,7 @@ class RestaurentCarousel extends React.Component {
   }
 }
 RestaurentCarousel.propTypes = {
-  nationalbrands: PropTypes.array.isRequired,
   popularnear: PropTypes.array.isRequired,
   remaining: PropTypes.array.isRequired,
-  // searchresults: PropTypes.array.isRequired,
 };
 export default RestaurentCarousel;

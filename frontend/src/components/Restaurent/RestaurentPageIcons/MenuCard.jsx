@@ -51,12 +51,18 @@ class MenuCard extends Component {
 
   handleAlert = () => {
     const { Orderquantity } = this.state;
-    const { title, price, addToCart, currentRestaurantName, dishDetails } =
-      this.props;
+    const {
+      title,
+      price,
+      addToCart,
+      currentRestaurantName,
+      dishDetails,
+      restaurantDeliveryType,
+    } = this.props;
     const cartDetails = {
       restaurantName: currentRestaurantName,
       restaurantId: dishDetails.restaurant_id,
-
+      DeliveryMode: restaurantDeliveryType,
       itemDetails: {
         title: title,
         price: price,
@@ -80,6 +86,7 @@ class MenuCard extends Component {
       currentRestaurantName,
       dishDetails,
       restaurantName,
+      restaurantDeliveryType,
     } = this.props;
     if (currentRestaurantName !== restaurantName && restaurantName !== "") {
       this.setState({
@@ -91,6 +98,7 @@ class MenuCard extends Component {
     const cartDetails = {
       restaurantName: currentRestaurantName,
       restaurantId: dishDetails.restaurant_id,
+      DeliveryMode: restaurantDeliveryType,
       itemDetails: {
         title: title,
         price: price * Orderquantity,
@@ -124,7 +132,7 @@ class MenuCard extends Component {
           className='card mb-3'
           style={{
             width: isOwnerHome ? "33rem" : "40rem",
-            margin: "1%",
+            margin: "0.5%",
             height: "10rem",
           }}
           onKeyPress={() => {}}
@@ -153,9 +161,12 @@ class MenuCard extends Component {
           style={{
             width: "100%",
             display: "flex",
-            height: "80rem",
+            height: "100%",
             alignItems: "center",
+            position: "absolute",
+            overflowY: "scroll",
           }}
+          scrollable
           centered>
           <Modal.Header>
             {" "}
@@ -176,6 +187,7 @@ class MenuCard extends Component {
                 height: "19rem",
               }}
             />
+
             <Modal.Title
               style={{
                 color: "black",
@@ -186,31 +198,34 @@ class MenuCard extends Component {
             </Modal.Title>
             <p>{description}</p>
           </Modal.Body>
-          <Modal.Footer>
-            <BsDashCircleFill
-              size='35px'
-              style={{ color: "lightgrey" }}
-              onClick={this.handleDecrement}
-            />
-            <p>{Orderquantity}</p>
-            <BsFillPlusCircleFill
-              size='35px'
-              style={{ color: "lightgrey" }}
-              onClick={this.handleIncrement}
-            />
-            <Button
-              variant='dark'
-              onClick={this.handleAddToCart}
-              style={{
-                width: "75%",
-                height: "3.5rem",
-                fontSize: "18px",
-                fontFamily: "UberMove sans-serif",
-              }}>
-              Add {Orderquantity} to order
-              <span style={{ paddingLeft: "15px" }}>${ItemPrice}</span>
-            </Button>
-          </Modal.Footer>
+
+          {!isOwnerHome && (
+            <Modal.Footer>
+              <BsDashCircleFill
+                size='35px'
+                style={{ color: "lightgrey" }}
+                onClick={this.handleDecrement}
+              />
+              <p>{Orderquantity}</p>
+              <BsFillPlusCircleFill
+                size='35px'
+                style={{ color: "lightgrey" }}
+                onClick={this.handleIncrement}
+              />
+              <Button
+                variant='dark'
+                onClick={this.handleAddToCart}
+                style={{
+                  width: "75%",
+                  height: "3.5rem",
+                  fontSize: "18px",
+                  fontFamily: "UberMove sans-serif",
+                }}>
+                Add {Orderquantity} to order
+                <span style={{ paddingLeft: "15px" }}>${ItemPrice}</span>
+              </Button>
+            </Modal.Footer>
+          )}
         </Modal>
         <Modal show={showAlert} variant='light'>
           <BiX
@@ -256,6 +271,11 @@ class MenuCard extends Component {
     );
   }
 }
+
+MenuCard.defaultProps = {
+  restaurantDeliveryType: "",
+};
+
 MenuCard.propTypes = {
   src: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
@@ -266,6 +286,7 @@ MenuCard.propTypes = {
   restaurantName: PropTypes.string.isRequired,
   isOwnerHome: PropTypes.bool.isRequired,
   dishDetails: PropTypes.object.isRequired,
+  restaurantDeliveryType: PropTypes.string,
 };
 
 const mapStateToProps = (state) => ({

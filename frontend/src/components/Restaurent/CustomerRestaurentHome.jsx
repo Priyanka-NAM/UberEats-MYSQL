@@ -52,7 +52,6 @@ class RestaurentHome extends Component {
       });
     axios
       .get(`${backendServer}/ubereats/dishes/alldishes/${restaurant_id}`)
-      // .get(`${backendServer}/ubereats/dishes/alldishes/35`)
       .then((response) => {
         if (response.data) {
           if (response.data.status !== "ALL_DISHES") {
@@ -61,7 +60,6 @@ class RestaurentHome extends Component {
             });
           } else {
             this.setState({
-              // dishesList: response.data.dishesList,
               dishesList: response.data.allDishes,
             });
             console.log("Dish Details Request Successful");
@@ -93,6 +91,7 @@ class RestaurentHome extends Component {
           title={dish.name}
           price={dish.price}
           currentRestaurantName={restaurentDetails.name}
+          restaurantDeliveryType={restaurentDetails.delivery_type}
           isOwnerHome={false}
           description={dish.description}
           dishDetails={dish}
@@ -109,15 +108,15 @@ class RestaurentHome extends Component {
           restaTitle={restaurentDetails.name}
           restaAddress={restaurentDetails.restaurant_city}
           isOwnerHome={false}
-          otherDetails='$5.00 Delivery Fee •   35
-          - 45 • min •  4.5'
+          otherDetails={`$5.00 Delivery Fee •   35
+          - 45 • min •  4.5 • ${restaurentDetails.restaurant_start_time} -${restaurentDetails.restaurant_end_time}`}
           restauDescri={restaurentDetails.description}
         />
       );
     }
 
     return (
-      <>
+      <div style={{ height: "100vh", overflow: "scroll" }}>
         <Header
           hideDeliveryPickup={false}
           defaultUserLocationDescription={
@@ -126,50 +125,44 @@ class RestaurentHome extends Component {
               : userLocation.addressDescription
           }
         />
-        <>
+        <div>
           {restaurentBanner}
           <Container fluid>
             <Row
               style={{
-                paddingLeft: "15px",
-                paddingTop: "40px",
+                paddingLeft: "20px",
+                paddingTop: "30px",
                 fontSize: "19px",
                 fontWeight: "500",
                 color: "black",
+
                 fontFamily: "UberMoveText, sans-serif",
               }}>
-              <nav
-                className='nav'
+              <h3
                 style={{
-                  paddingRight: "30px",
+                  fontFamily: "sans-serif",
+                  fontSize: "22px",
+                  fontWeight: "bold",
                 }}>
-                <a
-                  className='nav-link active'
-                  href='/'
-                  style={{ color: "black", paddingRight: "30px" }}>
-                  Desserts
-                </a>
-                <a
-                  className='nav-link'
-                  href='/'
-                  style={{ color: "black", paddingRight: "30px" }}>
-                  Picked for you
-                </a>
-                <a
-                  className='nav-link'
-                  href='/'
-                  style={{ color: "black", paddingRight: "25px" }}>
-                  mains
-                </a>
-              </nav>
+                Menu
+              </h3>
             </Row>
           </Container>
           <hr style={{ border: "soild 1px" }} />
-          <Container fluid style={{ height: "100vh", overflowY: "scroll" }}>
-            <Row style={{ padding: "0%", margin: "0%" }}>{restaurentMenu}</Row>
-          </Container>
-        </>
-      </>
+          <div
+            style={{
+              height: "100%",
+            }}>
+            <Row
+              style={{
+                padding: "0%",
+                margin: "0%",
+              }}>
+              {restaurentMenu}
+            </Row>
+          </div>
+        </div>
+      </div>
     );
   }
 }
@@ -177,7 +170,6 @@ class RestaurentHome extends Component {
 RestaurentHome.propTypes = {
   location: PropTypes.object.isRequired,
   currentLocation: PropTypes.object.isRequired,
-  // userLocation: PropTypes.object.isRequired,
 };
 const mapStateToProps = (state) => ({
   currentLocation: state.currentLocation,

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/forbid-prop-types */
 import React from "react";
@@ -91,12 +92,20 @@ class Cart extends React.Component {
               <Row>
                 <FaShoppingCart
                   size='100'
-                  style={{ paddingRight: "3px", color: "grey" }}
+                  style={{ paddingRight: "3px", color: "#eeee" }}
                 />
               </Row>
+              <br />
+              <br />
               <Row>
-                <h6 style={{ fontFamily: "sans-serif", fontSize: "18px" }}>
-                  Add items from a restaurant or store to start a new cart
+                <h6
+                  style={{
+                    fontFamily: "sans-serif",
+                    fontSize: "18px",
+                    fontWeight: "550",
+                    paddingLeft: "30px",
+                  }}>
+                  Add items from a restaurant to start a new cart
                 </h6>
               </Row>
             </Modal.Body>

@@ -132,10 +132,19 @@ class Location extends React.Component {
                 display: "flex",
                 justifyContent: "flex-start",
                 marginRight: "10px",
+                position: "absolute",
+                paddingBottom: "0%",
               }}
               size='25px'
             />
-            {AddressDescription}
+            <span
+              style={{
+                paddingLeft: "20px",
+                fontFamily: "sans-serif",
+                fontWeight: "550",
+              }}>
+              {AddressDescription}
+            </span>
           </Button>
         </InputGroup>
         <Modal

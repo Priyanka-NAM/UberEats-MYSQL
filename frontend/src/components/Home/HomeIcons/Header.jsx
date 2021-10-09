@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 /* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 import React from "react";
@@ -194,7 +195,7 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  restoSearch: this.handleSearchBarKeyPress.this(bind),
+  restoSearch: () => {},
   searchBarCallback: () => {},
 };
 

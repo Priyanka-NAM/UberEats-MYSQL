@@ -30,8 +30,8 @@ function RestaBanner({
         style={{
           width: isOwnerHome ? "80%" : "100%",
           color: "white",
-          position: "absolute",
-          marginTop: "-4%",
+          position: "relative",
+          marginTop: "-3.6%",
           background:
             "linear-gradient(0deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 100%)",
         }}>

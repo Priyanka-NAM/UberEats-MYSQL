@@ -27,10 +27,10 @@ function RestaBanner({
       />
       <div
         style={{
-          width: "100%",
+          width: "80%",
           color: "white",
-          position: "absolute",
-          marginTop: "-4%",
+          position: "relative",
+          marginTop: "-4.2%",
           background:
             "linear-gradient(0deg, rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0) 100%)",
         }}>

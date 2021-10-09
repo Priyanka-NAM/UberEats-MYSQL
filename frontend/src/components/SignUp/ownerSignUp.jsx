@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { Redirect } from "react-router";
 import PropTypes from "prop-types";
@@ -41,7 +42,7 @@ class OwnerSignUp extends Component {
   }
 
   render() {
-    const { owner } = this.props;
+    const { owner, UpdatedStatus } = this.props;
     // if (isOwnerSignedIn || isUserSignedIn) {
     //   return <Redirect to='/home' />;
     // }
@@ -53,18 +54,27 @@ class OwnerSignUp extends Component {
       restaurant_address_line_one,
     } = this.state;
 
+    // let errorMessage = "";
+    // const currentOwner = JSON.parse(localStorage.getItem("user"));
+    // if (currentOwner) {
+    //   if (
+    //     currentOwner.is_owner === 1 &&
+    //     owner &&
+    //     owner.status === "RESTAURANT_ADDED"
+    //   ) {
+    //     return <Redirect to='/owner/home' />;
+    //   }
+    // } else if (owner && owner.status === "RESTAURANT_ALREADY_EXISTS") {
+    //   errorMessage = "Opps! Email id already exists";
+    // }
+
     let errorMessage = "";
-    const currentOwner = JSON.parse(localStorage.getItem("user"));
-    if (currentOwner) {
-      if (
-        currentOwner.is_owner === 1 &&
-        owner &&
-        owner.status === "RESTAURANT_ADDED"
-      ) {
-        return <Redirect to='/owner/home' />;
-      }
-    } else if (owner && owner.status === "RESTAURANT_ALREADY_EXISTS") {
-      errorMessage = "Opps! Email id already exists";
+    if (!UpdatedStatus) {
+      errorMessage = "";
+    } else if (UpdatedStatus === "RESTAURANT_ADDED") {
+      return <Redirect to='/owner/home' />;
+    } else {
+      errorMessage = "Oops! Could not Add Restaurant";
     }
 
     return (
@@ -214,17 +224,9 @@ class OwnerSignUp extends Component {
                 type='submit'>
                 Submit
               </Button>
-              {errorMessage && (
-                // <p
-                //   style={{
-                //     width: "100%",
-                //     marginTop: "15px",
-                //     fontFamily: "UberMoveText-Medium,Helvetica,sans-serif",
-                //   }}
-                //   className='alert alert-danger'>
-                <Alert variant='danger'>{errorMessage}</Alert>
-                // </p>
-              )}
+              <br />
+              <br />
+              {errorMessage && <Alert variant='danger'>{errorMessage}</Alert>}
             </Form>
           </Container>
         </Container>
@@ -239,5 +241,6 @@ OwnerSignUp.propTypes = {
 };
 const mapStateToProps = (state) => ({
   owner: state.owner.ownerDetails,
+  UpdatedStatus: state.owner.ownerDetails.status,
 });
 export default connect(mapStateToProps, { addOwner })(OwnerSignUp);

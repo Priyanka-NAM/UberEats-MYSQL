@@ -55,8 +55,9 @@ const mainstyle = {
     overflow: "hidden",
     width: "13rem",
     display: "flex",
-    alignItems: "center",
-    alignContent: "center",
+    // alignItems: "center",
+    // alignContent: "center",
+    textOverflow: "ellipsis",
   },
   longlocation: {
     borderRadius: "30px",
