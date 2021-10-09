@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 /* eslint-disable react/destructuring-assignment */
 import React from "react";
 import {
@@ -57,7 +58,6 @@ class Location extends React.Component {
   };
 
   parseAddress = (address) => {
-    // eslint-disable-next-line prefer-const
     let parsedAddress = {
       addressDescription: "",
       addressLine1: "",
@@ -122,14 +122,6 @@ class Location extends React.Component {
     }
     return (
       <>
-        {/* <Button
-          style={isLong ? mainstyle.longlocation : mainstyle.location}
-          variant='light'
-          onClick={this.handleShow}>
-          <MdLocationOn size='25px' />
-          {AddressDescription}
-        </Button> */}
-
         <InputGroup className='mb-3'>
           <Button
             style={isLong ? mainstyle.longlocation : mainstyle.location}

@@ -17,6 +17,8 @@ class MenuAddEdit extends Component {
     this.state = {};
     this.handleUploadImage = this.handleUploadImage.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleAddSave = this.handleAddSave.bind(this);
+    this.handleEditSave = this.handleEditSave.bind(this);
     this.setStateFromProps = this.setStateFromProps.bind(this);
   }
 
@@ -33,9 +35,12 @@ class MenuAddEdit extends Component {
   }
 
   handleAddSave = (e) => {
-    const { visibilityCb } = this.props;
-    e.preventDefault();
+    const { visibilityCb, actionType } = this.props;
+    // e.preventDefault();
     console.log("Inside Handle Add Save ", this.state);
+    // if (actionType !== "Add Item") {
+    //   return this.handleEditSave(e);
+    // }
     const {
       restaurentId,
       dishname,
@@ -59,12 +64,12 @@ class MenuAddEdit extends Component {
     };
 
     this.props.ownerMenuAdd(dishdata);
-    visibilityCb();
+    return visibilityCb();
   };
 
   handleEditSave = (e) => {
     const { visibilityCb } = this.props;
-    e.preventDefault();
+    // e.preventDefault();
     console.log("Inside Handle Submit ", this.state);
     const isActive = "1";
     const {
@@ -93,38 +98,41 @@ class MenuAddEdit extends Component {
       isActive,
     };
     this.props.ownerMenuUpdate(dishdata);
+    visibilityCb();
     console.log("Before the update dish call ");
 
-    axios.defaults.withCredentials = true;
-    axios.defaults.headers.common.authorization = getToken();
-    axios
-      .post(`${backendServer}/ubereats/dishes/updatedish`, dishdata)
-      .then((response) => {
-        console.log("Response for dish update ", response.data);
-        if (this.hasMounted) {
-          this.setState({
-            updateStatus: response.data.status,
-          });
-        }
-      })
-      .catch((err) => {
-        console.log("Error for dish update ", err.response);
-        if (err.response && err.response.data) {
-          if (this.hasMounted) {
-            this.setState({
-              updateStatus: err.response.data,
-            });
-          }
-        }
-      });
-    visibilityCb();
+    // axios.defaults.withCredentials = true;
+    // axios.defaults.headers.common.authorization = getToken();
+    // axios
+    //   .post(`${backendServer}/ubereats/dishes/updatedish`, dishdata)
+    //   .then((response) => {
+    //     console.log("Response for dish update ", response.data);
+    //     if (this.hasMounted) {
+    //       this.setState({
+    //         updateStatus: response.data.status,
+    //       });
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log("Error for dish update ", err.response);
+    //     if (err.response && err.response.data) {
+    //       if (this.hasMounted) {
+    //         this.setState({
+    //           updateStatus: err.response.data,
+    //         });
+    //       }
+    //     }
+    //   });
   };
 
   handleSubmit = (e) => {
+    e.preventDefault();
     const { actionType } = this.props;
+    console.log("save button => action type ", actionType);
     if (actionType === "Add Item") {
       this.handleAddSave(e);
-    } else {
+    }
+    if (actionType === "Edit Item") {
       this.handleEditSave(e);
     }
   };
@@ -235,6 +243,7 @@ class MenuAddEdit extends Component {
           }}
           onSubmit={this.handleSubmit}>
           <Button
+            type='submit'
             style={{
               marginLeft: "70%",
               marginTop: "0%",
@@ -244,7 +253,8 @@ class MenuAddEdit extends Component {
               fontSize: "18px",
             }}
             variant='dark'
-            type='submit'>
+            // onClick={this.handleChange}
+          >
             Save
           </Button>
           <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
@@ -283,7 +293,6 @@ class MenuAddEdit extends Component {
                   <input
                     type='file'
                     name='image'
-                    required='true'
                     encType='multipart/form-data'
                     className='form-control'
                     style={{ display: "none" }}
@@ -356,7 +365,6 @@ class MenuAddEdit extends Component {
             <Form.Label>Main Ingredients</Form.Label>
             <Form.Control
               type='text'
-              required='true'
               name='ingredients'
               value={ingredients}
               placeholder=''
@@ -374,13 +382,13 @@ class MenuAddEdit extends Component {
                 name='price'
                 value={price}
                 onChange={this.handleChange}
-                required='true'
+                required
                 placeholder='$'
                 style={{ backgroundColor: "#eeee" }}
               />
             </Col>
           </Form.Group>
-          {alertmessage}
+          {/* {alertmessage} */}
         </Form>
       </div>
     );

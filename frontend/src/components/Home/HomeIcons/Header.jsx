@@ -1,6 +1,8 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/prop-types */
 import React from "react";
 import { withRouter } from "react-router";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import {
   Nav,
@@ -30,6 +32,12 @@ class Header extends React.Component {
       searchInput: "",
     };
   }
+
+  getAddressFromLocalStorage = () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const { address_line_1, city, state, country, zipcode } = user;
+    return { address_line_1, city, state, country, zipcode };
+  };
 
   handleShow = () => {
     this.setState({
@@ -86,6 +94,8 @@ class Header extends React.Component {
 
   render() {
     const { showModal, deliverystyle, pickupstyle } = this.state;
+    const userLocationFromLocal = this.getAddressFromLocalStorage();
+    const defaultDescription = `${userLocationFromLocal.address_line_1},${userLocationFromLocal.city},${userLocationFromLocal.state},${userLocationFromLocal.country},${userLocationFromLocal.zipcode}`;
     const { location, defaultUserLocationDescription } = this.props;
     const isCurrentURL = (url) =>
       location.pathname.toLowerCase() === url.toLowerCase();
@@ -144,7 +154,7 @@ class Header extends React.Component {
                   }}>
                   <Location
                     isLong={!isCurrentURL("/customer/home")}
-                    description={defaultUserLocationDescription}
+                    description={defaultDescription}
                     changedLocationDescription=''
                     changeLocation={() => {}}
                   />
@@ -186,7 +196,7 @@ Header.propTypes = {
   restoSearch: PropTypes.func.isRequired,
   searchBarCallback: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
-  location: PropTypes.object.isRequired,
+  // location: PropTypes.object.isRequired,
   defaultUserLocationDescription: PropTypes.string.isRequired,
 };
 

@@ -244,3 +244,30 @@ exports[`render correctly the Landing Page component 1`] = `
   </div>
 </div>
 `;
+
+exports[`renders three <SignIn /> components 1`] = `
+<Router
+  history={
+    Object {
+      "action": "POP",
+      "block": [Function],
+      "createHref": [Function],
+      "go": [Function],
+      "goBack": [Function],
+      "goForward": [Function],
+      "length": 1,
+      "listen": [Function],
+      "location": Object {
+        "hash": "",
+        "pathname": "/",
+        "search": "",
+        "state": undefined,
+      },
+      "push": [Function],
+      "replace": [Function],
+    }
+  }
+>
+  <Connect(SignIn) />
+</Router>
+`;

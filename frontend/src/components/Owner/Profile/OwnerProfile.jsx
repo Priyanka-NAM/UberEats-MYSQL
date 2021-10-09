@@ -11,7 +11,6 @@ import axios from "axios";
 import "react-times/css/classic/default.css";
 import PropTypes from "prop-types";
 import { Button, Form, Col, Card, Row, Alert } from "react-bootstrap";
-import FormTextBox from "./FormTextBox";
 import OwnerHome from "../../Home/OwnerHome";
 import backendServer from "../../../backEndConfig";
 import { getToken } from "../../Service/authService";
@@ -20,7 +19,7 @@ import { updateOwner, getOwnerProfile } from "../../../Actions/OwnerActions";
 class OwnerProfile extends Component {
   constructor(props) {
     super(props);
-    this.state = { showAlert: false };
+    this.state = { showAlert: false, description: "" };
     this.selectCountry = this.selectCountry.bind(this);
     this.selectRegion = this.selectRegion.bind(this);
     this.handleUploadImage = this.handleUploadImage.bind(this);
@@ -114,7 +113,6 @@ class OwnerProfile extends Component {
       restaurant_zipcode,
       email_id,
       name,
-      password,
       phone_num,
       restaurant_start_time,
       restaurant_end_time,
@@ -299,7 +297,7 @@ class OwnerProfile extends Component {
                     onChange={this.handleChange}
                     maxLength='30'
                     required
-                    pattern='^[A-Za-z0-9 ]+$'
+                    pattern='^[A-Za-z0-9. ]+$'
                   />
                 </Col>
               </Row>

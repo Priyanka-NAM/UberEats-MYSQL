@@ -122,7 +122,7 @@ class MenuUpdate extends Component {
     }
     return dishes.map((dish, index) => (
       <OwnerMenuCard
-        key={index}
+        key={dish.name}
         orderIndex={allDishIndexes[index]}
         dishName={dish.name}
         dishDescription={dish.description}
@@ -174,6 +174,7 @@ class MenuUpdate extends Component {
           show={showEdit.toString()}
           style={{ display: showEdit ? "block" : "none" }}>
           <MenuAddEdit
+            key='edit'
             visibilityCb={this.visibilityEditHandler}
             currentDish={currentDish}
             displayDetails={showEdit}
@@ -191,6 +192,7 @@ class MenuUpdate extends Component {
           show={showAdd.toString()}
           style={{ display: showAdd ? "block" : "none" }}>
           <MenuAddEdit
+            key='add'
             visibilityCb={this.visibilityAddHandler}
             displayDetails={showAdd}
             actionType='Add Item'

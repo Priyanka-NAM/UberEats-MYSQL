@@ -113,7 +113,7 @@ class CustomerOrders extends Component {
           fontWeight: "500",
         }}
         key={index + 100}>
-        {dish.quantity} - {dish.name}
+        {dish.quantity} - {dish.dish_name}
       </Col>
     ));
   };
@@ -201,11 +201,11 @@ class CustomerOrders extends Component {
       tax,
       delivery_cost,
       gratitude,
-      address_line_1,
-      city,
-      state,
-      country,
-      zipcode,
+      order_address_line_1,
+      order_city,
+      order_state,
+      order_country,
+      order_zipcode,
       restaurant_name,
       order_delivery_type,
     } = order;
@@ -219,7 +219,7 @@ class CustomerOrders extends Component {
           style={{ padding: "0px 20px 10px 20px" }}>
           <span>
             <span style={{ marginRight: "20px" }}>{dish.quantity}</span>
-            {dish.name}
+            {dish.dish_name}
           </span>
           <span>{dish.price}</span>
         </li>
@@ -309,7 +309,8 @@ class CustomerOrders extends Component {
             Address Details
           </h3>
           <h3 style={{ fontFamily: "sans-serif", fontSize: "16px" }}>
-            {address_line_1},{city},{state},{country},{zipcode}
+            {order_address_line_1},{order_city},{order_state},{order_country},
+            {order_zipcode}
           </h3>
           <hr />
           <h3
@@ -397,7 +398,7 @@ class CustomerOrders extends Component {
                 <option value='Preparing'>Preparing</option>
                 <option value='On the way'>On the way</option>
                 <option value='Delivered'>Delivered</option>
-                <option value='Cancel'>Cancel</option>
+                <option value='Cancel'>Cancelled</option>
                 <option value='Pick up Ready'>Pick up Ready</option>
                 <option value='Picked up'>Picked up</option>
               </Form.Select>

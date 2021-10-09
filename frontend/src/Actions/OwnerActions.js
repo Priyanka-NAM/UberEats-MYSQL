@@ -226,6 +226,7 @@ export const ownerMenu = () => async (dispatch) => {
 };
 
 export const ownerMenuUpdate = (dishdata) => async (dispatch) => {
+  console.log("Inside ownerMenuUpdate Action from Menu Update ", dishdata);
   axios.defaults.withCredentials = true;
   axios.defaults.headers.common.authorization = getToken();
   axios

@@ -27,18 +27,6 @@ class MenuNav extends Component {
               }}>
               Menus
             </Link>
-            {/* <Link
-              to='/owner/updatecategories'
-              style={{
-                paddingLeft: "40px",
-                color: "black",
-                fontSize: "22px",
-                textDecoration: "none",
-                fontFamily: "sans-serif",
-              }}
-              active>
-              Categories
-            </Link> */}
           </Nav>
         </Container>
       </Navbar>

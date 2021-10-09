@@ -2,6 +2,7 @@ import {
   USER_SIGNIN_SUCCESS,
   USER_SIGNIN_FAILURE,
   CUSTOMER_SIGNUP,
+  CUSTOMER_UPDATE,
 } from "../Actions/types";
 
 const intitalState = {
@@ -43,6 +44,13 @@ export default (state = intitalState, action) => {
         isLoggedin: true,
       };
     case CUSTOMER_SIGNUP:
+      return {
+        ...state,
+        user: action.payload.user,
+        address: processAddress(action.payload.user),
+        isLoggedin: true,
+      };
+    case CUSTOMER_UPDATE:
       return {
         ...state,
         user: action.payload.user,

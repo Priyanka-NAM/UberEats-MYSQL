@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable camelcase */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/destructuring-assignment */
@@ -32,21 +33,25 @@ class OwnerOrders extends Component {
 
   componentDidUpdate(prevprops) {
     const { newOrders, CustomerDetails } = this.props;
-    if (newOrders !== prevprops.newOrders) {
+    if (
+      newOrders !== prevprops.newOrders ||
+      CustomerDetails !== prevprops.CustomerDetails
+    ) {
       this.setState({
         newOrders,
-      });
-    }
-    if (CustomerDetails !== prevprops.CustomerDetails) {
-      this.setState({
         userDetails: CustomerDetails,
       });
     }
   }
 
   handleUserProfile = (e) => {
-    const { CustomerId } = this.props;
-    this.props.getUserDetails(CustomerId);
+    e.preventDefault();
+    const { customer_id } = this.state.currentOrder;
+    console.log(
+      "Click on Profile Link (New Order)=> Customer Id ",
+      customer_id
+    );
+    this.props.getUserDetails(customer_id);
     this.setState({
       showCategory: true,
     });
@@ -80,7 +85,7 @@ class OwnerOrders extends Component {
     const { order_id, restaurant_id } = this.state.currentOrder;
     let { order_status } = this.state.currentOrder;
     const { delivery_status } = this.state;
-    if (delivery_status === "Picked Up" || delivery_status === "Delivered") {
+    if (delivery_status === "Picked up" || delivery_status === "Delivered") {
       order_status = "Completed";
     }
     if (delivery_status === "Cancel") {
@@ -166,7 +171,7 @@ class OwnerOrders extends Component {
             }}>
             <Col>
               {dish.quantity}
-              <span style={{ paddingLeft: "5%" }}>{dish.name}</span>
+              <span style={{ paddingLeft: "5%" }}>{dish.dish_name}</span>
             </Col>
             <Col xs={3} style={{ textAlign: "end" }}>
               ${dish.price}
@@ -285,39 +290,7 @@ class OwnerOrders extends Component {
                   </li>
                 </ul>
               </Row>
-              {/* <Row
-                style={{
-                  fontSize: "18px",
-                  fontFamily: "sans-serif",
-                  fontWeight: "550",
-                }}>
-                <Col style={{ textAlign: "end" }}>
-                  Subtotal
-                  <span style={{ paddingLeft: "20px" }}>${orderTotal}</span>
-                </Col>
-              </Row>
-              <Row
-                style={{
-                  fontSize: "18px",
-                  fontFamily: "sans-serif",
-                  fontWeight: "550",
-                }}>
-                <Col style={{ textAlign: "end" }}>
-                  Tax
-                  <span style={{ paddingLeft: "20px" }}>${tax}</span>
-                </Col>
-              </Row>
-              <Row
-                style={{
-                  fontSize: "20px",
-                  fontFamily: "sans-serif",
-                  fontWeight: "550",
-                }}>
-                <Col style={{ textAlign: "end" }}>
-                  Total
-                  <span style={{ paddingLeft: "20px" }}>${subTotal}</span>
-                </Col>
-              </Row> */}
+
               <Row
                 style={{
                   fontSize: "20px",
@@ -438,7 +411,7 @@ OwnerOrders.propTypes = {
   ownerNewOrders: PropTypes.func.isRequired,
   ownerNewOrdersUpdate: PropTypes.func.isRequired,
   getUserDetails: PropTypes.func.isRequired,
-  CustomerId: PropTypes.number.isRequired,
+  // CustomerId: PropTypes.number.isRequired,
   CustomerDetails: PropTypes.object.isRequired,
 };
 

@@ -140,7 +140,10 @@ class CustomerProfile extends Component {
 
     let errorMessage = "";
     let message = "";
-    if (UpdateStatus === "Authentication Successful") {
+    if (
+      UpdateStatus === "Authentication Successful" ||
+      UpdateStatus === "USER_ADDED"
+    ) {
       message = "";
     } else if (UpdateStatus === "CUSTOMER_UPDATED") {
       message = "Customer Details updated";

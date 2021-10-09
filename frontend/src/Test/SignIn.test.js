@@ -7,15 +7,15 @@ import renderer from "react-test-renderer";
 import Enzyme, { shallow } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
-import OwnerSignUp from "../components/SignUp/OwnerSignUp";
+import SignIn from "../components/SignIn/signIn";
 
 Enzyme.configure({ adapter: new Adapter() });
 
-it("renders three <OwnerSignUp /> components", () => {
-  const OwnerSignUpWrapper = shallow(
+it("renders three <SignIn /> components", () => {
+  const SignInWrapper = shallow(
     <Router>
-      <OwnerSignUp />
+      <SignIn />
     </Router>
   );
-  expect(shallowToJson(OwnerSignUpWrapper)).toMatchSnapshot();
+  expect(shallowToJson(SignInWrapper)).toMatchSnapshot();
 });

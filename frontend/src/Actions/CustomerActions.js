@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import axios from "axios";
 import {
   CUSTOMER_SIGNUP,
@@ -48,6 +49,7 @@ export const updateCustomer = (customerUpdateData) => async (dispatch) => {
       customerUpdateData
     );
     const response = await res;
+    localStorage.setItem("user", JSON.stringify(response.data.user));
     dispatch({
       type: CUSTOMER_UPDATE,
       payload: response.data,

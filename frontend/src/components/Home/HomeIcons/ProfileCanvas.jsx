@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +8,8 @@ import { OffCanvas, OffCanvasMenu } from "react-offcanvas";
 import { FaUserCircle, FaHeart } from "react-icons/fa";
 import PropTypes from "prop-types";
 import { BiX } from "react-icons/bi";
+import backendServer from "../../../backEndConfig";
+
 import { userSignOut } from "../../../Actions/SignInAction";
 import "../../Styles/Header.css";
 
@@ -30,7 +33,8 @@ class ProfileCanvas extends Component {
   render() {
     const { showModal } = this.props;
     const user = JSON.parse(localStorage.getItem("user"));
-
+    const { profile_pic_file_path } = user;
+    const src = `${backendServer}/public/${profile_pic_file_path}`;
     return (
       <OffCanvas
         transitionDuration={1000}
@@ -67,10 +71,25 @@ class ProfileCanvas extends Component {
                   alignItems: "center",
                 }}>
                 <div>
-                  <FaUserCircle
-                    size='100px'
-                    style={{ color: "#eeeeee", marginRight: "10px" }}
-                  />
+                  {profile_pic_file_path && (
+                    <img
+                      className='rounded-circle'
+                      style={{
+                        display: "inline-block",
+                        objectFit: "cover",
+                        width: "120px",
+                        height: "120px",
+                      }}
+                      src={src}
+                      alt=''
+                    />
+                  )}
+                  {!profile_pic_file_path && (
+                    <FaUserCircle
+                      size='100px'
+                      style={{ color: "#eeeeee", marginRight: "10px" }}
+                    />
+                  )}
                 </div>
                 <div>
                   <p
@@ -174,7 +193,6 @@ ProfileCanvas.propTypes = {
   userSignOut: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
-  isLoggedin: state.signin.isLoggedin,
   user: state.signin.user,
 });
 export default connect(mapStateToProps, { userSignOut })(ProfileCanvas);

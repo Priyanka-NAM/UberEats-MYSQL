@@ -19,6 +19,7 @@ const intitalState = {
   orders: {},
   neworder: {},
   fav: {},
+  headerUserLocation: {},
 };
 
 const filterDeletedFavs = (favs, favId) =>

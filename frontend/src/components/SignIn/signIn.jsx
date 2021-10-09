@@ -1,5 +1,6 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/forbid-prop-types */
+/* eslint-disable react/prop-types */
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -165,7 +166,6 @@ class SignIn extends Component {
 
 SignIn.propTypes = {
   userSignin: PropTypes.func.isRequired,
-  errMsg: PropTypes.string.isRequired,
   isLoggedin: PropTypes.bool.isRequired,
 };
 const mapStateToProps = (state) => ({

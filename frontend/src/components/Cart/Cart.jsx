@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/forbid-prop-types */
 import React from "react";
 import { connect } from "react-redux";
@@ -14,9 +15,25 @@ import "../Styles/Header.css";
 class Cart extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { showModal: false };
+    this.state = { showModal: false, cartItemCount: 0 };
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
+  }
+
+  componentDidMount() {
+    const { cartItems } = this.props;
+    this.setState({
+      cartItemCount: cartItems.length,
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { cartItems } = this.props;
+    if (cartItems !== prevProps.cartItems) {
+      this.setState({
+        cartItemCount: cartItems.length,
+      });
+    }
   }
 
   handleShow = () => {
@@ -32,7 +49,7 @@ class Cart extends React.Component {
   };
 
   render() {
-    const { showModal } = this.state;
+    const { showModal, cartItemCount } = this.state;
     const { restaurantName, cartItems } = this.props;
     let cartRows = null;
     let emptyCart = null;
@@ -140,7 +157,7 @@ class Cart extends React.Component {
           variant='light'
           onClick={this.handleShow}>
           <FaShoppingCart style={{ paddingRight: "3px" }} />
-          Cart.{totalItems}
+          Cart.{cartItemCount}
         </Button>
         {emptyCart}
         {newCart}

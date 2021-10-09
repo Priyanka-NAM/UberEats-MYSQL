@@ -51,12 +51,21 @@ function RestaBanner({
   );
 }
 
+RestaBanner.defaultProps = {
+  restaAddress: "",
+  src: "",
+  restaTitle: "",
+  otherDetails: "",
+  restauDescri: "",
+};
+
 RestaBanner.propTypes = {
-  src: PropTypes.string.isRequired,
-  restaTitle: PropTypes.string.isRequired,
-  restaAddress: PropTypes.string.isRequired,
-  otherDetails: PropTypes.string.isRequired,
-  restauDescri: PropTypes.string.isRequired,
+  src: PropTypes.string,
+  restaTitle: PropTypes.string,
+  restaAddress: PropTypes.string,
+  otherDetails: PropTypes.string,
+  restauDescri: PropTypes.string,
   isOwnerHome: PropTypes.bool.isRequired,
 };
+
 export default RestaBanner;

@@ -1,3 +1,5 @@
+/* eslint-disable object-shorthand */
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable camelcase */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable prefer-destructuring */
@@ -8,7 +10,17 @@ import "../../Styles/SideBar.css";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { BiX } from "react-icons/bi";
-import { Button, Col, Row, Container, Nav, Form, Modal } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Row,
+  Container,
+  Nav,
+  Form,
+  FormControl,
+  Modal,
+  InputGroup,
+} from "react-bootstrap";
 import { FaBars } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
 import UberELogo from "../../Home/HomeIcons/logo";
@@ -23,8 +35,11 @@ class FinalOrder extends Component {
     super(props);
     this.state = {
       showModal: false,
+      showChange: false,
       showOrderSucess: false,
       deliveryevent: true,
+      tempChangeLocation: "",
+      ChangedDeliveryLocation: "",
     };
   }
 
@@ -37,12 +52,34 @@ class FinalOrder extends Component {
   handleClose = () => {
     this.setState({
       showModal: false,
+      showChange: false,
+    });
+  };
+
+  handleOpen = () => {
+    this.setState({
+      showChange: true,
+    });
+  };
+
+  handleDeliveryAddressChange = (e) => {
+    this.setState({
+      tempChangeLocation: e.target.value,
+    });
+  };
+
+  handleLocationClose = () => {
+    const { tempChangeLocation } = this.state;
+    this.setState({
+      showChange: false,
+      ChangedDeliveryLocation: tempChangeLocation,
     });
   };
 
   handlePlaceOrder = () => {
-    const { cartItems, restaurantId } = this.props;
-    const { deliveryevent } = this.state;
+    const { cartItems, restaurantId, currentLocation, userLocation } =
+      this.props;
+    const { deliveryevent, ChangedDeliveryLocation } = this.state;
     this.setState({
       showOrderSucess: true,
     });
@@ -57,10 +94,29 @@ class FinalOrder extends Component {
     if (deliveryevent) {
       order_delivery_type = "Delivery";
     }
+    let orderlocation = userLocation;
+    if (currentLocation.addressLine1 !== "") {
+      orderlocation = currentLocation;
+    }
+
+    let addressLine1 = orderlocation.addressLine1;
+    let state = orderlocation.state;
+    let city = orderlocation.city;
+    let country = orderlocation.country;
+    let zipcode = orderlocation.zipcode;
+
+    const locationdetails = ChangedDeliveryLocation.split(",");
+    [addressLine1, city, state, country, zipcode] = [...locationdetails];
+
     const orderPostInput = {
       ...statusDetails,
       ...CostObject,
       order_delivery_type,
+      order_address_line_1: addressLine1,
+      order_city: city,
+      order_state: state,
+      order_country: country,
+      order_zipcode: zipcode,
     };
     this.props.customerOrderPlaced(orderPostInput);
   };
@@ -102,7 +158,13 @@ class FinalOrder extends Component {
   };
 
   render() {
-    const { showModal, showOrderSucess, deliveryevent } = this.state;
+    const {
+      showModal,
+      showOrderSucess,
+      deliveryevent,
+      showChange,
+      ChangedDeliveryLocation,
+    } = this.state;
     const { restaurantName, cartItems, currentLocation, userLocation } =
       this.props;
     console.log("currentLocation", currentLocation);
@@ -121,6 +183,15 @@ class FinalOrder extends Component {
       country = currentLocation.country;
       zipcode = currentLocation.zipcode;
     }
+    if (ChangedDeliveryLocation !== "") {
+      const locationdetails = ChangedDeliveryLocation.split(",");
+      addressLine1 = locationdetails[0];
+      state = locationdetails[2];
+      city = locationdetails[1];
+      country = locationdetails[3];
+      zipcode = locationdetails[4];
+    }
+
     console.log("location", location);
     let cartRows = null;
     let totalCartValue = 0;
@@ -251,32 +322,32 @@ class FinalOrder extends Component {
                   <Row style={{ marginTop: "2%" }}>
                     <h4 className='subtitle'>Delivery Address</h4>
                   </Row>
-                  <Link
-                    to={{ pathname: "/order/location", state: "" }}
-                    className='linkstyle'>
-                    <Row style={{ textAlign: "left", width: "70%" }}>
-                      <Col xs={1} className='locationIcon'>
-                        <MdLocationOn size='30px' />
-                      </Col>
-                      <Col
-                        style={{ textAlign: "left", fontFamily: "sans-serif" }}>
-                        <h5 className='addressdetails'>{addressLine1}</h5>
-                        <h6 className='detailsadd'>
-                          {city},{zipcode},{state},{country}
-                        </h6>
-                      </Col>
-                      <Col style={{ textAlign: "right" }}>
-                        <Button
-                          variant='light'
-                          style={{
-                            borderRadius: "20px",
-                            backgroundColor: "#eeeeee",
-                          }}>
-                          Edit
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Link>
+                  {/* <Link */}
+
+                  <Row style={{ textAlign: "left", width: "70%" }}>
+                    <Col xs={1} className='locationIcon'>
+                      <MdLocationOn size='30px' />
+                    </Col>
+                    <Col
+                      style={{ textAlign: "left", fontFamily: "sans-serif" }}>
+                      <h5 className='addressdetails'>{addressLine1}</h5>
+                      <h6 className='detailsadd'>
+                        {city},{zipcode},{state},{country}
+                      </h6>
+                    </Col>
+                    <Col style={{ textAlign: "right" }}>
+                      <Button
+                        variant='light'
+                        style={{
+                          borderRadius: "20px",
+                          backgroundColor: "#eeeeee",
+                        }}
+                        onClick={this.handleOpen}>
+                        Edit
+                      </Button>
+                    </Col>
+                  </Row>
+                  {/* </Link> */}
                 </>
               )}
               <hr style={{ border: "1px", width: "70%" }} />
@@ -386,6 +457,56 @@ class FinalOrder extends Component {
           </Col>
         </Row>
         <ProfileCanvas handleClose={this.handleClose} showModal={showModal} />
+        <Modal
+          show={showChange}
+          onHide={this.handleLocationClose}
+          backdrop='static'
+          keyboard={false}
+          style={{ width: "100%", display: "flex", alignItems: "center" }}>
+          <Modal.Header>
+            <BiX
+              size='35px'
+              style={{ color: "black" }}
+              onClick={this.handleLocationClose}
+            />
+          </Modal.Header>
+          <Modal.Body>
+            <Modal.Title
+              style={{
+                fontSize: "36px",
+                fontFamily: "UberMove, sans-serif",
+                marginBottom: "20px",
+              }}>
+              Delivery Details
+            </Modal.Title>
+            <Row style={{ display: "flex" }}>
+              <InputGroup className='mb-3'>
+                <InputGroup.Text
+                  id='basic-addon1'
+                  style={{ background: "none" }}>
+                  <MdLocationOn size='35px' />
+                </InputGroup.Text>
+                <FormControl
+                  placeholder='Enter delivery address'
+                  onChange={this.handleDeliveryAddressChange}
+                />
+              </InputGroup>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant='dark'
+              onClick={this.handleLocationClose}
+              style={{
+                width: "100%",
+                height: "60px",
+                fontSize: "18px",
+                fontFamily: "UberMove, sans-serif",
+              }}>
+              Done
+            </Button>
+          </Modal.Footer>
+        </Modal>
         <Modal
           show={showOrderSucess}
           onHide={this.handleSecClose}
