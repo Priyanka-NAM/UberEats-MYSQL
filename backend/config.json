@@ -2,10 +2,10 @@
   "DB": {
     "connectionLimit": 500,
     "host": "ubereats.cgpwh4cefk7y.us-east-2.rds.amazonaws.com",
-    "user": "admin",
+    "user": "ubereats",
     "port": 3306,
     "password": "ubereats",
-    "database": "uber_eats"
+    "database": "uber_eats_test"
   },
   "secret": "ubereats",
   "frontEnd": "http://localhost:3000"
