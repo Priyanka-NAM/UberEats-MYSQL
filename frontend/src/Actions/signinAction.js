@@ -28,7 +28,7 @@ export const userSignin = (signindata) => async (dispatch) => {
     });
   }
 };
-
+// SignOut Action
 export const userSignOut = () => (dispatch) => {
   localStorage.clear();
   dispatch({ type: USER_SIGNOUT });

@@ -3,8 +3,8 @@ const path = require("path");
 
 const app = require("./app");
 const db = require("./dbPoolConnection");
-const signin = require("./routes/signin");
-const signup = require("./routes/signup");
+const signin = require("./routes/signIn");
+const signup = require("./routes/signUp");
 const customerrestaurant = require("./routes/customerrestaurant");
 const profile = require("./routes/profile");
 const verifyToken = require("./routes/tokenVerification");

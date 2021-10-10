@@ -11,7 +11,7 @@ import PropTypes from "prop-types";
 import { BiX } from "react-icons/bi";
 import backendServer from "../../../backEndConfig";
 
-import { userSignOut } from "../../../Actions/SignInAction";
+import { userSignOut } from "../../../Actions/signinAction";
 import "../../Styles/Header.css";
 
 class ProfileCanvas extends Component {
