@@ -8,8 +8,8 @@ import { Col, Row, Modal, Button } from "react-bootstrap";
 import { PropTypes } from "prop-types";
 import { connect } from "react-redux";
 import { BiX } from "react-icons/bi";
-import delivered from "../../SVG/delivered.jpg";
-import cancelled from "../../SVG/cancelled.jpg";
+import delivered from "../../Svg/delivered.jpg";
+import cancelled from "../../Svg/cancelled.jpg";
 import { getUserDetails } from "../../../Actions/OwnerActions";
 
 class OrderDetailsDC extends Component {
