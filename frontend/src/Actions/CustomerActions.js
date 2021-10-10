@@ -141,6 +141,7 @@ export const updateFav = (updateFavInput) => async (dispatch) => {
       newFavInput
     );
     const response = await res;
+    console.log("Favorite Restaurants ", response.data);
     dispatch({
       type: UPDATE_FAV,
       payload: response.data,

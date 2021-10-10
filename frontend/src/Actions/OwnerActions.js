@@ -104,11 +104,10 @@ export const ownerNewOrders = () => async (dispatch) => {
 
 export const ownerNewOrdersUpdate =
   (updateOrderDetails) => async (dispatch) => {
-    let { restaurant_id: restaurantId } = JSON.parse(
+    const { restaurant_id: restaurantId } = JSON.parse(
       localStorage.getItem("user")
     );
     console.log(" restaurantId: ", restaurantId);
-    restaurantId = 2;
     if (!restaurantId) return;
     axios.defaults.withCredentials = true;
     axios.defaults.headers.common.authorization = getToken();

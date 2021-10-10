@@ -123,6 +123,8 @@ class OwnerOrders extends Component {
     let gratitude = null;
     let deliveryCost = null;
     let orderDeliveryType = null;
+    let currentOrderStatus = null;
+    let order_status_options = null;
     if (userDetails) {
       customerName = userDetails.name;
       customerNickname = userDetails.nick_name;
@@ -152,6 +154,7 @@ class OwnerOrders extends Component {
     }
 
     if (currentOrder) {
+      console.log("Has Current Order ", currentOrder);
       orderId = currentOrder.order_id;
       name = currentOrder.customer_name;
       subTotal = currentOrder.sub_total;
@@ -160,6 +163,33 @@ class OwnerOrders extends Component {
       deliveryCost = currentOrder.delivery_cost;
       gratitude = currentOrder.gratitude;
       orderDeliveryType = currentOrder.order_delivery_type;
+      currentOrderStatus = currentOrder.delivery_status;
+
+      if (orderDeliveryType === "Pickup") {
+        console.log(
+          "Inside pickup order delivery type options ",
+          orderDeliveryType
+        );
+        order_status_options = (
+          <>
+            <option value='Order Received'> Order Received</option>
+            <option value='Preparing'>Preparing</option>
+            <option value='Pick up Ready'>Pick up Ready</option>
+            <option value='Picked up'>Picked up</option>
+            <option value='Cancel'>Cancel</option>
+          </>
+        );
+      } else {
+        order_status_options = (
+          <>
+            <option value='Order Received'> Order Received</option>
+            <option value='Preparing'>Preparing</option>
+            <option value='On the way'>On the way</option>
+            <option value='Delivered'>Delivered</option>
+            <option value='Cancel'>Cancel</option>
+          </>
+        );
+      }
 
       dishes = currentOrder.dishes.map((dish, index) => (
         <>
@@ -310,15 +340,17 @@ class OwnerOrders extends Component {
                     fontWeight: "550",
                   }}
                   onChange={this.handleChange}
+                  value={currentOrderStatus}
                   required>
-                  <option>Order Status</option>
-                  <option value='Order Received'> Order Received</option>
+                  <option value=''>Order Status</option>
+                  {order_status_options}
+                  {/* <option value='Order Received'> Order Received</option>
                   <option value='Preparing'>Preparing</option>
                   <option value='On the way'>On the way</option>
                   <option value='Delivered'>Delivered</option>
                   <option value='Cancel'>Cancel</option>
                   <option value='Pick up Ready'>Pick up Ready</option>
-                  <option value='Picked up'>Picked up</option>
+                  <option value='Picked up'>Picked up</option> */}
                 </Form.Select>
                 <Button
                   style={{

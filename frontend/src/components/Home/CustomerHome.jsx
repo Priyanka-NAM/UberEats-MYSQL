@@ -321,6 +321,8 @@ class CustomerHome extends Component {
         <div
           style={{
             marginLeft: "1%",
+            overflowY: "scroll",
+            height: "100vh",
           }}>
           <Header
             restoSearch={this.handleRestoSearch}

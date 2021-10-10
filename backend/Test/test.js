@@ -39,7 +39,7 @@ describe("Signin Testing Customer", () => {
   it("Authentication and Signin Sucessfull", (done) => {
     agent
       .post("/ubereats/signin")
-      .send({ email: "jackson@gmail.com", password: "123456" })
+      .send({ email: "jackson@gmail.com", password: "987654" })
       .then((res) => {
         expect(res.body).to.have.deep.property(
           "status",
@@ -53,73 +53,73 @@ describe("Signin Testing Customer", () => {
   });
 });
 
-// describe("Restaurant Owner Sign up", () => {
-//   it("Owner Exists", (done) => {
-//     agent
-//       .post("/ubereats/signup/owner")
-//       .send({
-//         name: "Tommy's Thai",
-//         email: "tommysthai@gmail.com",
-//         password: "123456",
-//         description: "",
-//         restaurant_address_line_one: "9 Camino Real2",
-//         restaurant_city: "San Jose",
-//         restaurant_state: "California",
-//         restaurant_country: "United States",
-//         restaurant_zipcode: "98245",
-//         image_file_path: "",
-//         phone_num: "9687451145",
-//         restaurant_start_time: "8.00",
-//         restaurant_end_time: "12.00",
-//         restaurant_week_start: "",
-//         restaurant_week_end: "",
-//         national_brand: "",
-//       })
-//       .then((res) => {
-//         expect(res.body).to.have.deep.property(
-//           "status",
-//           "RESTAURANT_ALREADY_EXISTS"
-//         );
-//         done();
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   });
-//   it(" Restaurant Owner Sucessfull", (done) => {
-//     agent
-//       .post("/ubereats/signup/owner")
-//       .send({
-//         name: "The new Food Place",
-//         email: "thenewfoodplace@gmail.com",
-//         password: "123456",
-//         description:
-//           "Curious to know what's the best thing on the menu? Of the 45 things on the menu, the butter chicken is one of the most popular and the chicken tikka masala and the garlic naan are two of the items that are most commonly ordered together at this late night go-to. • $ • Indian • Vegetarian • Asian • Healthy",
-//         restaurant_address_line_one: "4 North Whisman Road",
-//         restaurant_city: "San Jose",
-//         restaurant_state: "California",
-//         restaurant_country: "United States",
-//         restaurant_zipcode: "98245",
-//         image_file_path: "",
-//         phone_num: "9687451145",
-//         restaurant_start_time: "8.00",
-//         restaurant_end_time: "12.00",
-//         restaurant_week_start: "",
-//         restaurant_week_end: "",
-//         national_brand: "",
-//       })
-//       .then((res) => {
-//         expect(res.body).to.have.deep.property("status", "RESTAURANT_ADDED");
-//         done();
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//       });
-//   });
-// });
+describe("Restaurant Owner Sign up", () => {
+  it("Owner Exists", (done) => {
+    agent
+      .post("/ubereats/signup/owner")
+      .send({
+        name: "Tommy's Thai",
+        email: "tommysthai@gmail.com",
+        password: "123456",
+        description: "",
+        restaurant_address_line_one: "9 Camino Real2",
+        restaurant_city: "San Jose",
+        restaurant_state: "California",
+        restaurant_country: "United States",
+        restaurant_zipcode: "98245",
+        image_file_path: "",
+        phone_num: "9687451145",
+        restaurant_start_time: "8.00",
+        restaurant_end_time: "12.00",
+        restaurant_week_start: "",
+        restaurant_week_end: "",
+        national_brand: "",
+      })
+      .then((res) => {
+        expect(res.body).to.have.deep.property(
+          "status",
+          "RESTAURANT_ALREADY_EXISTS"
+        );
+        done();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+  it(" Restaurant Owner Sucessfull", (done) => {
+    agent
+      .post("/ubereats/signup/owner")
+      .send({
+        name: "The Food Place",
+        email: "foodplace@gmail.com",
+        password: "123456",
+        description:
+          "Curious to know what's the best thing on the menu? Of the 45 things on the menu, the butter chicken is one of the most popular and the chicken tikka masala and the garlic naan are two of the items that are most commonly ordered together at this late night go-to. • $ • Indian • Vegetarian • Asian • Healthy",
+        restaurant_address_line_one: "4 North Whisman Road",
+        restaurant_city: "San Jose",
+        restaurant_state: "California",
+        restaurant_country: "United States",
+        restaurant_zipcode: "98245",
+        image_file_path: "",
+        phone_num: "9687451145",
+        restaurant_start_time: "8.00",
+        restaurant_end_time: "12.00",
+        restaurant_week_start: "",
+        restaurant_week_end: "",
+        national_brand: "",
+      })
+      .then((res) => {
+        expect(res.body).to.have.deep.property("status", "RESTAURANT_ADDED");
+        done();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+});
 
 const authToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOnsic3RhdHVzIjoiU1VDQ0VTUyIsImlzX293bmVyIjowLCJuYW1lIjoiamFja3NvbiIsImVtYWlsX2lkIjoiamFja3NvbkBnbWFpbC5jb20iLCJjdXN0b21lcl9pZCI6NDgsInBhc3N3b3JkIjoiZTEwYWRjMzk0OWJhNTlhYmJlNTZlMDU3ZjIwZjg4M2UiLCJkYXRlX29mX2JpcnRoIjoibnVsbCIsImFkZHJlc3NfbGluZV8xIjoiMTI2IEFtYXlsIERyIiwiY2l0eSI6IlN1bm55dmFsZSIsInN0YXRlIjoiQ2FsaWZvcm5pYSIsImNvdW50cnkiOiJVbml0ZWQgU3RhdGVzIiwiemlwY29kZSI6Ijk4NzQ1Iiwibmlja19uYW1lIjoibnVsbCIsInByb2ZpbGVfcGljX2ZpbGVfcGF0aCI6Im51bGwiLCJwaG9uZV9udW0iOiI0NDU1NjU2Nzc3In0sImlhdCI6MTYzMzYyMjU4OH0.Y7gWI1qOXyULuQFeS5sgu3bQQ89RJ1jSJ4aEOf_GXdc";
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOnsic3RhdHVzIjoiU1VDQ0VTUyIsImlzX293bmVyIjowLCJuYW1lIjoiamFja3NvbiIsImVtYWlsX2lkIjoiamFja3NvbkBnbWFpbC5jb20iLCJjdXN0b21lcl9pZCI6NDgsInBhc3N3b3JkIjoiNmM0NGU1Y2QxN2YwMDE5YzY0YjA0MmU0YTc0NTQxMmEiLCJkYXRlX29mX2JpcnRoIjoiMjAyMS0xMC0xMiIsImFkZHJlc3NfbGluZV8xIjoiMTI2IEFtYXlsIERyIiwiY2l0eSI6IlN1bm55dmFsZSIsInN0YXRlIjoiQ2FsaWZvcm5pYSIsImNvdW50cnkiOiJVbml0ZWQgU3RhdGVzIiwiemlwY29kZSI6Ijk3NDUyIiwibmlja19uYW1lIjoiamFjayIsInByb2ZpbGVfcGljX2ZpbGVfcGF0aCI6InVzZXJ1bmRlZmluZWQtMTYzMzcwOTk5NjA5Mi5qcGciLCJwaG9uZV9udW0iOiI4NDU1NjU2Nzc5In0sImlhdCI6MTYzMzgzMDU5M30.AClFvZ0FPA1fwKyI_8QxxpcE3p2ZJQsNe97oxkNWvlU";
 describe(" Customer Profile Testing", () => {
   it("Customer doesnot exist", (done) => {
     agent
@@ -204,10 +204,10 @@ describe(" Get Customer Orders", () => {
 
   it("Get Customer orders Sucessfull", (done) => {
     agent
-      .get("/ubereats/orders/orderstatus/customer/48")
+      .get("/ubereats/orders/orderstatus/customer/50")
       .set("Authorization", authToken)
       .then((res) => {
-        expect(res.body.orders.length).to.equal(1);
+        expect(res.body.orders.length).to.equal(19);
         expect(res.body).to.have.deep.property("status", "CUSTOMER_ORDERS");
         done();
       })

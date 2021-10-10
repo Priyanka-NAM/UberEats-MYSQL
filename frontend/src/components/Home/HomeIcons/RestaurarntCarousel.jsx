@@ -14,15 +14,23 @@ class RestaurentCarousel extends React.Component {
   render() {
     const { popularnear, remaining } = this.props;
     return (
-      <div style={{ height: "100vh", overflowY: "scroll" }}>
+      // <div style={{ height: "100vh", overflowY: "scroll" }}>
+      <div>
         <Container fluid='true'>
-          <h2>Restaurants Picked For you</h2>
+          <h2 style={{ fontWeight: "550", fontFamily: "sans-serif" }}>
+            Restaurants Picked For you
+          </h2>
+          <br />
           <Row xxs='auto' fluid='true'>
             {popularnear}
           </Row>
         </Container>
+        <br />
         <Container fluid='true'>
-          <h2>All Other Restaurants</h2>
+          <h2 style={{ fontWeight: "550", fontFamily: "sans-serif" }}>
+            Loved by locals
+          </h2>
+          <br />
           <Row xxs='auto' fluid='true'>
             {remaining}
           </Row>

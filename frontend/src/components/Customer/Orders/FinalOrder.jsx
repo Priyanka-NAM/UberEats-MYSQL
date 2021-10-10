@@ -106,9 +106,10 @@ class FinalOrder extends Component {
     let country = orderlocation.country;
     let zipcode = orderlocation.zipcode;
 
-    const locationdetails = ChangedDeliveryLocation.split(",");
-    [addressLine1, city, state, country, zipcode] = [...locationdetails];
-
+    if (ChangedDeliveryLocation !== "") {
+      const locationdetails = ChangedDeliveryLocation.split(",");
+      [addressLine1, city, state, country, zipcode] = [...locationdetails];
+    }
     const orderPostInput = {
       ...statusDetails,
       ...CostObject,

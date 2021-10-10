@@ -75,50 +75,25 @@ class CustomerOrders extends Component {
     });
   };
 
-  // dateparse = (date) => {
-  //   const dateComponents = date.split("T");
-  //   const datePieces = dateComponents[0].split("-");
-  //   const timePieces = dateComponents[1].split(":");
-  //   return new Date(
-  //     datePieces[0],
-  //     datePieces[1] - 1,
-  //     datePieces[2],
-  //     timePieces[0],
-  //     timePieces[1]
-  //   );
-  // };
-
   dateparse = (date) => {
+    console.log("Date ", date);
     const dateComponents = date.split("T");
     console.log("dateComponents", dateComponents);
     const datePieces = dateComponents[0].split("-");
-
+    console.log("datePieces", datePieces);
     const timePieces = dateComponents[1].split(":");
+    console.log("timepieces", timePieces);
 
     return new Date(
-      datePieces[0],
-      datePieces[1] - 1,
-      datePieces[2],
-      timePieces[0],
-      timePieces[1]
+      Date.UTC(
+        datePieces[0],
+        datePieces[1] - 1,
+        datePieces[2],
+        timePieces[0],
+        timePieces[1]
+      )
     );
   };
-  // dateparse = (date) => {
-  //   const pattern = "YYYY-MM-DD HH:mm:ss.SS";
-  //   // return moment(date, pattern).utc(false);
-
-  //   // in utc
-  //   const utcCutoff = moment.utc(date, "YYYYMMDD HH:mm:ss");
-  //   const displayCutoff = utcCutoff.clone().tz("America/Los_Angeles");
-
-  //   return displayCutoff;
-
-  //   // return moment.tz(date, "America/Los_Angeles").format("MM/DD/YYYY h:mm a");
-  //   // const newdate = new Date(date);
-  //   // return `${newdate.getFullYear()}  ${
-  //   //   newdate.getMonth() + 1
-  //   // }   ${newdate.getDate()} at ${newdate.getTime()}`;
-  // };
 
   DishItems = (dishes) => {
     console.log("Dishes ", dishes);
@@ -387,11 +362,9 @@ class CustomerOrders extends Component {
       modalComps = this.CreateModal(currentOrder);
     }
     return (
-      <div style={{ marginLeft: "1%" }}>
+      <div style={{ marginLeft: "1%", height: "100vh", overflow: "scroll" }}>
         <Header />
-        <Container
-          style={{ marginLeft: "1%", height: "100vh", overflow: "scroll" }}
-          fluid>
+        <Container style={{ marginLeft: "1%" }} fluid>
           <Row>
             <Col>
               <h1>Past Orders</h1>

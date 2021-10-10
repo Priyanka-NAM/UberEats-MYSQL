@@ -233,7 +233,7 @@ class OwnerProfile extends Component {
                     name='email_id'
                     value={email_id}
                     onChange={this.handleChange}
-                    maxLength='30'
+                    maxLength='45'
                     minLength='5'
                     required
                     pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$"
