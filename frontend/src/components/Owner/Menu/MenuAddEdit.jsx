@@ -1,3 +1,4 @@
+/* eslint-disable no-return-assign */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
 /* eslint-disable react/forbid-prop-types */
@@ -28,7 +29,6 @@ class MenuAddEdit extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // eslint-disable-next-line react/destructuring-assignment
     if (this.props.currentDish !== prevProps.currentDish) {
       this.setStateFromProps(this.props);
     }
@@ -36,11 +36,9 @@ class MenuAddEdit extends Component {
 
   handleAddSave = (e) => {
     const { visibilityCb, actionType } = this.props;
-    // e.preventDefault();
+    e.preventDefault();
     console.log("Inside Handle Add Save ", this.state);
-    // if (actionType !== "Add Item") {
-    //   return this.handleEditSave(e);
-    // }
+
     const {
       restaurentId,
       dishname,
@@ -69,7 +67,7 @@ class MenuAddEdit extends Component {
 
   handleEditSave = (e) => {
     const { visibilityCb } = this.props;
-    // e.preventDefault();
+    e.preventDefault();
     console.log("Inside Handle Submit ", this.state);
     const isActive = "1";
     const {
@@ -99,30 +97,6 @@ class MenuAddEdit extends Component {
     };
     this.props.ownerMenuUpdate(dishdata);
     visibilityCb();
-    console.log("Before the update dish call ");
-
-    // axios.defaults.withCredentials = true;
-    // axios.defaults.headers.common.authorization = getToken();
-    // axios
-    //   .post(`${backendServer}/ubereats/dishes/updatedish`, dishdata)
-    //   .then((response) => {
-    //     console.log("Response for dish update ", response.data);
-    //     if (this.hasMounted) {
-    //       this.setState({
-    //         updateStatus: response.data.status,
-    //       });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log("Error for dish update ", err.response);
-    //     if (err.response && err.response.data) {
-    //       if (this.hasMounted) {
-    //         this.setState({
-    //           updateStatus: err.response.data,
-    //         });
-    //       }
-    //     }
-    //   });
   };
 
   handleSubmit = (e) => {
@@ -203,7 +177,7 @@ class MenuAddEdit extends Component {
   };
 
   render() {
-    const { displayDetails, actionType, currentDish } = this.props;
+    const { actionType } = this.props;
     console.log("state inside render of menu add edit ", this.state);
     const {
       dishname: name,
@@ -252,9 +226,7 @@ class MenuAddEdit extends Component {
               fontFamily: "sans-serif",
               fontSize: "18px",
             }}
-            variant='dark'
-            // onClick={this.handleChange}
-          >
+            variant='dark'>
             Save
           </Button>
           <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
@@ -296,7 +268,6 @@ class MenuAddEdit extends Component {
                     encType='multipart/form-data'
                     className='form-control'
                     style={{ display: "none" }}
-                    // eslint-disable-next-line no-return-assign
                     ref={(fileInput) => (this.fileInput = fileInput)}
                   />
                   <Card.Footer align='center'>
@@ -388,7 +359,7 @@ class MenuAddEdit extends Component {
               />
             </Col>
           </Form.Group>
-          {/* {alertmessage} */}
+          {alertmessage}
         </Form>
       </div>
     );
@@ -396,7 +367,6 @@ class MenuAddEdit extends Component {
 }
 
 MenuAddEdit.propTypes = {
-  displayDetails: PropTypes.bool.isRequired,
   actionType: PropTypes.string.isRequired,
   visibilityCb: PropTypes.func.isRequired,
   currentDish: PropTypes.object.isRequired,
@@ -404,7 +374,7 @@ MenuAddEdit.propTypes = {
   ownerMenuUpdate: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = () => ({});
 
 export default connect(mapStateToProps, {
   ownerMenuAdd,

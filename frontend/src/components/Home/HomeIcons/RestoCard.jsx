@@ -1,3 +1,5 @@
+/* eslint-disable react/forbid-prop-types */
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from "react";
 import "@fortawesome/fontawesome-free/css/fontawesome.css";
@@ -57,7 +59,6 @@ class RestoCard extends Component {
         isFav: false,
       });
     }
-    // eslint-disable-next-line no-unneeded-ternary
     const newisFav = isFav ? false : true;
     const { restaurant } = this.props;
     const restaurantId = restaurant.restaurant_id;
@@ -141,13 +142,12 @@ class RestoCard extends Component {
   }
 }
 RestoCard.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
   restaurant: PropTypes.object.isRequired,
   isLiked: PropTypes.bool.isRequired,
   RestaRedirect: PropTypes.func.isRequired,
   updateFav: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = () => ({});
 
 export default connect(mapStateToProps, { updateFav })(RestoCard);

@@ -74,7 +74,6 @@ class OwnerHomePage extends Component {
               src={src}
               restaTitle={restaTitle}
               restaAddress={restaAddress}
-              // isOwnerHome
               otherDetails={otherDetails}
               restauDescri={description}
             />

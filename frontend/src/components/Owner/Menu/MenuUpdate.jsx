@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/no-array-index-key */
@@ -26,7 +27,6 @@ class MenuUpdate extends Component {
   componentDidUpdate = (prevprops) => {
     const { allDishes } = this.props;
     if (allDishes !== prevprops.allDishes) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         allDishes,
       });
@@ -137,7 +137,6 @@ class MenuUpdate extends Component {
   render() {
     const { showEdit, showAdd, errormessage, allDishes, currentDish } =
       this.state;
-    // let orderComps = null;
     let appetizerComp = null;
     let saladsComp = null;
     let mainCourseComp = null;
@@ -230,7 +229,6 @@ class MenuUpdate extends Component {
             </Button>
             {errormessage}
             <Row style={{ paddingTop: "40px", width: "90%" }}>
-              {/* <thead style={{ marginBottom: "25px" }}> */}
               <tr>
                 <th
                   style={{
@@ -241,7 +239,6 @@ class MenuUpdate extends Component {
                   <span style={{ paddingLeft: "15px" }}>Appetizers</span>
                 </th>
               </tr>
-              {/* </thead> */}
               <Row>{appetizerComp}</Row>
             </Row>
             <Row style={{ paddingTop: "40px", width: "90%" }}>

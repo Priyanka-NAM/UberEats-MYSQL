@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
@@ -72,7 +73,6 @@ class DeliveredOrders extends Component {
       orderComps = deliveredOrders.map((order, index) => (
         <OrderCard
           bccolor='#eeeeee'
-          // eslint-disable-next-line react/no-array-index-key
           key={index}
           orderIndex={index}
           name={order.customer_name}
@@ -163,11 +163,6 @@ class DeliveredOrders extends Component {
     return <OwnerHome pageContent={pageContent} />;
   }
 }
-
-// DeliveredOrders.propTypes = {
-//   deliveredOrders: PropTypes.object.isRequired,
-//   ownerDeliveredOrders: PropTypes.func.isRequired,
-// };
 
 const mapStateToProps = (state) => ({
   deliveredOrders: state.owner.deliveredOrders,

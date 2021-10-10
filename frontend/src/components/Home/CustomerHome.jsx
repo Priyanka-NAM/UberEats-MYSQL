@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-state */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable react/no-did-update-set-state */
@@ -17,7 +18,6 @@ import Header from "./HomeIcons/Header";
 import RestaurantCarousel from "./HomeIcons/RestaurarntCarousel";
 import RestoCard from "./HomeIcons/RestoCard";
 import { isUserSignedIn } from "../Service/authService";
-// import { searchRestaurants } from "../../Actions/RestaurantAction";
 import { restaurants, searchRestaurants } from "../../Actions/RestaurantAction";
 
 import SideBar from "./HomeIcons/SideBar";
@@ -197,7 +197,6 @@ class CustomerHome extends Component {
         ? changedUserLocation
         : userLocation;
     this.setState({
-      // eslint-disable-next-line react/no-unused-state
       searchInput: e,
     });
     this.handleRestaurantFiltering(

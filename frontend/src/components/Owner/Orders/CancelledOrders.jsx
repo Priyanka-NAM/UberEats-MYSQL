@@ -7,7 +7,6 @@ import React, { Component } from "react";
 import "react-times/css/classic/default.css";
 import { Col, Row, Alert } from "react-bootstrap";
 import { Redirect } from "react-dom";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import OwnerHome from "../../Home/OwnerHome";
 import OrdersNav from "./OrdersNav";
@@ -168,11 +167,6 @@ class CancelledOrders extends Component {
     return <OwnerHome pageContent={pageContent} />;
   }
 }
-
-// CancelledOrders.propTypes = {
-//   cancelledOrders: PropTypes.object.isRequired,
-//   ownerCancelledOrders: PropTypes.func.isRequired,
-// };
 
 const mapStateToProps = (state) => ({
   cancelledOrders: state.owner.cancelledOrders,

@@ -173,9 +173,7 @@ class OwnerHome extends Component {
                 </Nav.Item>
               </Nav>
             </Col>
-            {/* <div style={{ height: "100vh", overflow: "scroll" }}> */}
             {pageContent}
-            {/* </div> */}
           </Row>
         </Container>
       </>

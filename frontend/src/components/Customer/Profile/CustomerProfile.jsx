@@ -29,17 +29,6 @@ class CustomerProfile extends Component {
     super(props);
     this.state = {
       showAlert: false,
-      // email_id: "",
-      // name: "",
-      // nick_name: "",
-      // phone_num: "",
-      // address_line_1: "",
-      // date_of_birth: "",
-      // city: "",
-      // state: "",
-      // password: "",
-      // country: "",
-      // zipcode: "",
     };
 
     this.handleChange = this.handleChange.bind(this);

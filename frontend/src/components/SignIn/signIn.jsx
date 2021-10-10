@@ -34,10 +34,10 @@ class SignIn extends Component {
   };
 
   render() {
-    const { errMsg, isLoggedin } = this.props;
+    const { errMsg } = this.props;
     let errorMessage = null;
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user && isLoggedin) {
+    if (user) {
       if (user.is_owner === 1) {
         return <Redirect to='/owner/home' />;
       }
@@ -166,7 +166,6 @@ class SignIn extends Component {
 
 SignIn.propTypes = {
   userSignin: PropTypes.func.isRequired,
-  isLoggedin: PropTypes.bool.isRequired,
 };
 const mapStateToProps = (state) => ({
   isLoggedin: state.signin.isLoggedin,

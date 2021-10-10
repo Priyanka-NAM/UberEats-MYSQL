@@ -411,7 +411,6 @@ OwnerOrders.propTypes = {
   ownerNewOrders: PropTypes.func.isRequired,
   ownerNewOrdersUpdate: PropTypes.func.isRequired,
   getUserDetails: PropTypes.func.isRequired,
-  // CustomerId: PropTypes.number.isRequired,
   CustomerDetails: PropTypes.object.isRequired,
 };
 

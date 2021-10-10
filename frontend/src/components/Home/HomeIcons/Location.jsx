@@ -22,9 +22,6 @@ class Location extends React.Component {
   constructor(props) {
     super(props);
     this.state = { showModal: false, showChange: false, locationInput: "" };
-    // this.handleShow = this.handleShow.bind(this);
-    // this.handleClose = this.handleClose.bind(this);
-    // this.handleOpen = this.handleOpen.bind(this);
   }
 
   handleShow = () => {

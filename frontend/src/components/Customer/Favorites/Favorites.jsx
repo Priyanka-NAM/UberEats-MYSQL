@@ -6,9 +6,7 @@ import React, { Component } from "react";
 import { Container, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-// import { FaRegHeart } from "react-icons/fa";
-// import { Link } from "react-router-dom";
-// import { BiX } from "react-icons/bi";
+
 import Header from "../../Home/HomeIcons/Header";
 import { customerFav } from "../../../Actions/CustomerActions";
 
@@ -39,12 +37,9 @@ class Favorites extends Component {
 
   render() {
     const { fav } = this.state;
-    // const { allRestaurents } = this.state;
     console.log("fav", fav);
     let favorites = null;
-    // const favoriteRestos = fav.filter(
-    //   (eachFavResta) => eachFavResta.isFavorite === ""
-    // );
+
     if (fav) {
       favorites = fav.map((favrestaurant, index) => (
         <RestoCard

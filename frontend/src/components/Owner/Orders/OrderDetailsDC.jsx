@@ -69,7 +69,6 @@ class OrderDetailsDC extends Component {
       customerEmailId = userDetails.email_id;
       customerPhoneNum = userDetails.phone_num;
     }
-    // console.log("Customer Name of the Order ", customerName);
     return (
       <div
         show={displayDetails}

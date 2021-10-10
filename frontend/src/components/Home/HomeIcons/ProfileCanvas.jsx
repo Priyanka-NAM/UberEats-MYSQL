@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 /* eslint-disable camelcase */
 /* eslint-disable react/prefer-stateless-function */
 import React, { Component } from "react";
@@ -25,7 +26,6 @@ class ProfileCanvas extends Component {
   };
 
   handleSignOut = () => {
-    // eslint-disable-next-line react/destructuring-assignment
     this.props.userSignOut();
     console.log("inside handlesignout");
   };

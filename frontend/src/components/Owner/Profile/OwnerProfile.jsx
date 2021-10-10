@@ -103,7 +103,6 @@ class OwnerProfile extends Component {
   }
 
   render() {
-    console.log("Owner Profile State ", this.state);
     const {
       description,
       restaurant_country,

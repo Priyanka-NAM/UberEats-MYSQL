@@ -87,22 +87,38 @@ class CustomerOrders extends Component {
   //     timePieces[1]
   //   );
   // };
+
   dateparse = (date) => {
-    const pattern = "YYYY-MM-DD HH:mm:ss.SS";
-    // return moment(date, pattern).utc(false);
+    const dateComponents = date.split("T");
+    console.log("dateComponents", dateComponents);
+    const datePieces = dateComponents[0].split("-");
 
-    // in utc
-    const utcCutoff = moment.utc(date, "YYYYMMDD HH:mm:ss");
-    const displayCutoff = utcCutoff.clone().tz("America/Los_Angeles");
+    const timePieces = dateComponents[1].split(":");
 
-    return displayCutoff;
-
-    // return moment.tz(date, "America/Los_Angeles").format("MM/DD/YYYY h:mm a");
-    // const newdate = new Date(date);
-    // return `${newdate.getFullYear()}  ${
-    //   newdate.getMonth() + 1
-    // }   ${newdate.getDate()} at ${newdate.getTime()}`;
+    return new Date(
+      datePieces[0],
+      datePieces[1] - 1,
+      datePieces[2],
+      timePieces[0],
+      timePieces[1]
+    );
   };
+  // dateparse = (date) => {
+  //   const pattern = "YYYY-MM-DD HH:mm:ss.SS";
+  //   // return moment(date, pattern).utc(false);
+
+  //   // in utc
+  //   const utcCutoff = moment.utc(date, "YYYYMMDD HH:mm:ss");
+  //   const displayCutoff = utcCutoff.clone().tz("America/Los_Angeles");
+
+  //   return displayCutoff;
+
+  //   // return moment.tz(date, "America/Los_Angeles").format("MM/DD/YYYY h:mm a");
+  //   // const newdate = new Date(date);
+  //   // return `${newdate.getFullYear()}  ${
+  //   //   newdate.getMonth() + 1
+  //   // }   ${newdate.getDate()} at ${newdate.getTime()}`;
+  // };
 
   DishItems = (dishes) => {
     console.log("Dishes ", dishes);
@@ -206,7 +222,6 @@ class CustomerOrders extends Component {
       order_state,
       order_country,
       order_zipcode,
-      restaurant_name,
       order_delivery_type,
     } = order;
     const { showModal } = this.state;

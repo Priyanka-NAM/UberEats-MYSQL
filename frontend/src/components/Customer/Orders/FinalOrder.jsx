@@ -537,13 +537,6 @@ class FinalOrder extends Component {
           backdrop='static'
           keyboard={false}
           style={{ width: "100%", display: "flex", alignItems: "center" }}>
-          <Modal.Header>
-            {/* <BiX
-              size='35px'
-              style={{ color: "black" }}
-              // onClick={this.handleSecClose}
-            /> */}
-          </Modal.Header>
           <Modal.Body>
             <Modal.Title
               style={{

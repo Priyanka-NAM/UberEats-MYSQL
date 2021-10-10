@@ -46,15 +46,8 @@ class CustomerSignUp extends React.Component {
     //   return <Redirect to='/home' />;
     // }
 
-    // const currentUser = JSON.parse(localStorage.getItem("user"));
     const { country, state, city, address_line_1, zipcode } = this.state;
-    // if (currentUser) {
-    //   if (currentUser.is_owner === 0 && user && user.status === "USER_ADDED") {
-    //     return <Redirect to='/customer/home' />;
-    //   }
-    // } else if (user && user.status === "USER_EXISTS") {
-    //   errorMessage = "Opps! Email id already exists";
-    // }
+
     let errorMessage = "";
     if (!UpdateStatus) {
       errorMessage = "";

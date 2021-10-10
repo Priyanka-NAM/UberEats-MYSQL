@@ -43,11 +43,6 @@ function SignInUpNAV() {
                 Sign In
               </Button>
             </Nav.Item>
-            {/* <Nav.Item>
-              <Button active='true' variant='dark' type='submit'>
-                Sign Up
-              </Button>
-            </Nav.Item> */}
           </Nav>
         </Navbar.Brand>
       </Container>
