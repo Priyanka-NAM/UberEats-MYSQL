@@ -14,7 +14,7 @@ import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { Button, Nav, Container, Col, Row, Navbar } from "react-bootstrap";
 import UberELogo from "./HomeIcons/logo";
-import { userSignOut } from "../../Actions/SignInAction";
+import { userSignOut } from "../../Actions/signinAction";
 import { isOwnerSignedIn } from "../Service/authService";
 
 class OwnerHome extends Component {
