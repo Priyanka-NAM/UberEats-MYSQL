@@ -8,5 +8,5 @@
     "database": "uber_eats_test"
   },
   "secret": "ubereats",
-  "frontEnd": "http://localhost:3000"
+  "frontEnd": "http://3.141.15.27:3000"
 }
