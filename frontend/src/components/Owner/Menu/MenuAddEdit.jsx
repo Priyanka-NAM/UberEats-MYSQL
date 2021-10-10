@@ -349,7 +349,8 @@ class MenuAddEdit extends Component {
             </Form.Label>
             <Col sm={4}>
               <Form.Control
-                type='number'
+                type='text'
+                pattern='^\d*(\.\d{0,2})?$'
                 name='price'
                 value={price}
                 onChange={this.handleChange}
