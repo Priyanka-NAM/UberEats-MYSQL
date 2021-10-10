@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from "react";
 import { Route } from "react-router-dom";
-import OwnerSignUp from "./SignUp/OwnerSignUp";
-import CustomerSignUp from "./SignUp/CustomerSignUp";
+import OwnerSignUp from "./SignUp/ownerSignUp";
+import CustomerSignUp from "./SignUp/customerSignUp";
 import CustomerHome from "./Home/CustomerHome";
 import SignIn from "./SignIn/signIn";
 import RestaurentHome from "./Restaurent/CustomerRestaurentHome";
