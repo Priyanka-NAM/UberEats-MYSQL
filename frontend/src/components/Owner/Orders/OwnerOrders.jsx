@@ -68,6 +68,7 @@ class OwnerOrders extends Component {
     this.setState({
       showEdit: true,
       currentOrder: newOrders[index],
+      delivery_status: newOrders[index].delivery_status,
     });
   };
 
@@ -107,6 +108,7 @@ class OwnerOrders extends Component {
       currentOrder,
       showCategory,
       userDetails,
+      delivery_status,
     } = this.state;
     let orderId = null;
     let name = null;
@@ -172,21 +174,49 @@ class OwnerOrders extends Component {
         );
         order_status_options = (
           <>
-            <option value='Order Received'> Order Received</option>
-            <option value='Preparing'>Preparing</option>
-            <option value='Pick up Ready'>Pick up Ready</option>
-            <option value='Picked up'>Picked up</option>
-            <option value='Cancel'>Cancel</option>
+            <Form.Select
+              name='delivery_status'
+              style={{
+                width: "40%",
+                height: "3.5rem",
+                fontSize: "20px",
+                fontFamily: "sans-serif",
+                fontWeight: "550",
+              }}
+              onChange={this.handleChange}
+              value={delivery_status}
+              required>
+              <option value=''>Order Status</option>
+              <option value='Order Received'> Order Received</option>
+              <option value='Preparing'>Preparing</option>
+              <option value='Pick up Ready'>Pick up Ready</option>
+              <option value='Picked up'>Picked up</option>
+              <option value='Cancel'>Cancel</option>
+            </Form.Select>
           </>
         );
       } else {
         order_status_options = (
           <>
-            <option value='Order Received'> Order Received</option>
-            <option value='Preparing'>Preparing</option>
-            <option value='On the way'>On the way</option>
-            <option value='Delivered'>Delivered</option>
-            <option value='Cancel'>Cancel</option>
+            <Form.Select
+              name='delivery_status'
+              style={{
+                width: "40%",
+                height: "3.5rem",
+                fontSize: "20px",
+                fontFamily: "sans-serif",
+                fontWeight: "550",
+              }}
+              onChange={this.handleChange}
+              value={delivery_status}
+              required>
+              <option value=''>Order Status</option>
+              <option value='Order Received'> Order Received</option>
+              <option value='Preparing'>Preparing</option>
+              <option value='On the way'>On the way</option>
+              <option value='Delivered'>Delivered</option>
+              <option value='Cancel'>Cancel</option>
+            </Form.Select>
           </>
         );
       }
@@ -330,7 +360,8 @@ class OwnerOrders extends Component {
                   display: "flex",
                   justifyContent: "space-between",
                 }}>
-                <Form.Select
+                {order_status_options}
+                {/* <Form.Select
                   name='delivery_status'
                   style={{
                     width: "40%",
@@ -340,18 +371,19 @@ class OwnerOrders extends Component {
                     fontWeight: "550",
                   }}
                   onChange={this.handleChange}
-                  value={currentOrderStatus}
+                  value={delivery_status}
                   required>
                   <option value=''>Order Status</option>
                   {order_status_options}
-                  {/* <option value='Order Received'> Order Received</option>
+                  <option value='Order Received'> Order Received</option>
                   <option value='Preparing'>Preparing</option>
                   <option value='On the way'>On the way</option>
                   <option value='Delivered'>Delivered</option>
                   <option value='Cancel'>Cancel</option>
                   <option value='Pick up Ready'>Pick up Ready</option>
-                  <option value='Picked up'>Picked up</option> */}
-                </Form.Select>
+                  <option value='Picked up'>Picked up</option> 
+                </Form.Select> 
+                */}
                 <Button
                   style={{
                     width: "20%",
