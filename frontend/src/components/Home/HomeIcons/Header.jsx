@@ -79,10 +79,12 @@ class Header extends React.Component {
   };
 
   handleSearchBarChange = (e) => {
+    const { searchBarChangeCb } = this.props;
     console.log("On Search Bar change: ", e.target.value);
     this.setState({
       searchInput: e.target.value,
     });
+    searchBarChangeCb(e.target.value);
   };
 
   handleSearchBar = (e) => {
@@ -202,6 +204,7 @@ Header.propTypes = {
   restoSearch: PropTypes.func,
   searchBarCallback: PropTypes.func,
   defaultUserLocationDescription: PropTypes.string.isRequired,
+  searchBarChangeCb: PropTypes.func,
 };
 
 export default withRouter(Header);

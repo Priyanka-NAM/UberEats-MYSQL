@@ -60,14 +60,14 @@ class Cart extends React.Component {
     if (cartItems) {
       totalItems = cartItems.length;
       cartRows = cartItems.map((cartitem) => {
-        totalCartValue += parseInt(cartitem.price, 10);
-        let eachitemprice = parseInt(cartitem.price, 10);
+        totalCartValue += parseFloat(cartitem.price, 10);
+        let eachitemprice = parseFloat(cartitem.price, 10);
         eachitemprice = eachitemprice.toFixed(2);
         return (
           <CartItemRow
             quantity={cartitem.quantity}
             dishtitle={cartitem.title}
-            totaldishprice={eachitemprice}
+            totaldishprice={eachitemprice.toString()}
           />
         );
       });

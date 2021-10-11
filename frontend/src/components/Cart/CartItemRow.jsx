@@ -4,6 +4,7 @@ import { Row, Col, Button } from "react-bootstrap";
 
 function CartItemRow(props) {
   const { quantity, dishtitle, totaldishprice } = props;
+  console.log("Total dish price ", totaldishprice);
   return (
     <Row style={{ display: "flex" }}>
       <Row style={{ display: "flex", paddingBottom: "0px" }}>
@@ -46,7 +47,7 @@ function CartItemRow(props) {
 CartItemRow.propTypes = {
   quantity: PropTypes.number.isRequired,
   dishtitle: PropTypes.string.isRequired,
-  totaldishprice: PropTypes.number.isRequired,
+  totaldishprice: PropTypes.string.isRequired,
 };
 
 export default CartItemRow;

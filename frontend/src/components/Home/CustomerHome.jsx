@@ -36,6 +36,7 @@ class CustomerHome extends Component {
       allRestaurents: [],
       deliveryType: "Delivery",
       foodSelectionType: "allresto",
+      searchBarHasText: false,
     };
   }
 
@@ -132,17 +133,24 @@ class CustomerHome extends Component {
 
         console.log("User Location ", location);
 
-        // Restaurants Near me
-        nearToYouRestos = deliveryBasedFilteredSet.filter(
-          (restaurant) =>
-            restaurant.is_search_result === 1 &&
-            location &&
-            location.city &&
-            this.StringSimilarityLevenshtein(
-              restaurant.restaurant_city,
-              location.city
-            ) >= 0.6
-        );
+        const { searchBarHasText } = this.state;
+        if (searchBarHasText) {
+          // Restaurants Near me
+          nearToYouRestos = deliveryBasedFilteredSet.filter(
+            (restaurant) => restaurant.is_search_result === 1
+          );
+        } else {
+          nearToYouRestos = deliveryBasedFilteredSet.filter(
+            (restaurant) =>
+              // restaurant.is_search_result === 1 &&
+              location &&
+              location.city &&
+              this.StringSimilarityLevenshtein(
+                restaurant.restaurant_city,
+                location.city
+              ) >= 0.6
+          );
+        }
         // National Brands
         nationalRestos = deliveryBasedFilteredSet.filter(
           (restaurant) => restaurant.national_brand
@@ -262,6 +270,14 @@ class CustomerHome extends Component {
     return costs[s2.length];
   };
 
+  searchBarChangeCb = (val) => {
+    if (val === "") {
+      this.setState({ searchBarHasText: false });
+    } else {
+      this.setState({ searchBarHasText: true });
+    }
+  };
+
   render() {
     let redirectVar = null;
     if (!isUserSignedIn()) {
@@ -327,6 +343,7 @@ class CustomerHome extends Component {
           <Header
             restoSearch={this.handleRestoSearch}
             searchBarCallback={this.handleSearchBarInput}
+            searchBarChangeCb={this.searchBarChangeCb}
             defaultUserLocationDescription={
               userAddressDescription
                 ? userAddressDescription
